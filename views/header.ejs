@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width">
+    <title>
+        <%- title %>
+    </title>
+    <link rel="stylesheet" href="/stylesheets/style.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap-theme.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+    <script src="https://cdn.datatables.net/1.10.13/js/jquery.dataTables.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.13/css/jquery.dataTables.min.css" />
+    <link rel="stylesheet" href="/stylesheets/bootstrap-treeview.min.css">
+    <script src="/javascripts/bootstrap-treeview.min.js"></script>
+
+    <!--% if (ENV_DEVELOPMENT) { %>
+        <!--script src="http://localhost:35729/livereload.js"></script-->
+    <!--% } %>
+
+
+            <!--script>
+                $(document).ready(function() {
+                    $('#tableResult').DataTable({
+                        aLengthMenu: [
+                            [10, 25, 50, 100, -1],
+                            [10, 25, 50, 100, "All"]
+                        ],
+                        iDisplayLength: 10
+                    });
+                });
+
+            </script-->
+
+
+</head>
+
+<body>
+
+
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <a class="navbar-brand" href="#">Documentation</a>
+            </div>
+            <ul class="nav navbar-nav" ->
+                <!--ul class="dropdown-menu" id="2"-->
+                <li class="current"><a href="/">Home</a></li>
+                <li>
+                    <a/ href="/users">Users</a>
+                </li>
+                <li><a href="/visualization1">Visualization</a></li>
+                <li>
+                    <a/ href="/tree">Tree</a>
+                </li>
+                <li>
+                    <a/ href="/contactus">Contact Us</a>
+                </li>
+
+
+                <!--% include menus %-->
+            </ul>
+        </div>
+    </nav>
+
+    <!--    <div class="container-fluid">-->
