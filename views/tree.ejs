@@ -4,67 +4,16 @@
 -->
     <div class="container">
         <h1> Tree View of Concepts</h1>
+        <!--
         <div class="row">
-            <hr>
-            <div class="col-sm-8">
-                <h2>Input</h2>
-                <input type="radio" name="myField" value="normal" /> RADIO1
-                </label>
-                <label class="radio">
-                    `enter code here`
-                    <input type="radio" name="myField" value="high" /> RADIO2
-                </label>
-                <!-- <form> -->
-                <div class="form-group">
-                    <label for="input-search" class="sr-only">Search Tree:</label>
-                    <input type="input" class="form-control" id="input-search" placeholder="Type to search..." value="">
-                </div>
-                <div class="checkbox">
-                    <label>
-                        <input type="checkbox" class="checkbox" id="chk-ignore-case" value="false"> Ignore Case
-                    </label>
-                </div>
-                <div class="checkbox">
-                    <label>
-                        <input type="checkbox" class="checkbox" id="chk-exact-match" value="false"> Exact Match
-                    </label>
-                </div>
-                <div class="checkbox">
-                    <!--label>
-                        <input type="checkbox" class="checkbox" id="chk-reveal-results" value="false"> Reveal Results
-                    </label-->
-                </div>
-                <button type="button" class="btn btn-success" id="btn-search">Search</button>
-                <button type="button" class="btn btn-default" id="btn-clear-search">Clear</button>
-
-                <br/>
-                <br/>
-                <h2>Results</h2>
-                <div id="search-output"></div>
-                <!-- </form> -->
-                <div id="tree"></div>
-
-                <!--
-                <table class="table">
-    <thead>
-        <tr>
-            <th>Concept</th>
-        </tr>
-    </thead>
-    <tbody>
-         for (i=0; i<data.length; i++) { 
-            <tr onclick='selectItem( JSON.stringify(data[i]))'>
-                <td>
-                     data[i].concept 
-                </td>
-            </tr>
-             } 
-    </tbody>
-</table>
 -->
-            </div>
-            <div id="conceptsDetails" class="col-sm-4">
+        <hr>
+        <div class="col-sm-8">
+            <div class="row">
+
                 <div class="dropdown">
+                    <span class="pull-right">
+
                     <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Filter by File
                         <span class="caret"></span></button>
                     <ul class="dropdown-menu">
@@ -83,11 +32,74 @@
 
 
                     </ul>
+                    <br />
+                    </span>
+
                 </div>
             </div>
+
+            <br/>
+            <div class="row">
+                <span class="pull-right">
+
+                        <label >
+                            <input type="checkbox" class="form-check-input" id="chk-ignore-case" value="false"> Ignore Case
+                        </label >
+                        <label >
+                            <input type="checkbox" class="form-check-input" id="chk-exact-match" value="false"> Exact Match
+                        </label>
+
+                                                                  </span>
+
+            </div>
+
+            <!-- <form> -->
+            <div class="form-group">
+                <label for="input-search" class="sr-only">Search Tree:</label>
+                <input type="input" class="form-control" id="input-search" placeholder="Type to search..." value="">
+            </div>
+
+            <div class="row">
+
+                <label class="col-sm-3" class="radio inline">
+                    <input type="radio" value="1" /> View with Classes
+                </label>
+                <label class="col-sm-3" class="radio inline">
+                    <input type="radio" value="2" /> View with Soks
+                </label>
+
+            </div>
+
+
+            <div>
+                <span class="pull-right">
+                <button type="button" class="btn btn-success" id="btn-search">Search</button>
+                <button type="button" class="btn btn-default" id="btn-clear-search">Clear</button>
+     </span>
+            </div>
+            <br/>
+            <br/>
+            <br/>
+            <div>
+
+                <h2>Results</h2>
+                <div id="search-output"></div>
+                <!-- </form> -->
+                <div id="tree"></div>
+            </div>
+
+
         </div>
-        <!--        <div class="row">-->
-        <!--<hr>
+
+        <div id="infoDetails" class="col-sm-4">
+
+
+        </div>
+
+
+    </div>
+    <!--        <div class="row">-->
+    <!--<hr>
         <h2>Data</h2>
         <div class="col-sm-4">
             <h2>JSON Data</h2>
@@ -101,12 +113,12 @@
             <h2></h2>
             <div id="treeview14"></div>
         </div>-->
-    </div>
+    <!--
+</div>-->
     <br/>
     <br/>
     <br/>
     <br/>
-    <h1> <%= data.length %> </h1>
 
     <% include footer %>
         <script>

@@ -1,6 +1,9 @@
 var express = require('express');
 var router = express.Router();
 var appdata = require('../results.json');
+var http = require('http');
+////
+
 
 //var */ = "";
 //var JSONTree;
@@ -59,20 +62,69 @@ router.get('/', function (req, res) {
         return out;
     }
 
-    /*function sort_unique(array) {
 
-        if (array.length === 0) return arr;
-        array = array.sort(function (a, b) {
-            return a * 1 - b * 1;
-        });
-        var ret = [array[0]];
-        for (var i = 1; i < array.length; i++) { // start loop at 1 as element 0 can never be a duplicate
-            if (array[i - 1] !== array[i]) {
-                ret.push(array[i]);
+
+    // query sparql endpoint 
+    var request = require('request');
+    var querystring = require('querystring');
+
+    var myquery2 = querystring.stringify({
+        query: 'SELECT ?subject ?predicate ?object WHERE {  ?subject ?predicate ?object } LIMIT 25'
+    });
+
+    //var params = "myquery2";
+    request.post({
+            headers: {
+                'content-type': 'application/x-www-form-urlencoded'
+            },
+
+            url: "http://localhost:3030/ds/sparql?" + myquery2
+        },
+        function (error, response, body) {
+            console.log(response.statusCode)
+
+            if (!error && response.statusCode == 200) {
+                // Show the HTML for the Google homepage.
+                console.log('successful update');
+                console.log(body);
+            } else {
+                console.log(response.statusCode)
+                console.warn(error);
+                console.log("else block");
+
             }
+
+        });
+
+
+    /*               var request = require('request');
+                  request.post({
+                      headers: {
+                          'content-type': 'application/x-www-form-urlencoded'
+                      },
+                      url: 'http://localhost/test2.php',
+                      body: "mes=heydude"
+                  }, function (error, response, body) {
+                      console.log(body);
+                  });*/
+    /*var testQuery = 'SELECT ?subject ?predicate ?object WHERE {  ?subject ?predicate ?object } LIMIT 25';
+
+    var url = "http://localhost:3030/ds/sparql?query";
+    // var url = "http://localhost:3030/ds/update";
+    var params = "testQuery";
+    /*
+        var http = new XMLHttpRequest();
+
+    http.open("POST", url + params, true);
+    http.onreadystatechange = function () {
+        if (http.readyState == 4 && http.status == 200) {
+            alert(http.responseText);
         }
-        return ret;
-    }*/
+    }
+    http.send(); */
+
+
+
 
     // Call Sort By Name
     appdata.sort(SortConcepts);
@@ -88,7 +140,7 @@ router.get('/', function (req, res) {
     files.sort(SortFiles);
     files = uniquefileNames(files);
 
-    console.log(files);
+    //console.log(files);
 
     res.render('tree.ejs', {
         title: 'tree',
