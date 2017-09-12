@@ -164,16 +164,16 @@ public class App {
 
 						if (classParent.getURI() != null) {
 							obj.put("parent", classParent.getURI().toString());
-							 System.out.println("parent: "+classParent.getURI().toString());
-
+							//System.out.println("parent: " + classParent.getURI().toString());
 
 						}
 
-					/*} else
-						obj.put("parent", "");*/
+						/*
+						 * } else obj.put("parent", "");
+						 */
 
+					}
 				}
-				 }
 				File file = new File(_sourceFile);
 				obj.put("fileName", file.getName());
 				if (label != null)
@@ -209,21 +209,23 @@ public class App {
 		String conceptArray[];
 		String conceptTrimmed = "";
 		if (URI.contains("/")) {
-			 conceptArray = URI.split("/");
-		if (conceptArray != null && conceptArray.length > 0) {
-			conceptTrimmed = conceptArray[conceptArray.length - 1];
-			// System.out.println(fileType);
+			conceptArray = URI.split("/");
+			if (conceptArray != null && conceptArray.length > 0) {
+				conceptTrimmed = conceptArray[conceptArray.length - 1];
+				// System.out.println(fileType);
+			}
 		}
-	}if(conceptTrimmed.contains("#"))
-	{
-		conceptArray = URI.split("#");
-		if (conceptArray != null && conceptArray.length > 0) {
-			conceptTrimmed = conceptArray[conceptArray.length - 1];
+		if (conceptTrimmed.contains("#")) {
+			conceptArray = URI.split("#");
+			if (conceptArray != null && conceptArray.length > 0) {
+				conceptTrimmed = conceptArray[conceptArray.length - 1];
+
+			}
 
 		}
+		 //System.out.println("Parent"+conceptTrimmed);
 
-	}
-	return conceptTrimmed;
+		return conceptTrimmed;
 	}
 
 	public static String trim(String URI, Boolean isParent) {
@@ -234,65 +236,42 @@ public class App {
 				conceptArray = URI.split("/");
 				if (conceptArray != null && conceptArray.length > 0) {
 					conceptTrimmed = conceptArray[conceptArray.length - 1];
-					// System.out.println(fileType);
+					//System.out.println("test " + conceptTrimmed);
 				}
 			}
-			if (conceptTrimmed.contains("#")) {
-				conceptArray = URI.split("#");
-				if (conceptArray != null && conceptArray.length > 0) {
-					conceptTrimmed = conceptArray[conceptArray.length - 1];
-					// System.out.println(fileType);
+			if (conceptTrimmed.contains("#") || URI.contains("#")) {
+				if (conceptTrimmed.equals("")) {
+					conceptArray = URI.split("#");
+					if (conceptArray != null && conceptArray.length > 0) {
+						conceptTrimmed = conceptArray[conceptArray.length - 1];
+						// System.out.println(fileType);
+					}
 				}
-			}  
-			 else
-				return URI;
+				else
+				{
+					conceptArray = conceptTrimmed.split("#");
+					if (conceptArray != null && conceptArray.length > 0) {
+						conceptTrimmed = conceptArray[conceptArray.length - 1];
+						// System.out.println(fileType);
+					}
+					
+					
+				}
+
+			} /*else
+				return URI;*/
 
 		}
 
 		return conceptTrimmed;
 	}
 
-	/*
-	 * public static String readFile(String filename) { String result = ""; try
-	 * { BufferedReader br = new BufferedReader(new FileReader(filename));
-	 * StringBuilder sb = new StringBuilder(); String line = br.readLine();
-	 * while (line != null) { sb.append(line); line = br.readLine(); } result =
-	 * sb.toString(); } catch (Exception e) { e.printStackTrace(); } return
-	 * result; }
-	 */
-
 	public static void fileDecode(JSONObject obj) {
-		// InputStream fis = new FileInputStream("./out/results.JSON");
 
-		// JsonReader reader = JSON.createReader(fis);
-
-		// JSONObject personObject = reader.readObject();
-
-		// reader.close();
-
-		// System.out.println("Name : " + personObject.("name"));
-		// System.out.println("Age : " + personObject.getInt("age"));
-		// System.out.println("Married: " +
-		// personObject.getBoolean("isMarried"));
-		//
-		// JSONObject addressObject = personObject.getJSONObject("address");
-		// System.out.println("Address: ");
-		// System.out.println(addressObject.getString("street"));
-		// System.out.println(addressObject.getString("zipCode"));
-		//
-		// System.out.println("Phone : ");
-		// JSONArray phoneNumbersArray =
-		// personObject.getJSONArray("phoneNumbers");
-
-		// for (JsonValue jsonValue : phoneNumbersArray) {
-		// System.out.println(jsonValue.toString());
-		// }
-		// }
 		try {
-			// parser.JSONParser parser = new parser.JSONParser();
 			JSONObject rootJSON = obj;
 			JSONArray orginzedArray = new JSONArray();
-			String conceptTrimmed = "";
+			//String conceptTrimmed = "";
 			JSONArray dataList = (JSONArray) rootJSON.get("files");
 			for (Object projectObj : dataList) {
 				JSONObject project = (JSONObject) projectObj;
@@ -300,29 +279,23 @@ public class App {
 				for (Object issueObj : issueList) {
 					JSONObject issue = (JSONObject) issueObj;
 					JSONObject orginzedOject = new JSONObject();
-						orginzedOject.put("concept", issue.getString("concept"));
-						orginzedOject.put("fileName", issue.getString("fileName"));
-						orginzedOject.put("label", issue.getString("label"));
-						orginzedOject.put("URI", issue.getString("URI"));
-						orginzedOject.put("RDFType", issue.getString("rdfType"));
-						//if (issue.has("parent")) {
-							if (issue.has("parent") && !issue.isNull("parent") ){
-							String parentTrimmed = trim(issue.getString("parent"), true);
-							orginzedOject.put("parent", parentTrimmed);
-							System.out.println("\nParent ::"+ parentTrimmed );
+					orginzedOject.put("concept", issue.getString("concept"));
+					orginzedOject.put("fileName", issue.getString("fileName"));
+					orginzedOject.put("label", issue.getString("label"));
+					orginzedOject.put("URI", issue.getString("URI"));
+					orginzedOject.put("RDFType", issue.getString("rdfType"));
+					// if (issue.has("parent")) {
+					if (issue.has("parent") && !issue.isNull("parent")) {
+						String parentTrimmed = trim(issue.getString("parent"), true);
+						orginzedOject.put("parent", parentTrimmed);
+						System.out.println("\nParent ::" + parentTrimmed);
 
+					} else {
 
-						} else
-						{
-							
-							orginzedOject.put("parent", "");
+						orginzedOject.put("parent", "");
 
+					}
 
-						}
-						
-					//
-					//
-					//
 					orginzedArray.put(orginzedOject);
 				}
 

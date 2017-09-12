@@ -6,8 +6,14 @@
         <h1> Tree View of Concepts</h1>
         <div class="row">
             <hr>
-            <div class="col-sm-4">
+            <div class="col-sm-8">
                 <h2>Input</h2>
+                <input type="radio" name="myField" value="normal" /> RADIO1
+                </label>
+                <label class="radio">
+                    `enter code here`
+                    <input type="radio" name="myField" value="high" /> RADIO2
+                </label>
                 <!-- <form> -->
                 <div class="form-group">
                     <label for="input-search" class="sr-only">Search Tree:</label>
@@ -24,9 +30,9 @@
                     </label>
                 </div>
                 <div class="checkbox">
-                    <label>
+                    <!--label>
                         <input type="checkbox" class="checkbox" id="chk-reveal-results" value="false"> Reveal Results
-                    </label>
+                    </label-->
                 </div>
                 <button type="button" class="btn btn-success" id="btn-search">Search</button>
                 <button type="button" class="btn btn-default" id="btn-clear-search">Clear</button>
@@ -36,9 +42,8 @@
                 <h2>Results</h2>
                 <div id="search-output"></div>
                 <!-- </form> -->
-            </div>
-            <div class="col-sm-4">
                 <div id="tree"></div>
+
                 <!--
                 <table class="table">
     <thead>
