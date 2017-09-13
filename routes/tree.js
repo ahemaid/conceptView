@@ -1,15 +1,16 @@
 var express = require('express');
+var app = express();
 var router = express.Router();
 var appdata = require('../results.json');
 var http = require('http');
-////
+const url = require('url');
 
+// Prints https://example.org/foo#baz
 
 //var */ = "";
 //var JSONTree;
 /* Execute a command line. */
 router.get('/', function (req, res) {
-
 
     var treeData = [];
     // loop to find the classes
@@ -62,69 +63,15 @@ router.get('/', function (req, res) {
         return out;
     }
 
-
-
-    // query sparql endpoint 
-    var request = require('request');
-    var querystring = require('querystring');
-
-    var myquery2 = querystring.stringify({
-        query: 'SELECT ?subject ?predicate ?object WHERE {  ?subject ?predicate ?object } LIMIT 25'
-    });
-
-    //var params = "myquery2";
-    request.post({
-            headers: {
-                'content-type': 'application/x-www-form-urlencoded'
-            },
-
-            url: "http://localhost:3030/ds/sparql?" + myquery2
-        },
-        function (error, response, body) {
-            console.log(response.statusCode)
-
-            if (!error && response.statusCode == 200) {
-                // Show the HTML for the Google homepage.
-                console.log('successful update');
-                console.log(body);
-            } else {
-                console.log(response.statusCode)
-                console.warn(error);
-                console.log("else block");
-
-            }
-
-        });
-
-
-    /*               var request = require('request');
-                  request.post({
-                      headers: {
-                          'content-type': 'application/x-www-form-urlencoded'
-                      },
-                      url: 'http://localhost/test2.php',
-                      body: "mes=heydude"
-                  }, function (error, response, body) {
-                      console.log(body);
-                  });*/
-    /*var testQuery = 'SELECT ?subject ?predicate ?object WHERE {  ?subject ?predicate ?object } LIMIT 25';
-
-    var url = "http://localhost:3030/ds/sparql?query";
-    // var url = "http://localhost:3030/ds/update";
-    var params = "testQuery";
-    /*
-        var http = new XMLHttpRequest();
-
-    http.open("POST", url + params, true);
-    http.onreadystatechange = function () {
-        if (http.readyState == 4 && http.status == 200) {
-            alert(http.responseText);
+    // translation of concept to URI
+    function findURI(array, item) {
+        var i = 0;
+        while (array[i].concept != item) {
+            i++;
         }
+
+        return array[i].URI;
     }
-    http.send(); */
-
-
-
 
     // Call Sort By Name
     appdata.sort(SortConcepts);
@@ -140,240 +87,99 @@ router.get('/', function (req, res) {
     files.sort(SortFiles);
     files = uniquefileNames(files);
 
+    /////////////////////////////////////////////////////////////////////
+    // parse URL to get URI
+    /////////////////////////////////////////////////////////////////////
+    /*    function fullUrl(req) {
+            return url.format({
+                protocol: req.protocol,
+                host: req.get('host'),
+                pathname: req.originalUrl
+            });
+        }
+        console.log(fullUrl);*/
+    /////////////////////////////////////////////////////////////////////
+    // find URI for the concept
+    /////////////////////////////////////////////////////////////////////
+    var concept = "Longevity";
+    console.log(concept);
+
+    var conceptURI = findURI(appdata, concept);
+
+    /*    var conceptURI = appdata.forEach(function (element) {
+            if (element.concept == concept)
+                return element.URI;
+        });*/
+    console.log("URI ready for sparql qurey " + conceptURI);
+
+    /*    app.get("/tree/:id", function (req, res) {
+            //var concept = req.param('id');
+            var str = req.params.id;
+            var concept = str.split("/");
+
+            //console.log("concept  " + req.query.id);
+            //debugger;
+        });*/
+
+
+    ///////////////////////////////////////////////////////////////////////////
+    // query sparql endpoint 
+    ///////////////////////////////////////////////////////////////////////////
+    var request = require('request');
+    var querystring = require('querystring');
+
+    var myquery2 = querystring.stringify({
+        query: 'prefix schema: <http://schema.org/> \n' +
+            'prefix owl:   <http://www.w3.org/2002/07/owl#> \n' +
+            'prefix xsd:   <http://www.w3.org/2001/XMLSchema#> \n' +
+            'prefix voaf:  <http://purl.org/vocommons/voaf#> \n' +
+            'prefix skos:  <http://www.w3.org/2004/02/skos/core#> \n' +
+            'prefix mv:    <http://eccenca.com/mobivoc/> \n' +
+            'prefix rdfs:  <http://www.w3.org/2000/01/rdf-schema#> \n' +
+            'prefix vcard: <http://www.w3.org/2001/vcard-rdf/3.0#> \n' +
+            'prefix gr:    <http://purl.org/goodrelations/v1#> \n' +
+            'prefix geo:   <http://www.w3.org/2003/01/geo/wgs84_pos#> \n' +
+            'prefix s:     <http://schema.org/> \n' +
+            'prefix dct:   <http://purl.org/dc/terms/> \n' +
+            'prefix rdf:   <http://www.w3.org/1999/02/22-rdf-syntax-ns#> \n' +
+            'prefix vCard: <http://www.w3.org/2001/vcard-rdf/3.0#> \n' +
+            'prefix foaf:  <http://xmlns.com/foaf/spec/#> \n' +
+            'SELECT   ?s ?p ?o WHERE {  <' + conceptURI + '> ?p ?o } limit 25 '
+    });
+
+    //var params = "myquery2";
+    request.post({
+            headers: {
+                'content-type': 'application/x-www-form-urlencoded'
+                    //'content-type': 'application/sparql-results+json'
+            },
+
+            url: "http://localhost:3030/ds/sparql?" + myquery2
+        },
+        function (error, response, body) {
+            console.log(response.statusCode)
+
+            if (!error && response.statusCode == 200) {
+                console.log(body);
+                console.log('successful update');
+
+            } else {
+                console.log(response.statusCode)
+                console.warn(error);
+
+            }
+
+        });
+
+
+
     //console.log(files);
 
     res.render('tree.ejs', {
         title: 'tree',
         data: treeData,
-        fileNames: files
+        fileNames: files,
     });
 
 });
-/*    //var tree = '<ul>';
-    // var jsonData = '';
-    var arr = [];
-
-    // read json file and get the result
-    fs.readFile('./results.json', 'utf8', function (err, data) {
-        if (err) throw err;
-        var obj = JSON.parse(data);
-
-        function SortByName(x, y) {
-            return ((x.concept.toLowerCase() == y.concept.toLowerCase()) ? 0 : ((x.concept.toLowerCase() > y.concept.toLowerCase()) ? 1 : -1));
-        }
-
-        function uniqurArray(array) {
-            var out = [];
-            var sl = array;
-
-            for (var i = 0, l = sl.length; i < l; i++) {
-                var unique = true;
-                for (var j = 0, k = out.length; j < k; j++) {
-                    if (sl[i].concept.toLowerCase() === out[j].concept.toLowerCase()) {
-                        unique = false;
-                    }
-                }
-                if (unique) {
-                    out.push(sl[i]);
-                }
-            }
-
-            return out;
-        }
-
-        // Call Sort By Name
-        obj.sort(SortByName);
-        JSONTree = uniqurArray(obj);
-
-        //To create json object for tree structure 
-        var child = [];
-        //var object = eliminateDuplicates(obj);
-        for (var i = 0; i <= JSONTree.length - 1; i++) {
-            for (key in JSONTree[i]) {
-                //if (obj[i].hasOwnProperty('concept'))
-                //      {
-                var concept = JSONTree[i]['concept'];
-                //if (JSONTree[i]['parent'] != "") {
-                arr.push({
-                    'text': concept
-                });
-                //                            } else {
-                //                                child.push({
-                //                                    "text": concept
-                //                                });
-                //                                arr.push({
-                //
-                //                                    "text": JSONTree[i]['parent'],
-                //                                    "nodes": child
-                //                                });
-                //
-                //                                //var URI = obj[i]['URI'];
-                //                            }
-                // tree += '<li><a href="#">' + concept + '<a></li>';
-                //}
-            }
-        }
-        console.log(arr);
-
-    });*/
-
-
-//tree +='<li><span><i class="icon-folder-open"></i>'  +concept +'</span></li>';
-//console.log('concept: '+concept) ;
-//console.log('parent: '+obj[i]['parent']) ;
-//console.log('fileName: '+obj[i]['fileName']) ;
-//console.log('label: '+obj[i]['label']) ;  
-//console.log('URI: '+URI) ;                              
-// console.log('RDFType: '+obj[i]['RDFType']+"\n") ;  
-
-
-
-
-
-//   }
-//  }
-
-
-// console.log(JSONTree);
-
-
-//tree += '</ul></div>';
-/*    res.render('tree', {
-        title: 'test'
-    });
-    //res.send(JSONTree);
-});*/
-
 module.exports = router;
-//    var bindings = content["files"].Concepts;
-//         console.log(bindings);
-//        for(i in bindings) 
-//            {
-//                 console.log("inside loop");
-//               console.log(bindings[i].concept); 
-//                
-//            }
-// JavaScript  for...in loop iterates
-// through the properties of bindings array
-// which are [0,1,length-1] as opposed to the
-// array item.
-
-//    for(i in bindings) {
-//    //var binding = bindings[i];
-//    if (bindings[i].classChild.value)
-//    {
-//        var childClass = bindings[i].classChild.value.split("/").pop();
-//        
-//        //display Child class
-//        console.log("Class Child: "+childClass); // a for-loop to print all the bindings
-//        tree +=' <li class="parent_li" role="treeitem">'+
-//            ' <span><i class="icon-folder-open"></i> '+childClass+'</span> <a href="">Goes somewhere</a></li>';
-//
-//    }
-//
-//    if(typeof  bindings[i].classParent != 'undefined' )
-//    {   
-//        //var pClass = bindings[i].classParent.value;
-//        var pClass = bindings[i].classParent.value.split("/").pop();
-//
-//        if (pClass.includes("#"))
-//           {pClass = pClass.split("#").pop();} 
-//
-//       //display parent class
-//        console.log("Class Parent: "+pClass);
-//    }
-//        else
-//    {    
-//        console.log("Class Parent: "+ "");
-//    }
-//
-//    console.log("\n"); 
-//
-//    }
-//        
-//    console.log("\n"); 
-
-/*var config = require('results.json');
-console.log(config.head.vars.slice(-1) );*/
-
-
-//console.log("he is " + __dirname);
-/*var errorCallback = function(data) {
-useErrorData(data);
-};
-nrc.run('cd  SimpleSparqlQuery/ && java -jar simpleHtmlGenerator.jar', { onError: dataCallback }); */
-
-/*cmd.get(
-'cd SimpleSparqlQuery/ && java -jar simpleHtmlGenerator.jar',
-//   "java -jar  " + homedir+"\\simpleHtmlGenerator.jar", //simpleHtmlGenerator.jar,
-function(err, data, stderr){
-if (!err) {
-console.log('the node-cmd cloned executed the jar file :\n\n')
-} else {
-console.log('error', err)
-}
-}
-);*/
-
-/*child = exec('cd  SimpleSparqlQuery/ && java -jar simpleHtmlGenerator.jar', 
-{maxBuffer : 500 * 1024},function (error, stdout, stderr){
-console.log('stderr: ' + stderr);
-if(error !== null){
-console.log('exec error: ' + error);
-}
-});*/
-
-
-//    ' <span><i class="icon-folder-open"></i> Parent</span> <a href="">Goes somewhere</a>'+
-//    '<ul>'+
-//    ' <li>'+
-//    '<span><i class="icon-minus-sign"></i> Child</span> <a href="">Goes somewhere</a>'+
-//    ' <ul>'+
-//    ' <li>'+
-//      '  <span><i class="icon-leaf"></i> Grand Child</span> <a href="">Goes somewhere</a>'+
-//    '  </li>'+
-//    '  </ul>'+
-//    ' </li>'+
-//       ' <li class="parent_li" role="treeitem">'+
-//            '<span title="Collapse this branch"><i class="icon-minus-sign"></i> Child</span> <a href="">Goes somewhere</a>'+
-//           ' <ul role="group">'+
-//               ' <li>'+
-//                  '  <span><i class="icon-leaf"></i> Grand Child</span> <a href="">Goes somewhere</a>'+
-//               ' </li>'+
-//                '<li class="parent_li" role="treeitem">'+
-//                    '<span title="Collapse this branch"><i class="icon-minus-sign"></i> Grand Child</span> <a href="">Goes somewhere</a>'+
-//                   ' <ul role="group">'+
-//                       ' <li class="parent_li" role="treeitem">'+
-//                           ' <span title="Collapse this branch"><i class="icon-minus-sign"></i> Great Grand Child</span> <a href="">Goes somewhere</a>'+
-//                           ' <ul role="group">'+
-//                               ' <li>'+
-//                                    '<span><i class="icon-leaf"></i> Great great Grand Child</span> <a href="">Goes somewhere</a>'+
-//                               ' </li>'+
-//                                '<li>'+
-//                                  '  <span><i class="icon-leaf"></i> Great great Grand Child</span> <a href="">Goes somewhere</a>'+
-//                               ' </li>'+
-//                            ' </ul>'+
-//                      '  </li>'+
-//                       ' <li>'+
-//                          '  <span><i class="icon-leaf"></i> Great Grand Child</span> <a href="">Goes somewhere</a>'+
-//                       ' </li>'+
-//                       ' <li>'+
-//                          '  <span><i class="icon-leaf"></i> Great Grand Child</span> <a href="">Goes somewhere</a>'+
-//                       ' </li>'+
-//                   ' </ul>'+
-//               ' </li>'+
-//               ' <li>'+
-//                 '   <span><i class="icon-leaf"></i> Grand Child</span> <a href="">Goes somewhere</a>'+
-//               ' </li>'+
-//          '  </ul>'+
-//       ' </li>'+
-//    ' </ul>'+
-//    '  </li>'+
-//    '  <li class="parent_li" role="treeitem">'+
-//    '   <span title="Collapse this branch"><i class="icon-folder-open"></i> Parent2</span> <a href="">Goes somewhere</a>'+
-//    '   <ul role="group">'+
-//    '   <li>'+
-//            '<span><i class="icon-leaf"></i> Child</span> <a href="">Goes somewhere</a>'+
-//       ' </li>'+
-//    ' </ul>'+
-//    ' </li>'+

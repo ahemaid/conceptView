@@ -9,38 +9,36 @@
 -->
         <hr>
         <div class="col-sm-8">
-            <div class="row">
+            <span class="pull-right">
 
-                <div class="dropdown">
-                    <span class="pull-right">
+            <div class="col-sm-4" class="dropdown">
 
                     <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Filter by File
                         <span class="caret"></span></button>
-                    <ul class="dropdown-menu">
-                        <li>
-                            <a href="#">
+            <ul class="dropdown-menu">
+                <li>
+                    <a href="#">
                                     ALL files
                                 </a>
-                        </li>
-                        <%fileNames.forEach(function (item) {%>
-                            <li>
-                                <a href="#">
-                                    <%= item %>
-                                </a>
-                            </li>
-                            <%});%>
+                </li>
+                <%fileNames.forEach(function (item) {%>
+                    <li>
+                        <a href="#">
+                            <%= item %>
+                        </a>
+                    </li>
+                    <%});%>
 
 
-                    </ul>
-                    <br />
-                    </span>
+            </ul>
 
-                </div>
-            </div>
+        </div>
+        </span>
 
-            <br/>
-            <div class="row">
-                <span class="pull-right">
+        <br/>
+
+        <div class="row">
+            <span class="pull-right">
 
                         <label >
                             <input type="checkbox" class="form-check-input" id="chk-ignore-case" value="false"> Ignore Case
@@ -51,50 +49,58 @@
 
                                                                   </span>
 
-            </div>
+        </div>
 
-            <!-- <form> -->
-            <div class="form-group">
-                <label for="input-search" class="sr-only">Search Tree:</label>
-                <input type="input" class="form-control" id="input-search" placeholder="Type to search..." value="">
-            </div>
+        <!-- <form> -->
+        <div class="form-group">
+            <label for="input-search" class="sr-only">Search Tree:</label>
+            <input type="input" class="form-control" id="input-search" placeholder="Type to search..." value="">
+        </div>
 
-            <div class="row">
+        <div class="row">
 
-                <label class="col-sm-3" class="radio inline">
-                    <input type="radio" value="1" /> View with Classes
-                </label>
-                <label class="col-sm-3" class="radio inline">
-                    <input type="radio" value="2" /> View with Soks
-                </label>
+            <label class="col-sm-3" class="radio inline">
+                <input type="radio" value="1" /> View with Classes
+            </label>
+            <label class="col-sm-3" class="radio inline">
+                <input type="radio" value="2" /> View with Soks
+            </label>
 
-            </div>
+        </div>
 
 
-            <div>
-                <span class="pull-right">
+        <div>
+            <span class="pull-right">
                 <button type="button" class="btn btn-success" id="btn-search">Search</button>
                 <button type="button" class="btn btn-default" id="btn-clear-search">Clear</button>
      </span>
-            </div>
-            <br/>
-            <br/>
-            <br/>
-            <div>
+        </div>
+        <br/>
+        <br/>
+        <br/>
+        <div>
 
-                <h2>Results</h2>
-                <div id="search-output"></div>
-                <!-- </form> -->
-                <div id="tree"></div>
-            </div>
+            <h2>Results</h2>
+            <div id="search-output"></div>
+            <!-- </form> -->
+            <div id="tree"></div>
+        </div>
 
+
+    </div>
+
+    <div id="infoDetails" class="col-sm-4">
+        <div class='container-fluid'>
+            <div data-spy="affix" data-offset-top="50">
+                <div class="header_for_fix">
+                    <h2>Events</h2>
+                    <div id="selectable-output"></div>
+                </div>
+            </div>
 
         </div>
 
-        <div id="infoDetails" class="col-sm-4">
-
-
-        </div>
+    </div>
 
 
     </div>
@@ -139,7 +145,9 @@
 
                 var node = {
                     text: parent,
-                    nodes: children
+                    nodes: children,
+                    tag: ['0'],
+                    href: parent
                 };
 
                 return node;
@@ -152,6 +160,10 @@
                 var viewData = <%- JSON.stringify(data) %>; //TODO: get this data with AJAX request.
                 for (var i = 0; i < viewData.length; i++) {
                     viewData[i].text = viewData[i].concept;
+                    viewData[i].tag = ['0'];
+                    viewData[i].href = viewData[i].text;
+
+
                 }
                 var allParents = getUniqueParents(viewData);
                 var data = [];
@@ -183,7 +195,18 @@
 
             $('#tree').treeview({
                 data: getTreeData(), // data is not optional
-                levels: 5
+                levels: 5,
+                showTags: true,
+                onNodeSelected: function(event, node) {
+                    //$(this).attr("href", "http://tnbelt.com");
+                    $('#selectable-output').prepend('<p>/tree?id=' + node.text + "   " + node.tag + ' was selected</p>');
+                    //location.replace("/tree" + node.href);
+                    //$('#selectable-output').load("/tree" + node.href);
+                    //location.replace("/tree/" + node.text);
+                    //console.log($(node.text);
+
+
+                }
             });
 
 

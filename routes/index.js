@@ -9,6 +9,8 @@ var app = express();
 router.get('/', function (req, res) {
 
     titleNew = 'MobiVoc';
+    //console.log("show url" + req.url);
+    //debugger;
 
     //            var result =
     //                " <table id='tableResult' class='table table-striped table-bordered' cellspacing='0'  border='5' width='100%'>";
