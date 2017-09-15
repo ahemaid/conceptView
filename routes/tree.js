@@ -4,6 +4,15 @@ var router = express.Router();
 var appdata = require('../results.json');
 var http = require('http');
 const url = require('url');
+var parseString = require('xml2js').parseString;
+var sparqlResponse = [];
+/*const jsdom = require("jsdom");
+const {
+    JSDOM
+} = jsdom;
+const {
+    document
+} = (new JSDOM(`...`)).window;*/
 
 // Prints https://example.org/foo#baz
 
@@ -112,6 +121,41 @@ router.get('/', function (req, res) {
         });*/
     console.log("URI ready for sparql qurey " + conceptURI);
 
+
+    // event of nodeselected
+    function onNodeSelected(event, node) {
+
+        console.log('HI');
+    }
+    /*
+        function addEvent(element, evnt, funct) {
+            if (element.attachEvent)
+                return element.attachEvent('on' + evnt, funct);
+            else
+                return element.addEventListener(evnt, funct, false);
+        }
+
+        // example
+        addEvent(
+            document.getElementById('li'),
+            'click',
+            function () {
+                alert('hi!');
+            }
+        );
+    */
+
+    /*var clickHandler = function () {
+        alert('Stuff happens now.');
+    }
+
+
+    if (document.addEventListener) {
+        document.getElementById('data-nodeid').addEventListener('click', clickHandler, false);
+    } else {
+        document.getElementById('data-nodeid').attachEvent('click', clickHandler);
+    }
+*/
     /*    app.get("/tree/:id", function (req, res) {
             //var concept = req.param('id');
             var str = req.params.id;
@@ -127,6 +171,7 @@ router.get('/', function (req, res) {
     ///////////////////////////////////////////////////////////////////////////
     var request = require('request');
     var querystring = require('querystring');
+    var queryResult;
 
     var myquery2 = querystring.stringify({
         query: 'prefix schema: <http://schema.org/> \n' +
@@ -160,7 +205,11 @@ router.get('/', function (req, res) {
             console.log(response.statusCode)
 
             if (!error && response.statusCode == 200) {
-                console.log(body);
+                parseString(body, function (err, result) {
+                    sparqlResponse = JSON.stringify(result);
+                    console.log(sparqlResponse);
+                });
+                //console.log(queryResult); //data 
                 console.log('successful update');
 
             } else {
@@ -171,14 +220,22 @@ router.get('/', function (req, res) {
 
         });
 
-
-
+    ///////////////////////////////////////////////////////////////////////////
+    //
+    //////////////////////////////////////////////////////////////////////////
+    console.log(" SPARQL Query is " + sparqlResponse);
+    /*    var xml = queryResult;
+        console.log(xml);
+        parseString(xml, function (err, result) {
+            console.dir(JSON.stringify(result));
+        });*/
     //console.log(files);
 
     res.render('tree.ejs', {
         title: 'tree',
         data: treeData,
         fileNames: files,
+        queryResult: queryResult
     });
 
 });

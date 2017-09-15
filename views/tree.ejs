@@ -8,7 +8,7 @@
         <div class="row">
 -->
         <hr>
-        <div class="col-sm-8">
+        <div class="col-sm-6">
             <span class="pull-right">
 
             <div class="col-sm-4" class="dropdown">
@@ -59,11 +59,11 @@
 
         <div class="row">
 
-            <label class="col-sm-3" class="radio inline">
+            <label class="col-sm-4" class="radio inline">
                 <input type="radio" value="1" /> View with Classes
             </label>
-            <label class="col-sm-3" class="radio inline">
-                <input type="radio" value="2" /> View with Soks
+            <label class="col-sm-4" class="radio inline">
+                <input type="radio" value="2" /> View with SKOS
             </label>
 
         </div>
@@ -89,12 +89,13 @@
 
     </div>
 
-    <div id="infoDetails" class="col-sm-4">
+    <div id="infoDetails" class="col-sm-6">
         <div class='container-fluid'>
             <div data-spy="affix" data-offset-top="50">
                 <div class="header_for_fix">
                     <h2>Events</h2>
                     <div id="selectable-output"></div>
+                    <div id="query-output"></div>
                 </div>
             </div>
 
@@ -128,6 +129,8 @@
 
     <% include footer %>
         <script>
+            var viewDataRendered = <%- JSON.stringify(data) %>;
+
             function getUniqueParents(data) {
                 var unique = [...new Set(data.map(item => item.parent))];
 
@@ -146,8 +149,11 @@
                 var node = {
                     text: parent,
                     nodes: children,
-                    tag: ['0'],
-                    href: parent
+                    tags: ['<a id=' + parent + ' href="" onmousedown="showFileFunc(this)">Show file</a>',
+                        '<a id=' + parent + ' href="" onmousedown="showTypeFunc(this)">Show Type</a>'
+                    ],
+                    tagsClass: 'label label-default'
+
                 };
 
                 return node;
@@ -156,12 +162,13 @@
             function getTreeData(propertyName, propertyValue) {
                 if (propertyValue)
                     propertyValue = propertyValue.trim();
-
-                var viewData = <%- JSON.stringify(data) %>; //TODO: get this data with AJAX request.
+                // viewDataRendered
+                var viewData = viewDataRendered; //TODO: get this data with AJAX request.
                 for (var i = 0; i < viewData.length; i++) {
                     viewData[i].text = viewData[i].concept;
-                    viewData[i].tag = ['0'];
-                    viewData[i].href = viewData[i].text;
+                    viewData[i].tags = ['<a id=' + viewData[i].concept + ' href="" onmousedown="showFileFunc(this)">Show file</a>', '<a id=' + viewData[i].concept + ' href="" onmousedown="showTypeFunc(this)">Show Type</a>'];
+                    viewData[i].tagsClass = 'label label-default';
+                    //viewData[i].href = "javascript:refConceptfunc(this);";
 
 
                 }
@@ -193,13 +200,30 @@
                 return data;
             }
 
+            function refConceptfunc() {
+                alert("hello")
+            }
+            //            $("#clickable a").click(function(e) {
+            //                //do something
+            //                e.stopPropagation();
+            // })
             $('#tree').treeview({
                 data: getTreeData(), // data is not optional
                 levels: 5,
                 showTags: true,
                 onNodeSelected: function(event, node) {
+                    /*                    var senderElementName = event.target.tagNametoLowerCase();
+                                        if (senderElementName === 'li')
+                                            alert('li is pressed');
+                                        else {
+
+
+                                            alert('others are  pressed');
+                                            event.stopPropagation();
+                                        }*/
+
                     //$(this).attr("href", "http://tnbelt.com");
-                    $('#selectable-output').prepend('<p>/tree?id=' + node.text + "   " + node.tag + ' was selected</p>');
+                    //$('#selectable-output').prepend('<p>/tree?id=' + node.text + "   " + node.tag + ' was selected</p>');
                     //location.replace("/tree" + node.href);
                     //$('#selectable-output').load("/tree" + node.href);
                     //location.replace("/tree/" + node.text);
@@ -209,6 +233,71 @@
                 }
             });
 
+            function getTreeInstantData(results) {
+                /*                alret(results);
+                                // viewDataRendered
+                                var viewData = viewDataRendered; //TODO: get this data with AJAX request.
+
+                                var allParents = getUniqueParents(viewData);
+                                var data = [];
+                                var j = 0;
+                                for (var i = 0; i < allParents.length; i++) {
+                                    if (allParents[i])
+                                        data[j++] = getParentWithChildren(viewData, allParents[i]);
+                                }
+
+                                for (var i = 0; i < viewData.length; i++) {
+                                    data[j++] = viewData[i];
+                                }
+
+                                if (results.length >0) {
+                                    var filteredData = [];
+                                    var k = 0;
+                                    for (var i = 0; i < data.length; i++) {
+                                        if (data[i][propertyName])
+                                            if (data[i][propertyName].trim() === propertyValue) {
+                                                filteredData[k] = data[i];
+                                                k++;
+                                            }
+                                    }
+                                    data = filteredData;
+                                }*/
+
+                return results;
+            }
+
+            function refConceptfunc() {
+                alert("hello")
+            }
+            //            $("#clickable a").click(function(e) {
+            //                //do something
+            //                e.stopPropagation();
+            // })
+            $('#tree').treeview({
+                data: getTreeData(), // data is not optional
+                levels: 5,
+                showTags: true,
+                onNodeSelected: function(event, node) {
+                    /*                    var senderElementName = event.target.tagNametoLowerCase();
+                                        if (senderElementName === 'li')
+                                            alert('li is pressed');
+                                        else {
+
+
+                                            alert('others are  pressed');
+                                            event.stopPropagation();
+                                        }*/
+
+                    //$(this).attr("href", "http://tnbelt.com");
+                    //$('#selectable-output').prepend('<p>/tree?id=' + node.text + "   " + node.tag + ' was selected</p>');
+                    //location.replace("/tree" + node.href);
+                    //$('#selectable-output').load("/tree" + node.href);
+                    //location.replace("/tree/" + node.text);
+                    //console.log($(node.text);
+
+
+                }
+            });
 
             var search = function(e) {
                 var pattern = $('#input-search').val();
@@ -218,12 +307,22 @@
                     revealResults: $('#chk-reveal-results').is(':checked')
                 };
                 var results = $('#tree').treeview('search', [pattern, options]);
-
+                //alert(results);
                 var output = '<p>' + results.length + ' matches found</p>';
                 $.each(results, function(index, result) {
                     output += '<p>- ' + result.text + '</p>';
+
                 });
-                $('#search-output').html(output);
+                $('#tree').treeview({
+                    data: getTreeInstantData(results), // data is not optional
+                    levels: 5,
+                    showTags: true,
+                    enableLinks: true,
+                    selectedIcon: "glyphicon glyphicon-stop",
+                    color: 'green',
+                    onNodeSelected: function(event, node) {}
+                });
+                //$('#search-output').html(output);
             }
 
             $('#btn-search').on('click', search);
@@ -250,19 +349,100 @@
                 if (text === "ALL files") {
                     $('#tree').treeview({
                         data: getTreeData(), // data is not optional
-                        levels: 5
+                        levels: 5,
+                        showTags: true,
+                        enableLinks: true,
+                        selectedIcon: "glyphicon glyphicon-stop",
+                        color: 'green',
+                        onNodeSelected: function(event, node) {}
+
+                        /*                    onNodeSelected: function(event, node) {
+                                                        //$(this).attr("href", "http://tnbelt.com");
+                                       
+                                       <p> node selected = ' + JSON.stringify(event) + ' data = /tree?id=' + node.text + " " + node.tag + ' was selected</p>');
+                                                        //location.replace("/tree" + node.href);
+                                //$('#selectable-output').load("/tree" + node.href);
+                                //location.replace("/tree/" + node.text);
+                                //console.log($(node.text);
+
+
+                        } */
                     });
                 } else {
                     $('#tree').treeview({
                         data: getTreeData('fileName', text), // data is not optional
-                        levels: 5
+                        levels: 5,
+                        showTags: true,
+                        enableLinks: true,
+                        selectedIcon: "glyphicon glyphicon-stop",
+                        color: 'green',
+                        onNodeSelected: function(event, node) {
+
+
+
+                                location.replace("https://www.w3schools.com");
+                            }
+                            /*                  onNodeSelected: function(event, node) {
+
+                                                  //$(this).attr("href", "http://tnbelt.com");
+                                                  /*$('#selectable-output').prepend('<p> node selected = ' + JSON.stringify(event) + ' data = /tree?id=' + node.text + " " + node.tag + ' was selected</p>');
+                                    $('#selectable-output').prepend('<p> node selected =  data = /tree?id=' + node.text + ' was selected</p>');
+                            //location.replace("/tree" + node.href);
+                            //$('#selectable-output').load("/tree" + node.href);
+                            //location.replace("/tree/" + node.text);
+                            //console.log($(node.text);
+
+
+                    } */
                     });
                 }
 
-
-
-                // here add to local storage;
-
             });
+
+
+            // show file
+            showFileFunc = function(e) {
+                var conceptFile = [];
+                //var viewData = <!--%- JSON.stringify(data) %--S>;
+                //alert("id is " + e.id + " json is " + viewDataRendered[0].concept)
+                for (var i = 0; i < viewDataRendered.length; i++) {
+                    if (e.id === viewDataRendered[i].concept) {
+                        conceptFile.push(viewDataRendered[i].fileName);
+                    }
+                    // alert("id is " + e.id + " json is " + viewDataRendered[i].concept)
+                    // if (!(conceptFile.includes(viewDataRendered[i].concept)
+                    //if ((conceptFile.include(viewDataRendered[i].fileName))) {
+                    //alert("found");
+                    //debugger;
+                    //}
+                }
+                var unique = [...new Set(conceptFile.map(item => item))];
+                // alert(unique);
+                //alert(conceptFile);
+                e.text = conceptFile;
+            }
+
+            //show type
+
+            showTypeFunc = function(e) {
+                var conceptRDFType = [];
+                //var viewData = <!--%- JSON.stringify(data) %--S>;
+                //alert("id is " + e.id + " json is " + viewDataRendered[0].concept)
+                for (var i = 0; i < viewDataRendered.length; i++) {
+                    if (e.id === viewDataRendered[i].concept) {
+                        conceptRDFType.push(viewDataRendered[i].RDFType);
+                    }
+                    // alert("id is " + e.id + " json is " + viewDataRendered[i].concept)
+                    // if (!(conceptFile.includes(viewDataRendered[i].concept)
+                    //if ((conceptFile.include(viewDataRendered[i].fileName))) {
+                    //alert("found");
+                    //debugger;
+                    //}
+                }
+                var unique = [...new Set(conceptRDFType.map(item => item))];
+                // alert(unique);
+                //alert(conceptRDFType);
+                e.text = conceptRDFType;
+            }
 
         </script>

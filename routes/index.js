@@ -9,6 +9,7 @@ var app = express();
 router.get('/', function (req, res) {
 
     titleNew = 'MobiVoc';
+
     //console.log("show url" + req.url);
     //debugger;
 
