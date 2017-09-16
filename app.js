@@ -9,6 +9,8 @@ var routes = require('./routes/index');
 var contactus = require('./routes/contactus');
 var users = require('./routes/users');
 var tree = require('./routes/tree');
+var visualization = require('./routes/visualization');
+
 //var selectServices = require('./routes/selectServices');
 
 //var favicon = require('favicons');
@@ -74,8 +76,9 @@ app.use('/', routes);
 app.use('/contactus', contactus);
 app.use('/users', users);
 app.use('/tree', tree);
-//app.use('/selectServices', selectServices);
-app.use('/visualization1', express.static('views/webvowl'));
+app.use('/visualization', visualization);
+app.use('/views', express.static("views/webvowl"));
+
 
 
 //  catch 404 and forward to error handler

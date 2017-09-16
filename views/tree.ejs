@@ -93,9 +93,11 @@
         <div class='container-fluid'>
             <div data-spy="affix" data-offset-top="50">
                 <div class="header_for_fix">
-                    <h2>Events</h2>
+                    <h2>Concept Details</h2>
                     <div id="selectable-output"></div>
-                    <div id="query-output"></div>
+                    <div id="graph-output"></div>
+                    <h2>Graph Representation</h2>
+
                 </div>
             </div>
 
@@ -403,46 +405,43 @@
             // show file
             showFileFunc = function(e) {
                 var conceptFile = [];
-                //var viewData = <!--%- JSON.stringify(data) %--S>;
-                //alert("id is " + e.id + " json is " + viewDataRendered[0].concept)
                 for (var i = 0; i < viewDataRendered.length; i++) {
                     if (e.id === viewDataRendered[i].concept) {
                         conceptFile.push(viewDataRendered[i].fileName);
                     }
-                    // alert("id is " + e.id + " json is " + viewDataRendered[i].concept)
-                    // if (!(conceptFile.includes(viewDataRendered[i].concept)
-                    //if ((conceptFile.include(viewDataRendered[i].fileName))) {
-                    //alert("found");
-                    //debugger;
-                    //}
                 }
                 var unique = [...new Set(conceptFile.map(item => item))];
-                // alert(unique);
-                //alert(conceptFile);
                 e.text = conceptFile;
+                debugger;
+                $('#selectable-output').html('conceptFile is ' + conceptFile);
+
             }
 
             //show type
-
             showTypeFunc = function(e) {
                 var conceptRDFType = [];
-                //var viewData = <!--%- JSON.stringify(data) %--S>;
-                //alert("id is " + e.id + " json is " + viewDataRendered[0].concept)
                 for (var i = 0; i < viewDataRendered.length; i++) {
                     if (e.id === viewDataRendered[i].concept) {
                         conceptRDFType.push(viewDataRendered[i].RDFType);
+
+
                     }
-                    // alert("id is " + e.id + " json is " + viewDataRendered[i].concept)
-                    // if (!(conceptFile.includes(viewDataRendered[i].concept)
-                    //if ((conceptFile.include(viewDataRendered[i].fileName))) {
-                    //alert("found");
-                    //debugger;
-                    //}
+
                 }
+                // <!--% console.log("Hi"); %-->
+
                 var unique = [...new Set(conceptRDFType.map(item => item))];
-                // alert(unique);
-                //alert(conceptRDFType);
-                e.text = conceptRDFType;
+                if (unique.length > 1) {
+                    //e.text = conceptRDFType;
+                    $('#selectable-output').html('more than one');
+
+                } else {
+
+                    e.text = conceptRDFType;
+                    $('#selectable-output').html('conceptRDFType is ' + conceptRDFType);
+                }
+
             }
 
         </script>
+        <% include footer %>
