@@ -91,47 +91,29 @@
 
     <div id="infoDetails" class="col-sm-6">
         <div class='container-fluid'>
-            <div data-spy="affix" data-offset-top="50">
-                <div class="header_for_fix">
-                    <h2>Concept Details</h2>
-                    <div id="selectable-output"></div>
-                    <div id="graph-output"></div>
-                    <h2>Graph Representation</h2>
+            <!--            <div data-spy="affix" data-offset-top="50">-->
+            <div class="header_for_fix">
+                <h3 id="conceptHead">Concept Details:</h3>
+                <div id="selectable-output"></div>
+                <h2>Graph Representation</h2>
 
-                </div>
+                <div id="graph-output"></div>
+
             </div>
-
+            <!--</div>-->
         </div>
 
     </div>
 
 
     </div>
-    <!--        <div class="row">-->
-    <!--<hr>
-        <h2>Data</h2>
-        <div class="col-sm-4">
-            <h2>JSON Data</h2>
-            <div id="treeview12" class=""></div>
-        </div>
-        <div class="col-sm-4">
-            <h2></h2>
-            <div id="treeview13" class=""></div>
-        </div>
-        <div class="col-sm-4">
-            <h2></h2>
-            <div id="treeview14"></div>
-        </div>-->
-    <!--
-</div>-->
-    <br/>
-    <br/>
-    <br/>
-    <br/>
+
 
     <% include footer %>
+
         <script>
             var viewDataRendered = <%- JSON.stringify(data) %>;
+            var conceptSelected = "";
 
             function getUniqueParents(data) {
                 var unique = [...new Set(data.map(item => item.parent))];
@@ -202,75 +184,23 @@
                 return data;
             }
 
-            function refConceptfunc() {
-                alert("hello")
-            }
-            //            $("#clickable a").click(function(e) {
-            //                //do something
-            //                e.stopPropagation();
-            // })
+
             $('#tree').treeview({
                 data: getTreeData(), // data is not optional
                 levels: 5,
                 showTags: true,
                 onNodeSelected: function(event, node) {
-                    /*                    var senderElementName = event.target.tagNametoLowerCase();
-                                        if (senderElementName === 'li')
-                                            alert('li is pressed');
-                                        else {
-
-
-                                            alert('others are  pressed');
-                                            event.stopPropagation();
-                                        }*/
-
-                    //$(this).attr("href", "http://tnbelt.com");
-                    //$('#selectable-output').prepend('<p>/tree?id=' + node.text + "   " + node.tag + ' was selected</p>');
-                    //location.replace("/tree" + node.href);
-                    //$('#selectable-output').load("/tree" + node.href);
-                    //location.replace("/tree/" + node.text);
-                    //console.log($(node.text);
-
+                    exec(node.text);
 
                 }
             });
 
             function getTreeInstantData(results) {
-                /*                alret(results);
-                                // viewDataRendered
-                                var viewData = viewDataRendered; //TODO: get this data with AJAX request.
 
-                                var allParents = getUniqueParents(viewData);
-                                var data = [];
-                                var j = 0;
-                                for (var i = 0; i < allParents.length; i++) {
-                                    if (allParents[i])
-                                        data[j++] = getParentWithChildren(viewData, allParents[i]);
-                                }
-
-                                for (var i = 0; i < viewData.length; i++) {
-                                    data[j++] = viewData[i];
-                                }
-
-                                if (results.length >0) {
-                                    var filteredData = [];
-                                    var k = 0;
-                                    for (var i = 0; i < data.length; i++) {
-                                        if (data[i][propertyName])
-                                            if (data[i][propertyName].trim() === propertyValue) {
-                                                filteredData[k] = data[i];
-                                                k++;
-                                            }
-                                    }
-                                    data = filteredData;
-                                }*/
 
                 return results;
             }
 
-            function refConceptfunc() {
-                alert("hello")
-            }
             //            $("#clickable a").click(function(e) {
             //                //do something
             //                e.stopPropagation();
@@ -280,22 +210,7 @@
                 levels: 5,
                 showTags: true,
                 onNodeSelected: function(event, node) {
-                    /*                    var senderElementName = event.target.tagNametoLowerCase();
-                                        if (senderElementName === 'li')
-                                            alert('li is pressed');
-                                        else {
-
-
-                                            alert('others are  pressed');
-                                            event.stopPropagation();
-                                        }*/
-
-                    //$(this).attr("href", "http://tnbelt.com");
-                    //$('#selectable-output').prepend('<p>/tree?id=' + node.text + "   " + node.tag + ' was selected</p>');
-                    //location.replace("/tree" + node.href);
-                    //$('#selectable-output').load("/tree" + node.href);
-                    //location.replace("/tree/" + node.text);
-                    //console.log($(node.text);
+                    exec(node.text);
 
 
                 }
@@ -309,12 +224,11 @@
                     revealResults: $('#chk-reveal-results').is(':checked')
                 };
                 var results = $('#tree').treeview('search', [pattern, options]);
-                //alert(results);
-                var output = '<p>' + results.length + ' matches found</p>';
-                $.each(results, function(index, result) {
-                    output += '<p>- ' + result.text + '</p>';
+                /*                var output = '<p>' + results.length + ' matches found</p>';
+                                $.each(results, function(index, result) {
+                                    output += '<p>- ' + result.text + '</p>';
 
-                });
+                                });*/
                 $('#tree').treeview({
                     data: getTreeInstantData(results), // data is not optional
                     levels: 5,
@@ -322,7 +236,11 @@
                     enableLinks: true,
                     selectedIcon: "glyphicon glyphicon-stop",
                     color: 'green',
-                    onNodeSelected: function(event, node) {}
+                    onNodeSelected: function(event, node) {
+
+                        exec(node.text);
+
+                    }
                 });
                 //$('#search-output').html(output);
             }
@@ -342,6 +260,44 @@
                 alert(item.label + " " + item.concept);
             }
 
+            function trim(str) {
+
+                var n = str.split("/");
+                var p = n[n.length - 1];
+
+                return p;
+            }
+
+            function trimHash(str) {
+
+                var n = str.split("#");
+                var p = n[n.length - 1];
+
+                return p;
+            }
+
+            function replaceWithRDFType(str) {
+
+                if (str.includes("22-rdf-syntax-ns")) {
+                    str = "rdf:" + trimHash(str);
+                } else if (str.includes('rdf-schema'))
+                    str = "rdfs:" + trimHash(str);
+                else if (str.includes('owl'))
+                    str = "owl:" + trimHash(str);
+                else
+                    str = str;
+                return str;
+            }
+
+            function isConceptAvailable(str) {
+
+                for (var i = 0; i < viewDataRendered.length; i++) {
+                    if (str === viewDataRendered[i].concept)
+                        return true;
+                }
+                return false;
+            }
+
             $('.dropdown-menu').on('click', 'a', function(e) {
                 // 'this' is the clicked anchor
                 var text = this.text;
@@ -356,19 +312,12 @@
                         enableLinks: true,
                         selectedIcon: "glyphicon glyphicon-stop",
                         color: 'green',
-                        onNodeSelected: function(event, node) {}
+                        onNodeSelected: function(event, node) {
+                            exec(node.text);
 
-                        /*                    onNodeSelected: function(event, node) {
-                                                        //$(this).attr("href", "http://tnbelt.com");
-                                       
-                                       <p> node selected = ' + JSON.stringify(event) + ' data = /tree?id=' + node.text + " " + node.tag + ' was selected</p>');
-                                                        //location.replace("/tree" + node.href);
-                                //$('#selectable-output').load("/tree" + node.href);
-                                //location.replace("/tree/" + node.text);
-                                //console.log($(node.text);
+                        }
 
 
-                        } */
                     });
                 } else {
                     $('#tree').treeview({
@@ -380,22 +329,10 @@
                         color: 'green',
                         onNodeSelected: function(event, node) {
 
+                            exec(node.text);
 
+                        }
 
-                                location.replace("https://www.w3schools.com");
-                            }
-                            /*                  onNodeSelected: function(event, node) {
-
-                                                  //$(this).attr("href", "http://tnbelt.com");
-                                                  /*$('#selectable-output').prepend('<p> node selected = ' + JSON.stringify(event) + ' data = /tree?id=' + node.text + " " + node.tag + ' was selected</p>');
-                                    $('#selectable-output').prepend('<p> node selected =  data = /tree?id=' + node.text + ' was selected</p>');
-                            //location.replace("/tree" + node.href);
-                            //$('#selectable-output').load("/tree" + node.href);
-                            //location.replace("/tree/" + node.text);
-                            //console.log($(node.text);
-
-
-                    } */
                     });
                 }
 
@@ -412,8 +349,6 @@
                 }
                 var unique = [...new Set(conceptFile.map(item => item))];
                 e.text = conceptFile;
-                debugger;
-                $('#selectable-output').html('conceptFile is ' + conceptFile);
 
             }
 
@@ -438,10 +373,83 @@
                 } else {
 
                     e.text = conceptRDFType;
-                    $('#selectable-output').html('conceptRDFType is ' + conceptRDFType);
                 }
 
             }
 
+
+            function exec(item) {
+                var str = "";
+                conceptSelected = item;
+                for (var i = 0; i < viewDataRendered.length; i++) {
+                    if (item === viewDataRendered[i].concept) {
+                        var conceptURI = viewDataRendered[i].URI;
+                    }
+                }
+                if (conceptURI) {
+                    var endpoint = "http://localhost:3030/ds/sparql"
+                    var sparql = 'prefix schema: <http://schema.org/> \n' +
+                        'prefix owl:   <http://www.w3.org/2002/07/owl#> \n' +
+                        'prefix xsd:   <http://www.w3.org/2001/XMLSchema#> \n' +
+                        'prefix voaf:  <http://purl.org/vocommons/voaf#> \n' +
+                        'prefix skos:  <http://www.w3.org/2004/02/skos/core#> \n' +
+                        'prefix mv:    <http://eccenca.com/mobivoc/> \n' +
+                        'prefix rdfs:  <http://www.w3.org/2000/01/rdf-schema#> \n' +
+                        'prefix vcard: <http://www.w3.org/2001/vcard-rdf/3.0#> \n' +
+                        'prefix gr:    <http://purl.org/goodrelations/v1#> \n' +
+                        'prefix geo:   <http://www.w3.org/2003/01/geo/wgs84_pos#> \n' +
+                        'prefix s:     <http://schema.org/> \n' +
+                        'prefix dct:   <http://purl.org/dc/terms/> \n' +
+                        'prefix rdf:   <http://www.w3.org/1999/02/22-rdf-syntax-ns#> \n' +
+                        'prefix vCard: <http://www.w3.org/2001/vcard-rdf/3.0#> \n' +
+                        'prefix foaf:  <http://xmlns.com/foaf/spec/#> \n' +
+                        'SELECT  ?p ?o WHERE {  <' + conceptURI + '> ?p ?o }  '
+                        //d3sparql.query(endpoint, sparql, render)
+                    d3sparql.query(endpoint, sparql, render)
+                        //var concept = trim(conceptURI);
+                }
+
+            }
+
+            function render(json) {
+
+                var dataSPARQL = json.results.bindings;
+                var table = '<table class="table table-striped" >' +
+                    '<tr>' +
+                    '<th>Predicate</th>' +
+                    '<th>Object</th>' +
+                    '</tr>';
+                for (var i = 0; i < dataSPARQL.length; i++) {
+                    var key1 = replaceWithRDFType(trim(dataSPARQL[i]['p'].value));
+                    var key2 = replaceWithRDFType(trim(dataSPARQL[i]['o'].value));
+                    //                    if (dataSPARQL[i]['o'].label))
+                    //                        key2 = key2 + dataSPARQL[i]['o'].label;
+                    if (isConceptAvailable(key1)) {
+                        key1 = '<a href="#" onmousedown="exec(&quot;' + key1 + '&quot;); return false;">' + key1 + '</a>';
+                    }
+                    if (isConceptAvailable(key2)) {
+                        key2 = '<a href="#" onmousedown="exec(&quot;' + key2 + '&quot;); return false;">' + key2 + '</a>';
+                    }
+                    debugger;
+
+                    table += '<tr><td>' + key1 + '</td>    <td>' + key2 + '</td>  </tr>';
+
+                }
+                table += '</table> ';
+                $("#conceptHead").html('<p > Concept Details :<code>' + conceptSelected + '</code></p>');
+                debugger;
+
+                $("#selectable-output").html(table);
+
+                //display on graph
+                var config = {
+                    "charge": -500,
+                    "distance": 50,
+                    "width": 500,
+                    "height": 350,
+                    "selector": "#graph-output"
+                }
+                d3sparql.forcegraph(json, config);
+            }
+
         </script>
-        <% include footer %>

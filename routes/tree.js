@@ -6,19 +6,8 @@ var http = require('http');
 const url = require('url');
 var parseString = require('xml2js').parseString;
 var sparqlResponse = [];
-/*const jsdom = require("jsdom");
-const {
-    JSDOM
-} = jsdom;
-const {
-    document
-} = (new JSDOM(`...`)).window;*/
 
-// Prints https://example.org/foo#baz
 
-//var */ = "";
-//var JSONTree;
-/* Execute a command line. */
 router.get('/', function (req, res) {
 
     var treeData = [];
@@ -107,6 +96,7 @@ router.get('/', function (req, res) {
             });
         }
         console.log(fullUrl);*/
+
     /////////////////////////////////////////////////////////////////////
     // find URI for the concept
     /////////////////////////////////////////////////////////////////////
@@ -115,10 +105,6 @@ router.get('/', function (req, res) {
 
     var conceptURI = findURI(appdata, concept);
 
-    /*    var conceptURI = appdata.forEach(function (element) {
-            if (element.concept == concept)
-                return element.URI;
-        });*/
     console.log("URI ready for sparql qurey " + conceptURI);
 
 
@@ -127,115 +113,75 @@ router.get('/', function (req, res) {
 
         console.log('HI');
     }
-    /*
-        function addEvent(element, evnt, funct) {
-            if (element.attachEvent)
-                return element.attachEvent('on' + evnt, funct);
-            else
-                return element.addEventListener(evnt, funct, false);
-        }
-
-        // example
-        addEvent(
-            document.getElementById('li'),
-            'click',
-            function () {
-                alert('hi!');
-            }
-        );
-    */
-
-    /*var clickHandler = function () {
-        alert('Stuff happens now.');
-    }
-
-
-    if (document.addEventListener) {
-        document.getElementById('data-nodeid').addEventListener('click', clickHandler, false);
-    } else {
-        document.getElementById('data-nodeid').attachEvent('click', clickHandler);
-    }
-*/
-    /*    app.get("/tree/:id", function (req, res) {
-            //var concept = req.param('id');
-            var str = req.params.id;
-            var concept = str.split("/");
-
-            //console.log("concept  " + req.query.id);
-            //debugger;
-        });*/
-
 
     ///////////////////////////////////////////////////////////////////////////
     // query sparql endpoint 
     ///////////////////////////////////////////////////////////////////////////
-    var request = require('request');
-    var querystring = require('querystring');
-    var queryResult;
-
-    var myquery2 = querystring.stringify({
-        query: 'prefix schema: <http://schema.org/> \n' +
-            'prefix owl:   <http://www.w3.org/2002/07/owl#> \n' +
-            'prefix xsd:   <http://www.w3.org/2001/XMLSchema#> \n' +
-            'prefix voaf:  <http://purl.org/vocommons/voaf#> \n' +
-            'prefix skos:  <http://www.w3.org/2004/02/skos/core#> \n' +
-            'prefix mv:    <http://eccenca.com/mobivoc/> \n' +
-            'prefix rdfs:  <http://www.w3.org/2000/01/rdf-schema#> \n' +
-            'prefix vcard: <http://www.w3.org/2001/vcard-rdf/3.0#> \n' +
-            'prefix gr:    <http://purl.org/goodrelations/v1#> \n' +
-            'prefix geo:   <http://www.w3.org/2003/01/geo/wgs84_pos#> \n' +
-            'prefix s:     <http://schema.org/> \n' +
-            'prefix dct:   <http://purl.org/dc/terms/> \n' +
-            'prefix rdf:   <http://www.w3.org/1999/02/22-rdf-syntax-ns#> \n' +
-            'prefix vCard: <http://www.w3.org/2001/vcard-rdf/3.0#> \n' +
-            'prefix foaf:  <http://xmlns.com/foaf/spec/#> \n' +
-            'SELECT   ?s ?p ?o WHERE {  <' + conceptURI + '> ?p ?o } limit 25 '
-    });
-
-    //var params = "myquery2";
-    request.post({
-            headers: {
-                'content-type': 'application/x-www-form-urlencoded'
-                    //'content-type': 'application/sparql-results+json'
-            },
-
-            url: "http://localhost:3030/ds/sparql?" + myquery2
-        },
-        function (error, response, body) {
-            console.log(response.statusCode)
-
-            if (!error && response.statusCode == 200) {
-                parseString(body, function (err, result) {
-                    sparqlResponse = JSON.stringify(result);
-                    console.log(sparqlResponse);
-                });
-                //console.log(queryResult); //data 
-                console.log('successful update');
-
-            } else {
-                console.log(response.statusCode)
-                console.warn(error);
-
-            }
-
-        });
+    //    var request = require('request');
+    //    var querystring = require('querystring');
+    //    var queryResult;
+    //
+    //    var myquery2 = querystring.stringify({
+    //        query: 'prefix schema: <http://schema.org/> \n' +
+    //            'prefix owl:   <http://www.w3.org/2002/07/owl#> \n' +
+    //            'prefix xsd:   <http://www.w3.org/2001/XMLSchema#> \n' +
+    //            'prefix voaf:  <http://purl.org/vocommons/voaf#> \n' +
+    //            'prefix skos:  <http://www.w3.org/2004/02/skos/core#> \n' +
+    //            'prefix mv:    <http://eccenca.com/mobivoc/> \n' +
+    //            'prefix rdfs:  <http://www.w3.org/2000/01/rdf-schema#> \n' +
+    //            'prefix vcard: <http://www.w3.org/2001/vcard-rdf/3.0#> \n' +
+    //            'prefix gr:    <http://purl.org/goodrelations/v1#> \n' +
+    //            'prefix geo:   <http://www.w3.org/2003/01/geo/wgs84_pos#> \n' +
+    //            'prefix s:     <http://schema.org/> \n' +
+    //            'prefix dct:   <http://purl.org/dc/terms/> \n' +
+    //            'prefix rdf:   <http://www.w3.org/1999/02/22-rdf-syntax-ns#> \n' +
+    //            'prefix vCard: <http://www.w3.org/2001/vcard-rdf/3.0#> \n' +
+    //            'prefix foaf:  <http://xmlns.com/foaf/spec/#> \n' +
+    //            'SELECT   ?s ?p ?o WHERE {  <' + conceptURI + '> ?p ?o } limit 25 '
+    //    });
+    //
+    //    //var params = "myquery2";
+    //    request.post({
+    //            headers: {
+    //                'content-type': 'application/x-www-form-urlencoded'
+    //                    //'content-type': 'application/sparql-results+json'
+    //            },
+    //
+    //            url: "http://localhost:3030/ds/sparql?" + myquery2
+    //        },
+    //        function (error, response, body) {
+    //            console.log(response.statusCode)
+    //
+    //            if (!error && response.statusCode == 200) {
+    //                parseString(body, function (err, result) {
+    //                    sparqlResponse = JSON.stringify(result);
+    //                    console.log(sparqlResponse);
+    //                });
+    //                //console.log(queryResult); //data 
+    //                console.log('successful update');
+    //
+    //            } else {
+    //                console.log(response.statusCode)
+    //                console.warn(error);
+    //
+    //            }
+    //
+    //        });
 
     ///////////////////////////////////////////////////////////////////////////
     //
     //////////////////////////////////////////////////////////////////////////
-    console.log(" SPARQL Query is " + sparqlResponse);
-    /*    var xml = queryResult;
-        console.log(xml);
-        parseString(xml, function (err, result) {
-            console.dir(JSON.stringify(result));
-        });*/
+    /*    console.log(" SPARQL Query is " + sparqlResponse);    /*    var xml = queryResult;
+    console.log(xml);
+    parseString(xml, function (err, result) {
+        console.dir(JSON.stringify(result));
+    }); */
     //console.log(files);
 
     res.render('tree.ejs', {
         title: 'tree',
         data: treeData,
-        fileNames: files,
-        queryResult: queryResult
+        fileNames: files
     });
 
 });
