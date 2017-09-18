@@ -7,7 +7,7 @@ a {
 }
 .mygrid-wrapper-div {
     overflow: scroll;
-    height: 50%;
+    height: 100%;
 }
 .tree {
     min-height: 20px;

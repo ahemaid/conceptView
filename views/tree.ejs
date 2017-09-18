@@ -212,7 +212,7 @@
                 onNodeSelected: function(event, node) {
                     $('#graph').empty();
                     exec(node.concept);
-                    debugger;
+                    //debugger;
 
                 }
             });
@@ -278,7 +278,7 @@
             //                alert(item.label + " " + item.concept);
             //            }
 
-            function trim(str) {
+            function trimSlash(str) {
 
                 var n = str.split("/");
                 var p = n[n.length - 1];
@@ -333,11 +333,8 @@
                         //                        color: 'green',
                         onNodeSelected: function(event, node) {
                             $('#graph').empty();
-                            alert(node.concept);
-
                             exec(node.concept);
 
-                            debugger;
                         }
 
 
@@ -353,7 +350,26 @@
                         //                        color: 'green',
                         onNodeSelected: function(event, node) {
                             $('#graph').empty();
-                            exec(node.concept);
+                            event.stopPropagation();
+                            if (node.text.includes("div") && !node.parent) {
+                                var parentNode = node.text;
+                                parentNode = parentNode.split('<');
+                                var str = parentNode[0];
+                                str = str.trim();
+                                alert(str);
+                                // conceptSelected = str;
+                                exec(str);
+
+
+                            } else {
+                                exec(node.concept);
+
+                            }
+
+                            //alert("here is parent div " + node.text);
+
+                            debugger;
+
 
                         }
 
@@ -372,7 +388,11 @@
                     }
                 }
                 var unique = [...new Set(conceptFile.map(item => item))];
-                e.text = conceptFile;
+                if (unique.length > 0)
+                    e.text = unique;
+                else
+                    e.text = "Not Found";
+
 
             }
 
@@ -386,31 +406,40 @@
 
                     }
 
+
                 }
                 // <!--% console.log("Hi"); %-->
 
                 var unique = [...new Set(conceptRDFType.map(item => item))];
-                if (unique.length > 1) {
-                    //e.text = conceptRDFType;
-                    $('#detailTable').html('more than one');
 
+                if (unique.length > 0) {
+
+                    e.text = unique;
                 } else {
+                    e.text = "Not Found";
+                    //$('#detailTable').html('more than one');
 
-                    e.text = conceptRDFType;
                 }
+                debugger;
 
             }
 
 
             function exec(item) {
                 var str = "";
+                var isURIExist = false;
+                var conceptURI;
                 conceptSelected = item;
                 for (var i = 0; i < viewDataRendered.length; i++) {
-                    if (item === viewDataRendered[i].concept) {
-                        var conceptURI = viewDataRendered[i].URI;
+                    if (item.toLowerCase() === viewDataRendered[i].concept.toLowerCase()) {
+                        conceptURI = viewDataRendered[i].URI;
+                        //alert(conceptURI);
+                        isURIExist = true;
+                        break;
+
                     }
                 }
-                if (conceptURI) {
+                if (isURIExist) {
                     var endpoint = "http://localhost:3030/ds/sparql"
                     var sparql = 'prefix schema: <http://schema.org/> \n' +
                         'prefix owl:   <http://www.w3.org/2002/07/owl#> \n' +
@@ -430,7 +459,15 @@
                         'SELECT  ?p ?o WHERE {  <' + conceptURI + '> ?p ?o }  '
                         //d3sparql.query(endpoint, sparql, render)
                     d3sparql.query(endpoint, sparql, render)
-                        //var concept = trim(conceptURI);
+                    debugger;
+                    //var concept = trim(conceptURI);
+                } else {
+                    alert("show");
+                    $("#infoDetails").show();
+                    $("#conceptHead ").html('<p > Concept Details :<code>' + conceptSelected + '</code></p>');
+                    $('#myDiv').hide();
+
+
                 }
 
             }
@@ -456,8 +493,8 @@
                     '<th>Used on these types</th>' +
                     '</tr>';
                 for (var i = 0; i < dataSPARQL.length; i++) {
-                    var key1 = replaceWithRDFType(trim(dataSPARQL[i]['p'].value));
-                    var key2 = replaceWithRDFType(trim(dataSPARQL[i]['o'].value));
+                    var key1 = replaceWithRDFType(trimSlash(dataSPARQL[i]['p'].value));
+                    var key2 = replaceWithRDFType(trimSlash(dataSPARQL[i]['o'].value));
                     //                    if (dataSPARQL[i]['o'].label))
                     //                        key2 = key2 + dataSPARQL[i]['o'].label;
 
@@ -498,7 +535,6 @@
                 $("#detailTable").html(table);
                 $("#domainTable").html(domainTable);
                 $("#rangeTable").html(rangeTable);
-                debugger;
 
                 //display on graph
                 //display on graph
