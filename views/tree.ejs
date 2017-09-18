@@ -1,4 +1,5 @@
 <% include header %>
+
     <!--
     <h1><%-title %></h1>
 -->
@@ -81,7 +82,8 @@
         <div>
 
             <h2>Results</h2>
-            <div id="search-output"></div>
+            <!--
+<div id="search-output"></div>-->
             <!-- </form> -->
             <div id="tree"></div>
         </div>
@@ -89,21 +91,22 @@
 
     </div>
 
-    <div id="infoDetails" class="col-sm-6">
-        <div class='container-fluid'>
-            <!--            <div data-spy="affix" data-offset-top="50">-->
-            <div class="header_for_fix">
-                <h3 id="conceptHead">Concept Details:</h3>
-                <div id="selectable-output"></div>
-                <h2>Graph Representation</h2>
+    <div class="col-sm-6">
+        <div id="infoDetails" class="mygrid-wrapper-div" style="height:500px;width:500px; display: none">
 
-                <div id="graph-output"></div>
+            <h3 id="conceptHead">Concept Details:</h3>
+            <div id="detailTable"></div>
+            <div id="domainTable"></div>
+            <div id="rangeTable"></div>
+
+            <h3>Graph Representation :</h3>
+            <div class="container" style="width:100%;height:100%;">
+                <div id='graph'></div>
+
 
             </div>
-            <!--</div>-->
-        </div>
 
-    </div>
+        </div>
 
 
     </div>
@@ -131,12 +134,12 @@
                 };
 
                 var node = {
-                    text: parent,
-                    nodes: children,
-                    tags: ['<a id=' + parent + ' href="" onmousedown="showFileFunc(this)">Show file</a>',
-                        '<a id=' + parent + ' href="" onmousedown="showTypeFunc(this)">Show Type</a>'
-                    ],
-                    tagsClass: 'label label-default'
+                    text: parent + '<div class = "pull-right" > <a id =' + parent + ' onmousedown = "showTypeFunc(this)" href = "JavaScript:Void(0);" class = "btn btn-default btn-xs" role = "button"> Show Type </a><a id=' + parent + ' onmousedown="showFileFunc(this)" href="JavaScript:Void(0);" class="btn btn-danger btn-xs" role="button">Show File(s)</a> </div>',
+                    nodes: children
+                        /*tags: ['<a id=' + parent + ' href="" onmousedown="showFileFunc(this)">Show file</a>',
+                            '<a id=' + parent + ' href="" onmousedown="showTypeFunc(this)">Show Type</a>'
+                        ],
+                        tagsClass: 'label label-default'*/
 
                 };
 
@@ -149,9 +152,9 @@
                 // viewDataRendered
                 var viewData = viewDataRendered; //TODO: get this data with AJAX request.
                 for (var i = 0; i < viewData.length; i++) {
-                    viewData[i].text = viewData[i].concept;
-                    viewData[i].tags = ['<a id=' + viewData[i].concept + ' href="" onmousedown="showFileFunc(this)">Show file</a>', '<a id=' + viewData[i].concept + ' href="" onmousedown="showTypeFunc(this)">Show Type</a>'];
-                    viewData[i].tagsClass = 'label label-default';
+                    viewData[i].text = viewData[i].concept + '<div class="pull-right"><a id=' + viewData[i].concept + ' onmousedown="showTypeFunc(this)" href="JavaScript:Void(0);" class="btn btn-default btn-xs" role="button">Show Type</a><a id=' + viewData[i].concept + ' onmousedown="showFileFunc(this)" href="JavaScript:Void(0);" class="btn btn-danger btn-xs" role="button" >Show File(s)</a></div>';
+                    /*    viewData[i].tags = ['<a id=' + viewData[i].concept + ' href="" onmousedown="showFileFunc(this)">Show file</a>', '<a id=' + viewData[i].concept + ' href="" onmousedown="showTypeFunc(this)">Show Type</a>'];
+                        viewData[i].tagsClass = 'label label-default';*/
                     //viewData[i].href = "javascript:refConceptfunc(this);";
 
 
@@ -178,7 +181,21 @@
                                 k++;
                             }
                     }
-                    data = filteredData;
+                    //data = filteredData;
+                    var allParentsFromFiles = getUniqueParents(filteredData);
+                    var dataFiles = [];
+                    var j = 0;
+                    for (var i = 0; i < allParentsFromFiles.length; i++) {
+                        if (allParentsFromFiles[i])
+                            dataFiles[j++] = getParentWithChildren(filteredData, allParentsFromFiles[i]);
+                    }
+                    for (var i = 0; i < filteredData.length; i++) {
+                        dataFiles[j++] = filteredData[i];
+                    }
+
+                    /*< filteredData.length; i++) { data2[j++]=f ilteredData[i]; }*/
+                    data = dataFiles;
+
                 }
 
                 return data;
@@ -188,16 +205,19 @@
             $('#tree').treeview({
                 data: getTreeData(), // data is not optional
                 levels: 5,
-                showTags: true,
+                enableLinks: true,
+                /*
+                                showTags: true,
+                */
                 onNodeSelected: function(event, node) {
-                    exec(node.text);
+                    $('#graph').empty();
+                    exec(node.concept);
+                    debugger;
 
                 }
             });
 
             function getTreeInstantData(results) {
-
-
                 return results;
             }
 
@@ -208,9 +228,14 @@
             $('#tree').treeview({
                 data: getTreeData(), // data is not optional
                 levels: 5,
-                showTags: true,
+                enableLinks: true,
+
+                /*
+                                showTags: true,
+                */
                 onNodeSelected: function(event, node) {
-                    exec(node.text);
+                    $('#graph').empty();
+                    exec(node.concept);
 
 
                 }
@@ -220,25 +245,18 @@
                 var pattern = $('#input-search').val();
                 var options = {
                     ignoreCase: $('#chk-ignore-case').is(':checked'),
-                    exactMatch: $('#chk-exact-match').is(':checked'),
-                    revealResults: $('#chk-reveal-results').is(':checked')
+                    exactMatch: $('#chk-exact-match').is(':checked')
                 };
                 var results = $('#tree').treeview('search', [pattern, options]);
-                /*                var output = '<p>' + results.length + ' matches found</p>';
-                                $.each(results, function(index, result) {
-                                    output += '<p>- ' + result.text + '</p>';
 
-                                });*/
                 $('#tree').treeview({
                     data: getTreeInstantData(results), // data is not optional
                     levels: 5,
-                    showTags: true,
                     enableLinks: true,
-                    selectedIcon: "glyphicon glyphicon-stop",
-                    color: 'green',
                     onNodeSelected: function(event, node) {
+                        $('#graph').empty();
 
-                        exec(node.text);
+                        exec(node.concept);
 
                     }
                 });
@@ -251,14 +269,14 @@
             $('#btn-clear-search').on('click', function(e) {
                 $searchableTree.treeview('clearSearch');
                 $('#input-search').val('');
-                $('#search-output').html('');
+                //$('#search-output').html('');
             });
 
 
-            function selectItem(item) {
-
-                alert(item.label + " " + item.concept);
-            }
+            //            function selectItem(item) {
+            //
+            //                alert(item.label + " " + item.concept);
+            //            }
 
             function trim(str) {
 
@@ -308,13 +326,18 @@
                     $('#tree').treeview({
                         data: getTreeData(), // data is not optional
                         levels: 5,
-                        showTags: true,
                         enableLinks: true,
-                        selectedIcon: "glyphicon glyphicon-stop",
-                        color: 'green',
-                        onNodeSelected: function(event, node) {
-                            exec(node.text);
 
+                        //                        showTags: true,
+                        //                        selectedIcon: "glyphicon glyphicon-stop",
+                        //                        color: 'green',
+                        onNodeSelected: function(event, node) {
+                            $('#graph').empty();
+                            alert(node.concept);
+
+                            exec(node.concept);
+
+                            debugger;
                         }
 
 
@@ -323,13 +346,14 @@
                     $('#tree').treeview({
                         data: getTreeData('fileName', text), // data is not optional
                         levels: 5,
-                        showTags: true,
                         enableLinks: true,
-                        selectedIcon: "glyphicon glyphicon-stop",
-                        color: 'green',
+                        //
+                        //                        showTags: true,
+                        //                        selectedIcon: "glyphicon glyphicon-stop",
+                        //                        color: 'green',
                         onNodeSelected: function(event, node) {
-
-                            exec(node.text);
+                            $('#graph').empty();
+                            exec(node.concept);
 
                         }
 
@@ -368,7 +392,7 @@
                 var unique = [...new Set(conceptRDFType.map(item => item))];
                 if (unique.length > 1) {
                     //e.text = conceptRDFType;
-                    $('#selectable-output').html('more than one');
+                    $('#detailTable').html('more than one');
 
                 } else {
 
@@ -414,41 +438,77 @@
             function render(json) {
 
                 var dataSPARQL = json.results.bindings;
+
                 var table = '<table class="table table-striped" >' +
+                    '<colgroup> <col class="col-md-2"><col class="col-md-4"> </colgroup>' +
                     '<tr>' +
                     '<th>Predicate</th>' +
                     '<th>Object</th>' +
+                    '</tr>';
+                var rangeTable = '<table class="table table-striped " >' +
+                    '<colgroup> <col class="col-md-6"> </colgroup>' +
+                    '<tr>' +
+                    '<th>Values expected to be one of these types</th>' +
+                    '</tr>';
+                var domainTable = '<table class="table table-striped " >' +
+                    '<colgroup> <col class="col-md-6"> </colgroup>' +
+                    '<tr>' +
+                    '<th>Used on these types</th>' +
                     '</tr>';
                 for (var i = 0; i < dataSPARQL.length; i++) {
                     var key1 = replaceWithRDFType(trim(dataSPARQL[i]['p'].value));
                     var key2 = replaceWithRDFType(trim(dataSPARQL[i]['o'].value));
                     //                    if (dataSPARQL[i]['o'].label))
                     //                        key2 = key2 + dataSPARQL[i]['o'].label;
-                    if (isConceptAvailable(key1)) {
-                        key1 = '<a href="#" onmousedown="exec(&quot;' + key1 + '&quot;); return false;">' + key1 + '</a>';
-                    }
-                    if (isConceptAvailable(key2)) {
-                        key2 = '<a href="#" onmousedown="exec(&quot;' + key2 + '&quot;); return false;">' + key2 + '</a>';
-                    }
-                    debugger;
 
-                    table += '<tr><td>' + key1 + '</td>    <td>' + key2 + '</td>  </tr>';
+                    if (key1.includes("domain")) {
+
+                        if (isConceptAvailable(key2))
+                            key2 = '<a href="#" onmousedown="exec(&quot;' + key2 + '&quot;); return false; ">' + key2 + '</a>';
+                        domainTable += '<tr>    <td>' + key2 + '</td>  </tr>';
+
+
+                    } else if (key1.includes("range")) {
+
+                        if (isConceptAvailable(key2))
+                            key2 = '<a href="#" onmousedown="exec(&quot;' + key2 + '&quot;); return false; ">' + key2 + '</a>';
+                        rangeTable += '<tr>    <td>' + key2 + '</td>  </tr>';
+
+                    } else {
+
+                        if (isConceptAvailable(key1)) {
+                            key1 = '<a href="#" onmousedown="exec(&quot;' + key1 + '&quot;); return false; ">' + key1 + '</a>';
+                        }
+                        if (isConceptAvailable(key2)) {
+                            key2 = '<a href="#" onmousedown="exec(&quot;' + key2 + '&quot;); return false; ">' + key2 + '</a>';
+                        }
+                        //debugger;
+
+                        table += '<tr><td>' + key1 + '</td>    <td>' + key2 + '</td>  </tr>';
+                    }
 
                 }
                 table += '</table> ';
-                $("#conceptHead").html('<p > Concept Details :<code>' + conceptSelected + '</code></p>');
+                domainTable += '</table> ';
+                rangeTable += '</table> ';
+
+                $("#conceptHead ").html('<p > Concept Details :<code>' + conceptSelected + '</code></p>');
+                // debugger;
+                $("#infoDetails").show();
+                $("#detailTable").html(table);
+                $("#domainTable").html(domainTable);
+                $("#rangeTable").html(rangeTable);
                 debugger;
 
-                $("#selectable-output").html(table);
-
+                //display on graph
                 //display on graph
                 var config = {
-                    "charge": -500,
-                    "distance": 50,
-                    "width": 500,
-                    "height": 350,
-                    "selector": "#graph-output"
-                }
+                    "charge ": '-500', //-500,
+                    "distance ": '50', //50,
+                    "height": '1000',
+                    "width": '750',
+                    "selector ": '#graph'
+                };
                 d3sparql.forcegraph(json, config);
             }
 

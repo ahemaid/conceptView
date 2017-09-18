@@ -1,58 +1,182 @@
 <% include header %>
-
     <!--
-      <a href="/ChargingPoint">ChargingStationI</a>
-      -->
-    <!--
-    <div style="margin-top: 5% !important;">
-        
-            <table id='tableResult' class='table table-striped table-bordered' cellspacing='0' border='5' width='100%'>
-                <thead>
-                    <tr>
-                        <th>Concept</th>
-                        <th>Type</th>
-                        <th>URI</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <!--% for (var i =0 ; JSONTree.length ; i++){ %>
-                        <tr>
-                            <td>
-                                <!--%= JSONTree[i]['concept'] %>
-                                    % console.log(JSONTree[i]['concept']);  %
+    <h1><%-title %></h1>
+-->
+    <div class="container">
 
-                            </td>
-                            <td>
-                                <!--%= JSONTree[i]['RDFType'] %>
-                            </td>
-                            <td>
-                                <!--%= JSONTree[i]['URI'] %>
-                            </td>
-                        </tr>
-                        <!--% } %>
-                </tbody>
-            </table>
+
+        <div id="infoDetails">
+            <h3 id="conceptHead">Concept Details:</h3>
+            <div id="detailTable"></div>
+            <div id="domainTable"></div>
+            <div id="rangeTable"></div>
+
+            <h3>Graph Representation :</h3>
+
+            <div id="graph-output"></div>
+
+        </div>
+
 
     </div>
--->
-    <script>
-        function responseHandler(res) {
-            var flat_array = [];
-            $.each(res, function(i, element) {
-                flat_array.push(JSON.flatten(element));
-            });
-            return flat_array;
-        }
 
-    </script>
 
-    <table id="data-table" class="table table-striped" data-url="../results.json" data-toggle="table" data-response-handler="responseHandler">
-        <thead>
-            <tr>
-                <th data-field="table.concept" data-sortable="true">Entry Page</th>
-                <th data-field="table.fileName" data-sortable="true">OS</th>
-                <th data-field="table.URI" data-sortable="true">Conversion Rate</th>
-            </tr>
-        </thead>
-    </table>
     <% include footer %>
+
+        <script>
+            var viewDataRendered = <%- JSON.stringify(app.locals.appdata) %>;
+            var conceptSelected = "";
+
+            document.getElementById("body").addEventListener("load", exec(<%- trim(str) %>));
+
+            function trim(str) {
+
+                var n = str.split("/");
+                var p = n[n.length - 1];
+
+                return p;
+            }
+
+            function trimHash(str) {
+
+                var n = str.split("#");
+                var p = n[n.length - 1];
+
+                return p;
+            }
+
+            function replaceWithRDFType(str) {
+
+                if (str.includes("22-rdf-syntax-ns")) {
+                    str = "rdf:" + trimHash(str);
+                } else if (str.includes('rdf-schema'))
+                    str = "rdfs:" + trimHash(str);
+                else if (str.includes('owl'))
+                    str = "owl:" + trimHash(str);
+                else
+                    str = str;
+                return str;
+            }
+
+            function isConceptAvailable(str) {
+
+                for (var i = 0; i < viewDataRendered.length; i++) {
+                    if (str === viewDataRendered[i].concept)
+                        return true;
+                }
+                return false;
+            }
+
+
+
+            function exec(item) {
+                var str = "";
+                conceptSelected = item;
+                for (var i = 0; i < viewDataRendered.length; i++) {
+                    if (item === viewDataRendered[i].concept) {
+                        var conceptURI = viewDataRendered[i].URI;
+                    }
+                }
+                if (conceptURI) {
+                    var endpoint = "http://localhost:3030/ds/sparql"
+                    var sparql = 'prefix schema: <http://schema.org/> \n' +
+                        'prefix owl:   <http://www.w3.org/2002/07/owl#> \n' +
+                        'prefix xsd:   <http://www.w3.org/2001/XMLSchema#> \n' +
+                        'prefix voaf:  <http://purl.org/vocommons/voaf#> \n' +
+                        'prefix skos:  <http://www.w3.org/2004/02/skos/core#> \n' +
+                        'prefix mv:    <http://eccenca.com/mobivoc/> \n' +
+                        'prefix rdfs:  <http://www.w3.org/2000/01/rdf-schema#> \n' +
+                        'prefix vcard: <http://www.w3.org/2001/vcard-rdf/3.0#> \n' +
+                        'prefix gr:    <http://purl.org/goodrelations/v1#> \n' +
+                        'prefix geo:   <http://www.w3.org/2003/01/geo/wgs84_pos#> \n' +
+                        'prefix s:     <http://schema.org/> \n' +
+                        'prefix dct:   <http://purl.org/dc/terms/> \n' +
+                        'prefix rdf:   <http://www.w3.org/1999/02/22-rdf-syntax-ns#> \n' +
+                        'prefix vCard: <http://www.w3.org/2001/vcard-rdf/3.0#> \n' +
+                        'prefix foaf:  <http://xmlns.com/foaf/spec/#> \n' +
+                        'SELECT  ?p ?o WHERE {  <' + conceptURI + '> ?p ?o }  '
+                        //d3sparql.query(endpoint, sparql, render)
+                    d3sparql.query(endpoint, sparql, render)
+                        //var concept = trim(conceptURI);
+                }
+
+            }
+
+            function render(json) {
+
+                var dataSPARQL = json.results.bindings;
+
+                var table = '<table class="table table-striped" >' +
+                    '<colgroup> <col class="col-md-2"><col class="col-md-4"> </colgroup>' +
+                    '<tr>' +
+                    '<th>Predicate</th>' +
+                    '<th>Object</th>' +
+                    '</tr>';
+                var rangeTable = '<table class="table table-striped " >' +
+                    '<colgroup> <col class="col-md-6"> </colgroup>' +
+                    '<tr>' +
+                    '<th>Values expected to be one of these types</th>' +
+                    '</tr>';
+                var domainTable = '<table class="table table-striped " >' +
+                    '<colgroup> <col class="col-md-6"> </colgroup>' +
+                    '<tr>' +
+                    '<th>Used on these types</th>' +
+                    '</tr>';
+                for (var i = 0; i < dataSPARQL.length; i++) {
+                    var key1 = replaceWithRDFType(trim(dataSPARQL[i]['p'].value));
+                    var key2 = replaceWithRDFType(trim(dataSPARQL[i]['o'].value));
+                    //                    if (dataSPARQL[i]['o'].label))
+                    //                        key2 = key2 + dataSPARQL[i]['o'].label;
+
+                    if (key1.includes("domain")) {
+
+                        if (isConceptAvailable(key2))
+                            key2 = '<a href="#" onmousedown="exec(&quot;' + key2 + '&quot;); return false; ">' + key2 + '</a>';
+                        domainTable += '<tr>    <td>' + key2 + '</td>  </tr>';
+
+
+                    } else if (key1.includes("range")) {
+
+                        if (isConceptAvailable(key2))
+                            key2 = '<a href="#" onmousedown="exec(&quot;' + key2 + '&quot;); return false; ">' + key2 + '</a>';
+                        rangeTable += '<tr>    <td>' + key2 + '</td>  </tr>';
+
+                    } else {
+
+                        if (isConceptAvailable(key1)) {
+                            key1 = '<a href="#" onmousedown="exec(&quot;' + key1 + '&quot;); return false; ">' + key1 + '</a>';
+                        }
+                        if (isConceptAvailable(key2)) {
+                            key2 = '<a href="#" onmousedown="exec(&quot;' + key2 + '&quot;); return false; ">' + key2 + '</a>';
+                        }
+                        debugger;
+
+                        table += '<tr><td>' + key1 + '</td>    <td>' + key2 + '</td>  </tr>';
+                    }
+
+                }
+                table += '</table> ';
+                domainTable += '</table> ';
+                rangeTable += '</table> ';
+
+                $("#conceptHead ").html('<p > Concept Details :<code>' + conceptSelected + '</code></p>');
+                debugger;
+
+                $("#detailTable").html(table);
+                $("#domainTable").html(domainTable);
+                $("#rangeTable").html(rangeTable);
+                //display on graph
+                //display on graph
+                var config = {
+                    "charge ": -500,
+                    "distance ": 50,
+                    "width ": 500,
+                    "height ": 350,
+                    "selector ": "#graph-output"
+                }
+                d3sparql.forcegraph(json, config);
+            }
+            var str = <%- concept %>;
+            //  exec(trim(str));
+
+        </script>
