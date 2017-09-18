@@ -92,21 +92,54 @@
     </div>
 
     <div class="col-sm-6">
-        <div id="infoDetails" class="mygrid-wrapper-div" style="height:500px;width:500px; display: none">
 
-            <h3 id="conceptHead">Concept Details:</h3>
-            <div id="detailTable"></div>
-            <div id="domainTable"></div>
-            <div id="rangeTable"></div>
 
-            <h3>Graph Representation :</h3>
-            <div class="container" style="width:100%;height:100%;">
-                <div id='graph'></div>
 
+        <div class="tabbing">
+            <ul class="tabNav">
+                <li><a href="#Documentation">Documentation</a></li>
+                <li><a href="#sourceCode">Turtle source</a></li>
+                <li><a href="#showGraph">Concept graph</a></li>
+            </ul>
+            <div class="tabContainer">
+                <div class="tabContent" id="Documentation">
+                    <div id="infoDetails" class="mygrid-wrapper-div" style="height:500px;width:500px; display: none">
+                        <h3 id="conceptHead">Concept Details:</h3>
+                        <div id="detailTable"></div>
+                        <div id="domainTable"></div>
+                        <div id="rangeTable"></div>
+                    </div>
+
+                </div>
+                <div class="tabContent" id="sourceCode">
+                    <h3>Source Code</h3>
+
+                </div>
+                <div class="tabContent" id="showGraph">
+                    <h3>Graph Representation:</h3>
+                    <div id='graph'></div>
+                </div>
 
             </div>
+        </div>
+
+
+        <!--<div id="infoDetails" class="mygrid-wrapper-div" style="height:500px;width:500px; display: none">
+    <div id="showOutput">
+        <div id="detailTable"></div>
+        <div id="domainTable"></div>
+        <div id="rangeTable"></div>
+
+        <div id="showGraph" class="container" style="width:100%;height:100%;">
+
+
+            <h3>Graph Representation :</h3>
+            <div id='graph'></div>
 
         </div>
+    </div>
+
+</div>-->
 
 
     </div>
@@ -235,6 +268,8 @@
                 */
                 onNodeSelected: function(event, node) {
                     $('#graph').empty();
+                    event.stopPropagation();
+
                     exec(node.concept);
 
 
@@ -255,6 +290,7 @@
                     enableLinks: true,
                     onNodeSelected: function(event, node) {
                         $('#graph').empty();
+                        event.stopPropagation();
 
                         exec(node.concept);
 
@@ -333,6 +369,8 @@
                         //                        color: 'green',
                         onNodeSelected: function(event, node) {
                             $('#graph').empty();
+                            event.stopPropagation();
+
                             exec(node.concept);
 
                         }
@@ -351,7 +389,18 @@
                         onNodeSelected: function(event, node) {
                             $('#graph').empty();
                             event.stopPropagation();
-                            if (node.text.includes("div") && !node.parent) {
+                            if (node.concept)
+                                exec(node.concept);
+                            else {
+                                var parentNode = node.text;
+                                parentNode = parentNode.split('<');
+                                var str = parentNode[0];
+                                $("#infoDetails").replaceWith('<h1><p > Concept <code>' + str + '</code> is not found</p></h1>');
+
+                            }
+
+
+                            /*if (node.text.includes("div") && !node.parent) {
                                 var parentNode = node.text;
                                 parentNode = parentNode.split('<');
                                 var str = parentNode[0];
@@ -365,7 +414,7 @@
                                 exec(node.concept);
 
                             }
-
+*/
                             //alert("here is parent div " + node.text);
 
                             debugger;
@@ -461,14 +510,17 @@
                     d3sparql.query(endpoint, sparql, render)
                     debugger;
                     //var concept = trim(conceptURI);
-                } else {
-                    alert("show");
-                    $("#infoDetails").show();
-                    $("#conceptHead ").html('<p > Concept Details :<code>' + conceptSelected + '</code></p>');
-                    $('#myDiv').hide();
-
-
                 }
+                /*else {
+                                   alert("show");
+                                   $("#infoDetails").show();
+                                   $("#conceptHead ").html('<p > Concept  :<code>' + conceptSelected + '</code> is not found</p>');
+                                   $('#detailTable').hide();
+                                   $('#domainTable').hide();
+                                   $('#rangeTable').hide();
+                                   $('#showGraph').hide();
+
+                               }*/
 
             }
 
@@ -547,5 +599,43 @@
                 };
                 d3sparql.forcegraph(json, config);
             }
+
+            // To display in TabView
+            $(document).ready(function(e) {
+                $('.tabbing').mTab({
+                    navigation: ".tabNav",
+                    container: ".tabContainer",
+                    activeTab: 1,
+                    activeClass: "active",
+                    scrollOffset: true,
+                    accordScreen: 768,
+                    toggleClose: true,
+                    animation: false,
+                    openWithUrl: true,
+                    callbackonclick: function() {},
+                    callback: function() {}
+                });
+
+            });
+
+            /*         <!-- script type = "text/javascript" >
+                         $(document).ready(function(e) {
+                             $('.tabbing').mTab({
+                                 navigation: ".tabNav",
+                                 container: ".tabContainer",
+                                 activeTab: 1,
+                                 activeClass: "active",
+                                 scrollOffset: true,
+                                 accordScreen: 768,
+                                 toggleClose: true,
+                                 animation: false,
+                                 openWithUrl: true,
+                                 callbackonclick: function() {},
+                                 callback: function() {}
+                             });
+
+                         });
+
+                 </script--> */
 
         </script>

@@ -5,7 +5,66 @@
         <%-title %>
     </p>
 
-    <div id="query" style="margin: 10px">
+    <head>
+
+        <link href="/stylesheets/mTab-style.css" type="text/css" rel="stylesheet" />
+    </head>
+
+    <body>
+        <div class="container" style="margin:30px auto; max-width:728px;">
+
+            <div class="tabbing">
+                <ul class="tabNav">
+                    <li><a href="#tab1">Documentation</a></li>
+                    <li><a href="#tab2">Turtle source</a></li>
+                    <li><a href="#tab3">Concept graph</a></li>
+                </ul>
+                <div class="tabContainer">
+                    <div class="tabContent" id="tab1">
+                        <h3>Tab Content 1</h3>
+                        <p>Lorem ipsum dolor sit amet, prompta molestie ad eam, ea commodo voluptaria referrentur pri, dicant consul est et. Corpora detraxit inciderint eam no, nonumy denique his id. Utroque percipit accusata usu eu, eu choro offendit consetetur nec. Cum at purto timeam cotidieque.</p>
+                        <p>At sit modus posse porro, duis doming interesset id pro. Vis vero ignota cetero ex, mentitum vituperatoribus quo id, eam eu modo sententiae. Cu iudico rationibus eum, ne duo elit nostrum constituam. Mea ea atqui minim. Eros primis persius eu sed. Usu cu aperiri utroque. An per voluptua phaedrum percipitur, ne ius scribentur dissentiunt. Lobortis principes est te, inermis placerat hendrerit mea ne, duo dicat nonumy sententiae an. An mel eius noster, dolore vituperata efficiendi pro at. Electram incorrupte mea at, percipit torquatos instructior sed eu, unum dolores ne vel. Id has tacimates intellegam, putent recusabo corrumpit nam ea.</p>
+                    </div>
+                    <div class="tabContent" id="tab2">
+                        <h3>Tab Content 2</h3>
+                        <p>At sit modus posse porro, duis doming interesset id pro. Vis vero ignota cetero ex, mentitum vituperatoribus quo id, eam eu modo sententiae. Cu iudico rationibus eum, ne duo elit nostrum constituam. Mea ea atqui minim. Eros primis persius eu sed. Usu cu aperiri utroque. An per voluptua phaedrum percipitur, ne ius scribentur dissentiunt. Lobortis principes est te, inermis placerat hendrerit mea ne, duo dicat nonumy sententiae an. An mel eius noster, dolore vituperata efficiendi pro at.</p>
+                        <p>Lorem ipsum dolor sit amet, prompta molestie ad eam, ea commodo voluptaria referrentur pri, dicant consul est et. Corpora detraxit inciderint eam no, nonumy denique his id. Utroque percipit accusata usu eu, eu choro offendit consetetur nec. Cum at purto timeam cotidieque.</p>
+                    </div>
+                    <div class="tabContent" id="tab3">
+                        <h3>Tab Content 3</h3>
+                        <p>Lorem ipsum dolor sit amet, prompta molestie ad eam, ea commodo voluptaria referrentur pri, dicant consul est et. Corpora detraxit inciderint eam no, nonumy denique his id. Utroque percipit accusata usu eu, eu choro offendit consetetur nec. Cum at purto timeam cotidieque.</p>
+                        <p>Ea oblique ceteros vix, ex quo paulo labore maiorum, falli detraxit ad pri. Ex sea populo tacimates definitionem, et mel sale erant, has ad probatus adipiscing. Mea cibo sententiae cotidieque ea. In viris quodsi lucilius vim, purto rebum graeco sea ad. In cum reque suscipit, moderatius philosophia sed ut. Denique platonem scribentur sed no, est natum electram abhorreant ei. Vis et possim quaerendum, sed primis nominavi ad. Nec munere lucilius ea, vel in latine erroribus, ius te porro regione. Te sed tollit tamquam invenire. Ad quo nihil virtute ancillae, pri ad idque singulis, iuvaret molestie dissentias ut cum.</p>
+                    </div>
+                    <div class="tabContent" id="tab4">
+                        <h3>Tab Content 4</h3>
+                        <p>Ea oblique ceteros vix, ex quo paulo labore maiorum, falli detraxit ad pri. Ex sea populo tacimates definitionem, et mel sale erant, has ad probatus adipiscing. Mea cibo sententiae cotidieque ea. In viris quodsi lucilius vim, purto rebum graeco sea ad.</p>
+                        <p> In cum reque suscipit, moderatius philosophia sed ut. Denique platonem scribentur sed no, est natum electram abhorreant ei. Vis et possim quaerendum, sed primis nominavi ad. Nec munere lucilius ea, vel in latine erroribus, ius te porro regione. Te sed tollit tamquam invenire. Ad quo nihil virtute ancillae, pri ad idque singulis, iuvaret molestie dissentias ut cum.</p>
+                    </div>
+                </div>
+            </div>
+
+            <script type="text/javascript">
+                $(document).ready(function(e) {
+                    $('.tabbing').mTab({
+                        navigation: ".tabNav",
+                        container: ".tabContainer",
+                        activeTab: 1,
+                        activeClass: "active",
+                        scrollOffset: true,
+                        accordScreen: 768,
+                        toggleClose: true,
+                        animation: false,
+                        openWithUrl: true,
+                        callbackonclick: function() {},
+                        callback: function() {}
+                    });
+
+                });
+
+            </script>
+
+
+            <!--div id="query" style="margin: 10px">
         <h1>d3forcegraph</h1>
         <form class="form-inline">
             <label>SPARQL endpoint:</label>
@@ -68,10 +127,10 @@
         // get data from d3sparql
         ////////////////////////////////////////////////////////
 
-    </script>
+    </script-->
 
 
 
 
 
-    <% include footer %>
+            <% include footer %>
