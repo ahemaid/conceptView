@@ -10,6 +10,8 @@ var contactus = require('./routes/contactus');
 var users = require('./routes/users');
 var tree = require('./routes/tree');
 var visualization = require('./routes/visualization');
+var turtleEditor = require('./routes/turtleEditor');
+
 
 //var selectServices = require('./routes/selectServices');
 
@@ -77,7 +79,11 @@ app.use('/contactus', contactus);
 app.use('/users', users);
 app.use('/tree', tree);
 app.use('/visualization', visualization);
-app.use('/views', express.static("views/webvowl"));
+app.use('/webvowlLink', express.static("views/webvowl"));
+app.use('/turtleEditorLink', express.static("views/turtleEditor"));
+app.use('/turtleEditor', turtleEditor);
+
+
 
 
 

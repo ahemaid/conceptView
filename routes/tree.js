@@ -115,7 +115,7 @@ router.get('/', function (req, res) {
     }
 
     ///////////////////////////////////////////////////////////////////////////
-    // query sparql endpoint 
+    // query sparql endpoint
     ///////////////////////////////////////////////////////////////////////////
     //    var request = require('request');
     //    var querystring = require('querystring');
@@ -157,7 +157,7 @@ router.get('/', function (req, res) {
     //                    sparqlResponse = JSON.stringify(result);
     //                    console.log(sparqlResponse);
     //                });
-    //                //console.log(queryResult); //data 
+    //                //console.log(queryResult); //data
     //                console.log('successful update');
     //
     //            } else {
@@ -167,6 +167,8 @@ router.get('/', function (req, res) {
     //            }
     //
     //        });
+
+
 
     ///////////////////////////////////////////////////////////////////////////
     //

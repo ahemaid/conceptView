@@ -134,7 +134,9 @@ public class App {
 				// System.out.println("\concept: " + concept.getURI());
 				Resource rdfType = (Resource) binding.get("rdfType");
 				String label = binding.get("label").toString();
-
+				if (!isNotInstances(rdfType.getURI()))
+				//System.out.println("rdfType: " + rdfType.getURI());
+					continue	;
 				JSONObject obj = new JSONObject();
 
 				// trimming of the concept from URI
@@ -196,7 +198,16 @@ public class App {
 		return jsonObject;
 
 	}
-
+	
+	public static Boolean isNotInstances(String RDFType) {
+		if(trim(RDFType).contains("Class"))
+			return true;
+		if(trim(RDFType).contains("Property"))
+			return true;
+	
+		return false;
+		
+	}
 	public static void clearTheFile(String fileName) throws IOException {
 		FileWriter fwOb = new FileWriter(fileName, false);
 		PrintWriter pwOb = new PrintWriter(fwOb, false);
@@ -284,11 +295,13 @@ public class App {
 					orginzedOject.put("label", issue.getString("label"));
 					orginzedOject.put("URI", issue.getString("URI"));
 					orginzedOject.put("RDFType", issue.getString("rdfType"));
+					System.out.println("\nRDFType: " + issue.getString("rdfType"));
+
 					// if (issue.has("parent")) {
 					if (issue.has("parent") && !issue.isNull("parent")) {
 						String parentTrimmed = trim(issue.getString("parent"), true);
 						orginzedOject.put("parent", parentTrimmed);
-						System.out.println("\nParent ::" + parentTrimmed);
+						//System.out.println("\nParent ::" + parentTrimmed);
 
 					} else {
 
