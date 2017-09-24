@@ -50,7 +50,7 @@
               <button type="button" class="btn btn-default" id="btn-clear-search">Clear</button>
    </span>
     </div> -->
-      <ul class="nav nav-tabs" role="tablist">
+      <ul id="viewList" class="nav nav-tabs" role="tablist" style="display: none">
         <li class="nav-item"><a class="nav-link active" data-toggle="tab" href="#Documentation" role="tab">Documentation</a></li>
         <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#sourceCode" onmousedown="showTurtleSource()" role="tab">Turtle source</a></li>
         <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#showGraph" role="tab">Concept graph</a></li>
@@ -71,7 +71,7 @@
           </div>
         </div>
         <div class="tab-pane" class="tabContent" id="sourceCode" role="tabpanel">
-          <h3>Source Code</h3>
+          <h3>Source Code:</h3>
           <!-- <div class="mygrid-wrapper-div" style="height:658px"> -->
           <textarea id="returnedTurtleSource" class="form-control" rows="24" wrap="hard"></textarea>
 
@@ -167,30 +167,26 @@
         }
         return data;
       }
-      // // get tree elements
-      // $('#tree').treeview({
-      //   data: getTreeData(), // data is not optional
-      //   levels: 5,
-      //   enableLinks: true,
-      //   onNodeSelected: function(event, node) {
-      //     $('#graph').empty();
-      //     event.stopPropagation();
-      //     exec(node.concept);
-      //     showInstances(node.concept);
-      //
-      //   }
-      // });
       // Bind the data to the tree html element for the first time
       $('#tree').treeview({
         data: getTreeData(), // data is not optional
         levels: 5,
         enableLinks: true,
         onNodeSelected: function(event, node) {
-          $('#graph').empty();
-          event.stopPropagation();
-          exec(node.concept);
-          showInstances(node.concept);
-          showTurtleSource(node.concept);
+          if (node.concept) {
+            $('#graph').empty();
+            event.stopPropagation();
+            $('#viewList').show();
+            exec(node.concept);
+            showInstances(node.concept);
+            showTurtleSource(node.concept);
+            conceptSelected = node.concept;
+          } else {
+            var parentNode = node.text;
+            parentNode = parentNode.split('<');
+            var str = parentNode[0];
+            exec(str);
+          }
         }
       });
       // Instant search on fly on concept
@@ -206,14 +202,24 @@
           levels: 5,
           enableLinks: true,
           onNodeSelected: function(event, node) {
-            $('#graph').empty();
-            event.stopPropagation();
-            exec(node.concept);
-            showInstances(node.concept);
-            showTurtleSource(node.concept);
-
+            if (node.concept) {
+              $('#graph').empty();
+              event.stopPropagation();
+              $('#viewList').show();
+              exec(node.concept);
+              showInstances(node.concept);
+              showTurtleSource(node.concept);
+              conceptSelected = node.concept;
+            } else {
+              var parentNode = node.text;
+              parentNode = parentNode.split('<');
+              var str = parentNode[0];
+              exec(str);
+            }
           }
         });
+        if ($('#input-search').val() == '')
+          location.reload();
         //$('#search-output').html(output);
       }
       $('#input-search').on('keyup', search);
@@ -266,11 +272,20 @@
             levels: 5,
             enableLinks: true,
             onNodeSelected: function(event, node) {
-              $('#graph').empty();
-              event.stopPropagation();
-              exec(node.concept);
-              showInstances(node.concept);
-              showTurtleSource(node.concept);
+              if (node.concept) {
+                $('#graph').empty();
+                event.stopPropagation();
+                $('#viewList').show();
+                exec(node.concept);
+                showInstances(node.concept);
+                showTurtleSource(node.concept);
+                conceptSelected = node.concept;
+              } else {
+                var parentNode = node.text;
+                parentNode = parentNode.split('<');
+                var str = parentNode[0];
+                exec(str);
+              }
             }
           });
         } else {
@@ -279,50 +294,51 @@
             levels: 5,
             enableLinks: true,
             onNodeSelected: function(event, node) {
-              $('#graph').empty();
-              event.stopPropagation();
               if (node.concept) {
+                $('#graph').empty();
+                event.stopPropagation();
+                $('#viewList').show();
                 exec(node.concept);
                 showInstances(node.concept);
-                //showTurtleSource(node.concept);
+                showTurtleSource(node.concept);
                 conceptSelected = node.concept;
               } else {
                 var parentNode = node.text;
                 parentNode = parentNode.split('<');
                 var str = parentNode[0];
-                $("#infoDetails").replaceWith('<h1><p > Concept <code>' + str + '</code> is not found</p></h1>');
+                exec(str);
               }
             }
           });
         }
       });
       // show file where the concept is found
-      showFileFunc = function(e) {
+      showFileFunc = function(event) {
+        //event.stopPropagation();
         var conceptFile = [];
         for (var i = 0; i < viewDataRendered.length; i++) {
-          if (e.id === viewDataRendered[i].concept) {
+          if (event.id === viewDataRendered[i].concept) {
             conceptFile.push(viewDataRendered[i].fileName);
           }
         }
         var unique = [...new Set(conceptFile.map(item => item))];
         if (unique.length > 0)
-          e.text = unique;
+          event.text = unique;
         else
-          e.text = "Not Found";
+          event.text = "External URI";
       }
       //show RDFType of the concept
-      showTypeFunc = function(e) {
+      showTypeFunc = function(event) {
+        //event.stopPropagation();
         var conceptRDFType = [];
         for (var i = 0; i < viewDataRendered.length; i++) {
-          if (e.id === viewDataRendered[i].concept) {
+          if (event.id === viewDataRendered[i].concept) {
             conceptRDFType.push(viewDataRendered[i].RDFType);
           }
         }
         var unique = [...new Set(conceptRDFType.map(item => item))];
         if (unique.length > 0) {
-          e.text = unique;
-        } else {
-          e.text = "Not Found";
+          event.text = unique;
         }
       }
       // show info. details of clicked instance
