@@ -73,7 +73,7 @@
         <div class="tab-pane" class="tabContent" id="sourceCode" role="tabpanel">
           <h3>Source Code</h3>
           <!-- <div class="mygrid-wrapper-div" style="height:658px"> -->
-            <textarea id="returnedTurtleSource" class="form-control" rows="24" wrap="hard" ></textarea>
+          <textarea id="returnedTurtleSource" class="form-control" rows="24" wrap="hard"></textarea>
 
           <!-- </div> -->
         </div>
@@ -111,11 +111,11 @@
           if (data[i].parent === parent)
             children.push(data[i]);
         };
-        if(isConceptAvailable(parent))
-        var parentNode = parent + '<div class = "pull-right" > <a id =' + parent + ' onmousedown = "showTypeFunc(this)" href = "JavaScript:Void(0);" class = "btn btn-default btn-xs" role = "button"> Show Type </a><a id=' + parent +
-          ' onmousedown="showFileFunc(this)" href="JavaScript:Void(0);" class="btn btn-danger btn-xs" role="button">Show File(s)</a> </div>';
+        if (isConceptAvailable(parent))
+          var parentNode = parent + '<div class = "pull-right" > <a id =' + parent + ' onmousedown = "showTypeFunc(this)" href = "JavaScript:Void(0);" class = "btn btn-default btn-xs" role = "button"> Show Type </a><a id=' + parent +
+            ' onmousedown="showFileFunc(this)" href="JavaScript:Void(0);" class="btn btn-danger btn-xs" role="button">Show File(s)</a> </div>';
         else
-        var parentNode = parent + '<div class = "pull-right" > <a id =' + parent + ' onmousedown = "showTypeFunc(this)" href = "JavaScript:Void(0);" class = "btn btn-default btn-xs" role = "button"> External </a> </div>';
+          var parentNode = parent + '<div class = "pull-right" > <a id =' + parent + ' onmousedown = "showTypeFunc(this)" href = "JavaScript:Void(0);" class = "btn btn-default btn-xs" role = "button"> External </a> </div>';
 
         var node = {
           text: parentNode,
@@ -180,10 +180,6 @@
       //
       //   }
       // });
-
-      function getTreeInstantData(results) {
-        return results;
-      }
       // Bind the data to the tree html element for the first time
       $('#tree').treeview({
         data: getTreeData(), // data is not optional
@@ -194,7 +190,7 @@
           event.stopPropagation();
           exec(node.concept);
           showInstances(node.concept);
-
+          showTurtleSource(node.concept);
         }
       });
       // Instant search on fly on concept
@@ -206,7 +202,7 @@
         };
         var results = $('#tree').treeview('search', [pattern, options]);
         $('#tree').treeview({
-          data: getTreeInstantData(results), // data is not optional
+          data: results, // data is not optional
           levels: 5,
           enableLinks: true,
           onNodeSelected: function(event, node) {
@@ -214,11 +210,18 @@
             event.stopPropagation();
             exec(node.concept);
             showInstances(node.concept);
+            showTurtleSource(node.concept);
+
           }
         });
         //$('#search-output').html(output);
       }
-
+      $('#input-search').on('keyup', search);
+      $('#btn-clear-search').on('click', function(e) {
+        $searchableTree.treeview('clearSearch');
+        $('#input-search').val('');
+        //$('#search-output').html('');
+      });
       // Get the word after slash char of a string
       function trimSlash(str) {
         var n = str.split("/");
@@ -267,6 +270,7 @@
               event.stopPropagation();
               exec(node.concept);
               showInstances(node.concept);
+              showTurtleSource(node.concept);
             }
           });
         } else {
@@ -280,6 +284,8 @@
               if (node.concept) {
                 exec(node.concept);
                 showInstances(node.concept);
+                //showTurtleSource(node.concept);
+                conceptSelected = node.concept;
               } else {
                 var parentNode = node.text;
                 parentNode = parentNode.split('<');
@@ -363,7 +369,6 @@
             $("#instanceHead").hide();
             $("#instanceDetailsTable").hide();
           }
-          debugger;
         }
         request.open(method, endpoint + querystring, true);
         request.setRequestHeader("Content-Type", 'application/x-www-form-urlencoded');
@@ -430,10 +435,18 @@
         }
       }
       // To display Turtle source for the selected node
-      function showTurtleSource(i) {
+      function showTurtleSource(item) {
         var conceptURI;
         var isURIExist = false;
-        if (conceptSelected) {
+        if (item) {
+          for (var i = 0; i < viewDataRendered.length; i++) {
+            if (item.toLowerCase() === viewDataRendered[i].concept.toLowerCase()) {
+              conceptURI = viewDataRendered[i].URI;
+              isURIExist = true;
+              break;
+            }
+          }
+        } else if (conceptSelected) {
           for (var i = 0; i < viewDataRendered.length; i++) {
             if (conceptSelected.toLowerCase() === viewDataRendered[i].concept.toLowerCase()) {
               conceptURI = viewDataRendered[i].URI;
@@ -441,39 +454,40 @@
               break;
             }
           }
-          if (isURIExist) {
-            var endpoint = "http://localhost:3030/ds/sparql?query="
-            var querystring = 'CONSTRUCT { <' + conceptURI + '> ?p ?o .}  WHERE {  <' + conceptURI + '> ?p ?o .}'
-            //d3sparql.query(endpoint, sparql, render)
-            var method = "POST";
-            // You REALLY want async = true.
-            // Otherwise, it'll block ALL execution waiting for server response.
-            var async = true;
-            var request = new XMLHttpRequest();
-            // Before we send anything, we first have to say what we will do when the
-            // server responds. This seems backwards (say how we'll respond before we send
-            // the request? huh?), but that's how Javascript works.
-            // This function attached to the XMLHttpRequest "onload" property specifies how
-            // the HTTP response will be handled.
-            request.onload = function() {
-              // Because of javascript's fabulous closure concept, the XMLHttpRequest "request"
-              // object declared above is available in this function even though this function
-              // executes long after the request is sent and long after this function is
-              // instantiated. This fact is CRUCIAL to the workings of XHR in ordinary
-              // applications.
-              // You can get all kinds of information about the HTTP response.
-              var status = request.status; // HTTP response status, e.g., 200 for "200 OK"
-              var data = JSON.stringify(request.responseText) ; // Returned data, e.g., an HTML document.
-              console.log(data); // [{'developerName': 'Mike Bostock'}]
-              $("#returnedTurtleSource").html(encodeURI(data));
-            }
-            request.open(method, endpoint + querystring, true);
-            request.setRequestHeader("Content-Type", 'application/x-www-form-urlencoded');
-            // Or... request.setRequestHeader("Content-Type", "text/plain;charset=UTF-8");
-            // Or... whatever
-            // Actually sends the request to the server.
-            request.send();
+        } else
+          isURIExist = false;
+        if (isURIExist) {
+          var endpoint = "http://localhost:3030/ds/sparql?query="
+          var querystring = 'CONSTRUCT { <' + conceptURI + '> ?p ?o .}  WHERE {  <' + conceptURI + '> ?p ?o .}'
+          //d3sparql.query(endpoint, sparql, render)
+          var method = "POST";
+          // You REALLY want async = true.
+          // Otherwise, it'll block ALL execution waiting for server response.
+          var async = true;
+          var request = new XMLHttpRequest();
+          // Before we send anything, we first have to say what we will do when the
+          // server responds. This seems backwards (say how we'll respond before we send
+          // the request? huh?), but that's how Javascript works.
+          // This function attached to the XMLHttpRequest "onload" property specifies how
+          // the HTTP response will be handled.
+          request.onload = function() {
+            // Because of javascript's fabulous closure concept, the XMLHttpRequest "request"
+            // object declared above is available in this function even though this function
+            // executes long after the request is sent and long after this function is
+            // instantiated. This fact is CRUCIAL to the workings of XHR in ordinary
+            // applications.
+            // You can get all kinds of information about the HTTP response.
+            var status = request.status; // HTTP response status, e.g., 200 for "200 OK"
+            var data = JSON.stringify(request.responseText); // Returned data, e.g., an HTML document.
+            console.log(data); // [{'developerName': 'Mike Bostock'}]
+            $("#returnedTurtleSource").html(unescape(encodeURI(data)).replace(/\n/g, "<br />"));
           }
+          request.open(method, endpoint + querystring, true);
+          request.setRequestHeader("Content-Type", 'application/x-www-form-urlencoded');
+          // Or... request.setRequestHeader("Content-Type", "text/plain;charset=UTF-8");
+          // Or... whatever
+          // Actually sends the request to the server.
+          request.send();
         } else
           $("#returnedTurtleSource").html('<p>No node was selected !!!</p>');
       }
