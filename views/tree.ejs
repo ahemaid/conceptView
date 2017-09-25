@@ -1,11 +1,10 @@
 <% include header %>
   <div class="container">
-    <div class="col-sm-6">
+    <div class="col-sm-12  col-md-6">
       <br/>
       <div id="tree" class="mygrid-wrapper-div" style="height:800px;width:auto"></div>
     </div>
-    <div class="col-sm-6">
-      <br/>
+    <div class="col-sm-12 col-md-6" style="padding-top:20px;">
       <div class="btn-group pull-right">
         <button class="btn btn-secondary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
     Select file(s)   <span class="sr-only">Toggle Dropdown</span>
@@ -14,6 +13,7 @@
           <li><a class="dropdown-item" href="#">
                                   ALL files
                               </a></li>
+          <li role="separator" class="divider"></li>
           <%fileNames.forEach(function (item) {%>
             <li>
               <a class="dropdown-item" href="#">
@@ -23,40 +23,32 @@
             <%});%>
         </ul>
       </div>
-      <br/>
-      <div class="row">
+      <div class="form-group">
         <label>
-                          <input type="checkbox" class="form-check-input" id="chk-ignore-case" value="false"> Ignore Case
-                      </label >
-                      <label >
-                          <input type="checkbox" class="form-check-input" id="chk-exact-match" value="false"> Exact Match
+                          <input type="checkbox" id="chk-ignore-case" value="false"> Ignore Case
+                      </label>
+        <label>
+                          <input type="checkbox" id="chk-exact-match" value="false"> Exact Match
                       </label>
       </div>
       <div class="form-group">
         <label for="input-search" class="sr-only">Search Tree:</label>
         <input type="input" class="form-control" id="input-search" placeholder="Type a concept to search..." value="">
       </div>
-      <div class="row">
-        <label class="col-sm-4" class="radio inline">
-              <input id="radioClasses" type="radio" value="1" /> View with Classes
-          </label>
-        <label class="col-sm-4" class="radio inline">
-              <input id="radioSKOS" type="radio" value="2" /> View with SKOS
-          </label>
+      <div class="form-group">
+        <label for="inlineRadio1" class="" style="
+    margin-right: 10px;
+"><input type="radio" id="radioClasses" value="option1" name="radioInline" checked="">
+ Classes View
+</label><label for="inlineRadio2" class=""><input type="radio" id="radioSKOS" value="option1" name="radioInline">
+SKOS View </label>
       </div>
-      <!-- <div>
-      <span class="pull-right">
-              <button type="button" class="btn btn-success" id="btn-search">Search</button>
-              <button type="button" class="btn btn-default" id="btn-clear-search">Clear</button>
-   </span>
-    </div> -->
       <ul id="viewList" class="nav nav-tabs" role="tablist" style="display: none">
         <li class="nav-item"><a class="nav-link active" data-toggle="tab" href="#Documentation" role="tab">Documentation</a></li>
         <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#sourceCode" onmousedown="showTurtleSource()" role="tab">Turtle source</a></li>
         <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#showGraph" role="tab">Concept graph</a></li>
       </ul>
       <div class="tab-content">
-
         <div class="tab-pane active" id="Documentation" role="tabpanel">
           <div id="infoDetails" class="mygrid-wrapper-div" style="height:658px;width:auto; display: none">
             <h3 id="conceptHead">Concept Details:</h3>
@@ -66,14 +58,12 @@
             <div id="instancesTable" style="display: none"></div>
             <h3 id="instanceHead" style="display: none"></h3>
             <div id="instanceDetailsTable" style="display: none"></div>
-
-
           </div>
         </div>
         <div class="tab-pane" class="tabContent" id="sourceCode" role="tabpanel">
           <h3>Source Code:</h3>
           <!-- <div class="mygrid-wrapper-div" style="height:658px"> -->
-          <textarea id="returnedTurtleSource" class="form-control" rows="24" wrap="hard"></textarea>
+          <textarea id="returnedTurtleSource" name="returnedTurtleSource" class="form-control" rows="24" wrap="hard"></textarea>
 
           <!-- </div> -->
         </div>
@@ -82,20 +72,21 @@
           <div id='graph' class="mygrid-wrapper-div" style="height:658px;width:auto"></div>
         </div>
       </div>
-
     </div>
   </div>
   <% include footer %>
     <!-- End of expressJS coding-->
 
-
     <!-- Start of javascript coding-->
     <script>
       var viewDataRendered = <%- JSON.stringify(data) %>;
       // var viewDataRendered;
-      // if ($('#radioClasses').is(':checked')) {
-      //   viewDataRendered = <%- JSON.stringify(data) %>;
-      // } else {
+      if ($("#radioSKOS").is(":checked"))
+        alert("radioSKOS is clicked");
+      // $("#SKOSorClassesRadioForm input").on('change', function() {
+      //   alert($('input[name=radioName]:checked', '#myForm').val());
+      // }
+      // else {
       //   viewDataRendered = "";
       // }
       var conceptSelected = "";
@@ -112,10 +103,10 @@
             children.push(data[i]);
         };
         if (isConceptAvailable(parent))
-          var parentNode = parent + '<div class = "pull-right" > <a id =' + parent + ' onmousedown = "showTypeFunc(this)" href = "JavaScript:Void(0);" class = "btn btn-default btn-xs" role = "button"> Show Type </a><a id=' + parent +
-            ' onmousedown="showFileFunc(this)" href="JavaScript:Void(0);" class="btn btn-danger btn-xs" role="button">Show File(s)</a> </div>';
+          var parentNode = parent + '<div class = "pull-right" > <a id =' + parent + ' onmousedown = "showTypeFunc(this)" href = "#" class = "btn btn-default btn-xs" role = "button"> Show Type </a><a id=' + parent +
+            ' onmousedown="showFileFunc(this)" href="#" class="btn btn-danger btn-xs" role="button">Show File(s)</a> </div>';
         else
-          var parentNode = parent + '<div class = "pull-right" > <a id =' + parent + ' onmousedown = "showTypeFunc(this)" href = "JavaScript:Void(0);" class = "btn btn-default btn-xs" role = "button"> External </a> </div>';
+          var parentNode = parent + '<div class = "pull-right" > <a id =' + parent + ' href = "#" class = "btn btn-default btn-xs" role = "button"> External </a> </div>';
 
         var node = {
           text: parentNode,
@@ -130,8 +121,8 @@
         // viewDataRendered
         var viewData = viewDataRendered; //TODO: get this data with AJAX request.
         for (var i = 0; i < viewData.length; i++) {
-          viewData[i].text = viewData[i].concept + '<div class="pull-right"><a id=' + viewData[i].concept + ' onmousedown="showTypeFunc(this)" href="JavaScript:Void(0);" class="btn btn-default btn-xs" role="button">Show Type</a><a id=' + viewData[i]
-            .concept + ' onmousedown="showFileFunc(this)" href="JavaScript:Void(0);" class="btn btn-danger btn-xs" role="button" >Show File(s)</a></div>';
+          viewData[i].text = viewData[i].concept + '<div class="pull-right"><a id=' + viewData[i].concept + ' onmousedown="showTypeFunc(this)" href="#" class="btn btn-default btn-xs" role="button">Show Type</a><a id=' + viewData[i]
+            .concept + '  href="#" onmousedown="showFileFunc(this)" class="btn btn-danger btn-xs" role="button" >Show File(s)</a></div>';
         }
         var allParents = getUniqueParents(viewData);
         var data = [];
@@ -315,6 +306,8 @@
       // show file where the concept is found
       showFileFunc = function(event) {
         //event.stopPropagation();
+        //console.log($(event))//.stopPropagation();
+        //console.log(/////event)).();preventDefault();
         var conceptFile = [];
         for (var i = 0; i < viewDataRendered.length; i++) {
           if (event.id === viewDataRendered[i].concept) {
@@ -324,8 +317,6 @@
         var unique = [...new Set(conceptFile.map(item => item))];
         if (unique.length > 0)
           event.text = unique;
-        else
-          event.text = "External URI";
       }
       //show RDFType of the concept
       showTypeFunc = function(event) {
@@ -390,6 +381,7 @@
         request.setRequestHeader("Content-Type", 'application/x-www-form-urlencoded');
         // Actually sends the request to the server.
         request.send();
+        //return false;
       }
       // To display instances of  the selected node
       function showInstances(item) {
@@ -475,31 +467,24 @@
         if (isURIExist) {
           var endpoint = "http://localhost:3030/ds/sparql?query="
           var querystring = 'CONSTRUCT { <' + conceptURI + '> ?p ?o .}  WHERE {  <' + conceptURI + '> ?p ?o .}'
-          //d3sparql.query(endpoint, sparql, render)
           var method = "POST";
           // You REALLY want async = true.
           // Otherwise, it'll block ALL execution waiting for server response.
           var async = true;
           var request = new XMLHttpRequest();
-          // Before we send anything, we first have to say what we will do when the
-          // server responds. This seems backwards (say how we'll respond before we send
-          // the request? huh?), but that's how Javascript works.
-          // This function attached to the XMLHttpRequest "onload" property specifies how
-          // the HTTP response will be handled.
           request.onload = function() {
-            // Because of javascript's fabulous closure concept, the XMLHttpRequest "request"
-            // object declared above is available in this function even though this function
-            // executes long after the request is sent and long after this function is
-            // instantiated. This fact is CRUCIAL to the workings of XHR in ordinary
-            // applications.
-            // You can get all kinds of information about the HTTP response.
             var status = request.status; // HTTP response status, e.g., 200 for "200 OK"
-            var data = JSON.stringify(request.responseText); // Returned data, e.g., an HTML document.
-            console.log(data); // [{'developerName': 'Mike Bostock'}]
-            $("#returnedTurtleSource").html(unescape(encodeURI(data)).replace(/\n/g, "<br />"));
+            //var data = JSON.stringify(request.responseText); // Returned data, e.g., an HTML document.
+            var data = request.responseText; // Returned data, e.g., an HTML document.
+
+            //  console.log(data); // [{'developerName': 'Mike Bostock'}]
+            $("#returnedTurtleSource").html(data);
+            //console.log(data.replace(/.\n/g,' '));
+            //console.log(data.replaceAll('.\\n','aaaaaa1'));
+            //$("#returnedTurtleSource").html($("#returnedTurtleSource").html().replaceAll('.\\n', '<br />'));
           }
           request.open(method, endpoint + querystring, true);
-          request.setRequestHeader("Content-Type", 'application/x-www-form-urlencoded');
+          request.setRequestHeader("Content-Type", 'application/x-www-form-urlencoded;charset=UTF-8');
           // Or... request.setRequestHeader("Content-Type", "text/plain;charset=UTF-8");
           // Or... whatever
           // Actually sends the request to the server.
@@ -591,18 +576,34 @@
         $("#domainTable").html(domainTable);
         $("#rangeTable").html(rangeTable);
 
+
+
+
         //To display on graph
         var config = {
-          "charge ": '-500', //-500,
-          "distance ": '50', //50,
-          "height": '1000',
-          "width": '750',
-          "selector ": '#graph'
+          "radius": 20,
+          "charge": -100,
+          "distance": 10,
+          "width": 500,
+          "height": 400,
+          "selector ": '#showGraph'
         };
         d3sparql.forcegraph(json, config);
+
+        $('#graph').html('');
+        $('div.d3sparql.forcegraph').appendTo($('#graph'));
+
+
       }
       // To display in TabView
       $(document).ready(function(e) {
+
+
+        $(document).on('click', 'a[href="#"]', function(e) {
+          e.preventDefault();
+        });
+        // $('').click(function(e) { alert('dd'); });
+
         $('.tabbing').mTab({
           navigation: ".tabNav",
           container: ".tabContainer",
@@ -616,6 +617,33 @@
           callbackonclick: function() {},
           callback: function() {}
         });
+        // formatting Turtle source code
+        // var editor = CodeMirror.fromTextArea(document.getElementById("returnedTurtleSource"), {
+        //   mode: "application/x-sparql-query",
+        //   tabMode: "indent",
+        //   matchBrackets: true
+        // });
+
+        //
+        // $('.xx').on('click', function (event){
+        //
+        //
+        // event.stopPropagation();
+        //
+        //   var conceptFile = [];
+        //   for (var i = 0; i < viewDataRendered.length; i++) {
+        //     if ($(this).attr('id') === viewDataRendered[i].concept) {
+        //       conceptFile.push(viewDataRendered[i].fileName);
+        //     }
+        //   }
+        //   var unique = [...new Set(conceptFile.map(item => item))];
+        //   if (unique.length > 0)
+        //     $(this).html(unique);
+        //   else
+        //     $(this).html("External URI");
+        //
+        // });
+
       });
     </script>
     <!-- End of javascript coding-->

@@ -6,7 +6,7 @@ a {
     color: #00B7FF;
 }
 .mygrid-wrapper-div {
-    overflow: scroll;
+    overflow: auto;
     height: 100%;
 }
 .tree {
