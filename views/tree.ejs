@@ -1,48 +1,96 @@
 <% include header %>
   <div class="container">
+    <!-- <div class="col-sm-12  col-md-12" style="padding-top: 2cm"></div> -->
+    <div class="ui segment" style="padding-top: 2cm">
+      <div class="ui form">
+        <div class="three fields">
+          <div class="twelve wide field">
+            <div class="ui huge icon input">
+              <label for="input-search" class="sr-only">Search Tree:</label>
+              <i class="search icon"></i>
+              <input type="input" id="input-search" placeholder="Type a concept to search..." value="">
+            </div>
+          </div>
+          <div class="four wide field">
+            <div class="ui large radio checkbox">
+              <input type="radio" id="chk-ignore-case" name="frequency" value="false">
+              <label>Ignore Case</label>
+            </div>
+            <div class="ui large  radio checkbox">
+              <input type="radio" id="chk-exact-match" name="frequency" value="false">
+              <label>Exact Match</label>
+            </div>
+          </div>
+          <div class="six wide field">
+            <div class="ui huge floating dropdown labeled icon button" style="background:rgba(255,255,255,.5) none">
+              <i class="filter icon"></i>
+              <span class="text">Filter Files</span>
+              <div class="menu">
+                <div class="ui icon search input">
+                  <i class="search icon"></i>
+                  <input type="text" placeholder="Select Files...">
+                </div>
+                <div class="divider"></div>
+                <div class="scrolling menu">
+                  <div class="item">
+                    <div class="ui red empty circular label"></div>
+                    ALL Files
+                  </div>
+                  <%fileNames.forEach(function (item) {%>
+                    <div class="item">
+                      <div class="ui blue empty circular label"></div>
+                      <%= item %>
+                    </div>
+                    <%});%>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="inline fields">
+          <div class="field">
+            <div class="ui radio checkbox">
+              <input type="radio" name="View">
+              <label style="padding-right:50px">RDF(S) View</label>
+            </div>
+          </div>
+          <div class="field">
+            <div class="ui radio checkbox">
+              <input type="radio" name="View">
+              <label style="padding-right:50px">SKOS View</label>
+            </div>
+          </div>
+          <div class="field">
+            <div class="ui slider checkbox" style="padding-right:50px">
+              <input type="checkbox" id="showTypesCheckBox" tabindex="0">
+              <label> Show Concepts Types</label>
+            </div>
+          </div>
+          <div class="field">
+            <div class="ui slider checkbox">
+              <input type="checkbox" id="showFilesCheckBox" tabindex="1">
+              <label> Show Concepts Files</label>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="ui message" id="notFoundMessage" style="display:none">
+      <div class="header">
+        message
+      </div>
+      <ul class="list">
+        <li>No concept was found!!</li>
+        <li>try another one</li>
+      </ul>
+    </div>
+
     <div class="col-sm-12  col-md-6">
       <br/>
       <div id="tree" class="mygrid-wrapper-div" style="height:800px;width:auto"></div>
     </div>
     <div class="col-sm-12 col-md-6" style="padding-top:20px;">
-      <div class="btn-group pull-right">
-        <button class="btn btn-secondary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-    Select file(s)   <span class="sr-only">Toggle Dropdown</span>
-  </button>
-        <ul class="dropdown-menu">
-          <li><a class="dropdown-item" href="#">
-                                  ALL files
-                              </a></li>
-          <li role="separator" class="divider"></li>
-          <%fileNames.forEach(function (item) {%>
-            <li>
-              <a class="dropdown-item" href="#">
-                <%= item %>
-              </a>
-            </li>
-            <%});%>
-        </ul>
-      </div>
-      <div class="form-group">
-        <label>
-                          <input type="checkbox" id="chk-ignore-case" value="false"> Ignore Case
-                      </label>
-        <label>
-                          <input type="checkbox" id="chk-exact-match" value="false"> Exact Match
-                      </label>
-      </div>
-      <div class="form-group">
-        <label for="input-search" class="sr-only">Search Tree:</label>
-        <input type="input" class="form-control" id="input-search" placeholder="Type a concept to search..." value="">
-      </div>
-      <div class="form-group">
-        <label for="inlineRadio1" class="" style="
-    margin-right: 10px;
-"><input type="radio" id="radioClasses" value="option1" name="radioInline" checked="">
- Classes View
-</label><label for="inlineRadio2" class=""><input type="radio" id="radioSKOS" value="option1" name="radioInline">
-SKOS View </label>
-      </div>
+
       <ul id="viewList" class="nav nav-tabs" role="tablist" style="display: none">
         <li class="nav-item"><a class="nav-link active" data-toggle="tab" href="#Documentation" role="tab">Documentation</a></li>
         <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#sourceCode" onmousedown="showTurtleSource()" role="tab">Turtle source</a></li>
@@ -50,11 +98,11 @@ SKOS View </label>
       </ul>
       <div class="tab-content">
         <div class="tab-pane active" id="Documentation" role="tabpanel">
-          <div id="infoDetails" class="mygrid-wrapper-div" style="height:658px;width:auto; display: none">
-            <h3 id="conceptHead">Concept Details:</h3>
+          <div id="infoDetails" class="mygrid-wrapper-div" style="height:658px;width:auto">
+            <h3 id="conceptHead" style="display: none">Concept Details:</h3>
             <div id="detailTable"></div>
-            <div id="domainTable"></div>
-            <div id="rangeTable"></div>
+            <div id="domainTable" style="display: none"></div>
+            <div id="rangeTable" style="display: none"></div>
             <div id="instancesTable" style="display: none"></div>
             <h3 id="instanceHead" style="display: none"></h3>
             <div id="instanceDetailsTable" style="display: none"></div>
@@ -63,7 +111,10 @@ SKOS View </label>
         <div class="tab-pane" class="tabContent" id="sourceCode" role="tabpanel">
           <h3>Source Code:</h3>
           <!-- <div class="mygrid-wrapper-div" style="height:658px"> -->
-          <textarea id="returnedTurtleSource" name="returnedTurtleSource" class="form-control" rows="24" wrap="hard"></textarea>
+          <div class="mygrid-wrapper-div" style="height:658px;width:auto">
+
+            <textarea id="code" name="code" class="form-control" rows="30" wrap="hard"></textarea>
+          </div>
 
           <!-- </div> -->
         </div>
@@ -80,17 +131,24 @@ SKOS View </label>
     <!-- Start of javascript coding-->
     <script>
       var viewDataRendered = <%- JSON.stringify(data) %>;
-      // var viewDataRendered;
-      if ($("#radioSKOS").is(":checked"))
-        alert("radioSKOS is clicked");
-      // $("#SKOSorClassesRadioForm input").on('change', function() {
-      //   alert($('input[name=radioName]:checked', '#myForm').val());
-      // }
-      // else {
-      //   viewDataRendered = "";
-      // }
       var conceptSelected = "";
-
+      $('.ui.radio.checkbox').checkbox();
+      $('.ui.dropdown').dropdown();
+      // To hide element from page
+      function hide(element) {
+        if (element = 'ALL') {
+          $("#instanceHead").html();
+          $("#instanceDetailsTable").html("");
+          $("#instanceHead").hide();
+          $("#viewList").hide();
+          $("#instanceDetailsTable").hide();
+          $("#conceptHead").html("");
+          $("#conceptHead").hide();
+          $("#infoDetails").hide();
+          $("#tree").hide();
+        }
+      }
+      // remove redundant parents from tree
       function getUniqueParents(data) {
         var unique = [...new Set(data.map(item => item.parent))];
         return unique;
@@ -177,6 +235,13 @@ SKOS View </label>
             parentNode = parentNode.split('<');
             var str = parentNode[0];
             exec(str);
+            //alert(node);
+            ////////////////////////////////////////////////
+            ///// testing here message when no item is found
+            ///////////////////////////////////////////////
+            hide('ALL');
+            $('#notFoundMessage').show();
+            debugger;
           }
         }
       });
@@ -305,9 +370,6 @@ SKOS View </label>
       });
       // show file where the concept is found
       showFileFunc = function(event) {
-        //event.stopPropagation();
-        //console.log($(event))//.stopPropagation();
-        //console.log(/////event)).();preventDefault();
         var conceptFile = [];
         for (var i = 0; i < viewDataRendered.length; i++) {
           if (event.id === viewDataRendered[i].concept) {
@@ -393,7 +455,6 @@ SKOS View </label>
               conceptURI = viewDataRendered[i].URI;
               isURIExist = true;
               break;
-              debugger;
             }
           }
           if (isURIExist) {
@@ -476,12 +537,8 @@ SKOS View </label>
             var status = request.status; // HTTP response status, e.g., 200 for "200 OK"
             //var data = JSON.stringify(request.responseText); // Returned data, e.g., an HTML document.
             var data = request.responseText; // Returned data, e.g., an HTML document.
+            $('#code').html(data);
 
-            //  console.log(data); // [{'developerName': 'Mike Bostock'}]
-            $("#returnedTurtleSource").html(data);
-            //console.log(data.replace(/.\n/g,' '));
-            //console.log(data.replaceAll('.\\n','aaaaaa1'));
-            //$("#returnedTurtleSource").html($("#returnedTurtleSource").html().replaceAll('.\\n', '<br />'));
           }
           request.open(method, endpoint + querystring, true);
           request.setRequestHeader("Content-Type", 'application/x-www-form-urlencoded;charset=UTF-8');
@@ -490,7 +547,7 @@ SKOS View </label>
           // Actually sends the request to the server.
           request.send();
         } else
-          $("#returnedTurtleSource").html('<p>No node was selected !!!</p>');
+          $("#code").html('<p>No node was selected !!!</p>');
       }
       // Fuction to query sparql endpoint return graph and queryResult
       function exec(item) {
@@ -570,15 +627,12 @@ SKOS View </label>
         domainTable += '</table> ';
         rangeTable += '</table> ';
         //display returned data on the Html tables
+        $("#conceptHead").show();
         $("#conceptHead ").html('<p > Concept Details :<code>' + conceptSelected + '</code></p>');
         $("#infoDetails").show();
         $("#detailTable").html(table);
         $("#domainTable").html(domainTable);
         $("#rangeTable").html(rangeTable);
-
-
-
-
         //To display on graph
         var config = {
           "radius": 20,
@@ -597,13 +651,10 @@ SKOS View </label>
       }
       // To display in TabView
       $(document).ready(function(e) {
-
-
         $(document).on('click', 'a[href="#"]', function(e) {
           e.preventDefault();
         });
-        // $('').click(function(e) { alert('dd'); });
-
+        // tabs config.
         $('.tabbing').mTab({
           navigation: ".tabNav",
           container: ".tabContainer",
@@ -617,12 +668,15 @@ SKOS View </label>
           callbackonclick: function() {},
           callback: function() {}
         });
-        // formatting Turtle source code
-        // var editor = CodeMirror.fromTextArea(document.getElementById("returnedTurtleSource"), {
+
+        // var editor = CodeMirror.fromTextArea(document.getElementById("code"), {
         //   mode: "application/x-sparql-query",
         //   tabMode: "indent",
         //   matchBrackets: true
         // });
+        // formatting Turtle source code
+        //  $(#code).show();
+
 
         //
         // $('.xx').on('click', function (event){

@@ -63,8 +63,10 @@ public class App {
 	String filesPath = "./ttlFiles/";
 
 	public static void main(String[] args) throws IOException {
-		JSONArray mergingArray = new JSONArray();
-		JSONObject mergedJsonObject = new JSONObject();
+		JSONArray mergingArrayClasses = new JSONArray();
+		JSONObject mergedJsonObjectClasses = new JSONObject();
+		JSONArray mergingArraySKOS = new JSONArray();
+		JSONObject mergedJsonObjectSKOS = new JSONObject();
 
 		try {
 
@@ -76,21 +78,27 @@ public class App {
 				if (files[i].contains("ttl")) {
 
 					System.out.println(files[i]);
-					JSONObject obj = GenerateHTML("./ttlFiles/" + files[i], "../../results.JSON");
-					// check for empty JSONobjects
-					if (obj.length() != 0) {
-						// System.out.println(obj);
-						mergingArray.put(obj);
+					JSONObject objClasses = generateClassesJSON("./ttlFiles/" + files[i], "../../results.JSON");
+					JSONObject objSKOS = generateSKOSJSON("./ttlFiles/" + files[i], "../../SKOSresults.JSON");
 
+					// check for empty JSONobjects
+					if (objClasses.length() != 0) {
+						// System.out.println(obj);
+						mergingArrayClasses.put(objClasses);
+					}
+					if (objSKOS.length() != 0) {
+						// System.out.println(obj);
+						mergingArraySKOS.put(objSKOS);
 					}
 				}
-
 			}
-			mergedJsonObject.put("files", mergingArray);
+			mergedJsonObjectClasses.put("files", mergingArrayClasses);
+			mergedJsonObjectSKOS.put("files", mergingArraySKOS);
+			System.out.println(mergedJsonObjectSKOS);
 
 			// call to organize
 
-			fileDecode(mergedJsonObject);
+			classesFileDecode(mergedJsonObjectClasses);
 
 		} catch (ArrayIndexOutOfBoundsException e) {
 			System.out.println("ArrayIndexOutOfBoundsException caught");
@@ -100,8 +108,8 @@ public class App {
 
 	}
 
-	@SuppressWarnings({ "null", "resource" })
-	public static JSONObject GenerateHTML(String _sourceFile, String _destination) throws IOException {
+	// @SuppressWarnings({ "null", "resource" })
+	public static JSONObject generateClassesJSON(String _sourceFile, String _destination) throws IOException {
 
 		org.apache.log4j.BasicConfigurator.configure(new NullAppender());
 
@@ -135,8 +143,8 @@ public class App {
 				Resource rdfType = (Resource) binding.get("rdfType");
 				String label = binding.get("label").toString();
 				if (!isNotInstances(rdfType.getURI()))
-				//System.out.println("rdfType: " + rdfType.getURI());
-					continue	;
+					// System.out.println("rdfType: " + rdfType.getURI());
+					continue;
 				JSONObject obj = new JSONObject();
 
 				// trimming of the concept from URI
@@ -166,7 +174,7 @@ public class App {
 
 						if (classParent.getURI() != null) {
 							obj.put("parent", classParent.getURI().toString());
-							//System.out.println("parent: " + classParent.getURI().toString());
+							// System.out.println("parent: " + classParent.getURI().toString());
 
 						}
 
@@ -198,16 +206,101 @@ public class App {
 		return jsonObject;
 
 	}
-	
-	public static Boolean isNotInstances(String RDFType) {
-		if(trim(RDFType).contains("Class"))
-			return true;
-		if(trim(RDFType).contains("Property"))
-			return true;
-	
-		return false;
-		
+
+	public static JSONObject generateSKOSJSON(String _sourceFile, String _destination) throws IOException {
+
+		org.apache.log4j.BasicConfigurator.configure(new NullAppender());
+
+		FileManager.get().addLocatorClassLoader(Main.class.getClassLoader());
+
+		OntModel ontModel = ModelFactory.createOntologyModel(OntModelSpec.OWL_DL_MEM);
+		FileManager.get().readModel(ontModel, _sourceFile);
+
+		mainQuery = "PREFIX skos: <http://www.w3.org/2004/02/skos/core#> " + 
+					"SELECT  ?sNarrower ?oNarrower  WHERE {"+
+					"?sNarrower skos:narrower ?oNarrower .}";
+		QueryExecution qexec1 = QueryExecutionFactory.create(mainQuery, ontModel);
+		ResultSet result1 = qexec1.execSelect();
+		//ResultSetFormatter.outputAsJSON(System.out, result1);
+
+		// ResultSetFormatter.out(System.out, result2);
+
+		JSONObject jsonObject = new JSONObject();
+		JSONArray array = new JSONArray();
+
+		while (result1.hasNext()) {
+			QuerySolution binding = result1.nextSolution();
+			if (binding.get("sNarrower").toString() != null) {
+				Resource sNarrower = (Resource) binding.get("sNarrower");
+
+				Resource oNarrower = (Resource) binding.get("oNarrower");
+
+				JSONObject obj = new JSONObject();
+
+				// trimming of the concept from URI
+				obj.put("sNarrower", trim(sNarrower.getURI().toString()));
+
+				obj.put("oNarrower", trim(oNarrower.getURI().toString()));
+
+				File file = new File(_sourceFile);
+				obj.put("fileName", file.getName());
+				array.put(obj);
+			} else
+				continue;
+
+		}
+
+		mainQuery = "PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>"
+				+ "PREFIX rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#>"
+				+ "PREFIX owl:  <http://www.w3.org/2002/07/owl#>" + "PREFIX foaf: <http://xmlns.com/foaf/0.1/>"
+				+ "PREFIX xsd:  <http://www.w3.org/2001/XMLSchema#>"
+				+ "PREFIX skos: <http://www.w3.org/2004/02/skos/core#> " 
+				+"SELECT  ?sBroader ?oBroader   WHERE {"
+				+ "?sBroader skos:broader ?oBroader .}";
+
+		QueryExecution qexec2 = QueryExecutionFactory.create(mainQuery, ontModel);
+		ResultSet result2 = qexec2.execSelect();
+		//ResultSetFormatter.outputAsJSON(System.out, result2);
+		while (result2.hasNext()) {
+			QuerySolution binding = result2.nextSolution();
+			if (binding.get("sBroader").toString() != null) {
+				Resource sBroader = (Resource) binding.get("sBroader");
+				// System.out.println("\concept: " + concept.getURI());
+				Resource oBroader = (Resource) binding.get("oBroader");
+				JSONObject obj = new JSONObject();
+
+				// trimming of the concept from URI
+				obj.put("sBroaderURI", sBroader.getURI()));
+
+				obj.put("sBroader", trim(sBroader.getURI().toString()));
+
+				obj.put("oBroader", trim(oBroader.getURI().toString()));
+
+				File file = new File(_sourceFile);
+				obj.put("fileName", file.getName());
+				array.put(obj);
+
+			} else
+				continue;
+		}
+
+		// check location
+		jsonObject.put("SKOSconcepts", array);
+
+		return jsonObject;
+
 	}
+
+	public static Boolean isNotInstances(String RDFType) {
+		if (trim(RDFType).contains("Class"))
+			return true;
+		if (trim(RDFType).contains("Property"))
+			return true;
+
+		return false;
+
+	}
+
 	public static void clearTheFile(String fileName) throws IOException {
 		FileWriter fwOb = new FileWriter(fileName, false);
 		PrintWriter pwOb = new PrintWriter(fwOb, false);
@@ -234,7 +327,7 @@ public class App {
 			}
 
 		}
-		 //System.out.println("Parent"+conceptTrimmed);
+		// System.out.println("Parent"+conceptTrimmed);
 
 		return conceptTrimmed;
 	}
@@ -247,7 +340,7 @@ public class App {
 				conceptArray = URI.split("/");
 				if (conceptArray != null && conceptArray.length > 0) {
 					conceptTrimmed = conceptArray[conceptArray.length - 1];
-					//System.out.println("test " + conceptTrimmed);
+					// System.out.println("test " + conceptTrimmed);
 				}
 			}
 			if (conceptTrimmed.contains("#") || URI.contains("#")) {
@@ -257,32 +350,30 @@ public class App {
 						conceptTrimmed = conceptArray[conceptArray.length - 1];
 						// System.out.println(fileType);
 					}
-				}
-				else
-				{
+				} else {
 					conceptArray = conceptTrimmed.split("#");
 					if (conceptArray != null && conceptArray.length > 0) {
 						conceptTrimmed = conceptArray[conceptArray.length - 1];
 						// System.out.println(fileType);
 					}
-					
-					
+
 				}
 
-			} /*else
-				return URI;*/
+			} /*
+				 * else return URI;
+				 */
 
 		}
 
 		return conceptTrimmed;
 	}
 
-	public static void fileDecode(JSONObject obj) {
+	public static void classesFileDecode(JSONObject obj) {
 
 		try {
 			JSONObject rootJSON = obj;
 			JSONArray orginzedArray = new JSONArray();
-			//String conceptTrimmed = "";
+			// String conceptTrimmed = "";
 			JSONArray dataList = (JSONArray) rootJSON.get("files");
 			for (Object projectObj : dataList) {
 				JSONObject project = (JSONObject) projectObj;
@@ -295,13 +386,13 @@ public class App {
 					orginzedOject.put("label", issue.getString("label"));
 					orginzedOject.put("URI", issue.getString("URI"));
 					orginzedOject.put("RDFType", issue.getString("rdfType"));
-					System.out.println("\nRDFType: " + issue.getString("rdfType"));
+					// System.out.println("\nRDFType: " + issue.getString("rdfType"));
 
 					// if (issue.has("parent")) {
 					if (issue.has("parent") && !issue.isNull("parent")) {
 						String parentTrimmed = trim(issue.getString("parent"), true);
 						orginzedOject.put("parent", parentTrimmed);
-						//System.out.println("\nParent ::" + parentTrimmed);
+						// System.out.println("\nParent ::" + parentTrimmed);
 
 					} else {
 
