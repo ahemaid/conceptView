@@ -237,6 +237,8 @@ public class App {
 
 				JSONObject obj = new JSONObject();
 
+				obj.put("sNarrowerURI", sNarrower.getURI());
+
 				// trimming of the concept from URI
 				obj.put("sNarrower", trim(sNarrower.getURI().toString()));
 
@@ -270,7 +272,7 @@ public class App {
 				JSONObject obj = new JSONObject();
 
 				// trimming of the concept from URI
-				obj.put("sBroaderURI", sBroader.getURI()));
+				obj.put("sBroaderURI", sBroader.getURI());
 
 				obj.put("sBroader", trim(sBroader.getURI().toString()));
 
