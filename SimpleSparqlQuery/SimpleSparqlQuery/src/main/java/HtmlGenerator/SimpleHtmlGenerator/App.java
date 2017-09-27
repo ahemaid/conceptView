@@ -67,6 +67,8 @@ public class App {
 		JSONObject mergedJsonObjectClasses = new JSONObject();
 		JSONArray mergingArraySKOS = new JSONArray();
 		JSONObject mergedJsonObjectSKOS = new JSONObject();
+		JSONArray mergingArrayobjExternalClasses = new JSONArray();
+		JSONObject mergedJsonObjectExternalClasses = new JSONObject();
 
 		try {
 
@@ -80,7 +82,8 @@ public class App {
 					System.out.println(files[i]);
 					JSONObject objClasses = generateClassesJSON("./ttlFiles/" + files[i], "../../results.JSON");
 					JSONObject objSKOS = generateSKOSJSON("./ttlFiles/" + files[i], "../../SKOSresults.JSON");
-
+					JSONObject objExternalClasses = generateExternalRDFSJSON("./ttlFiles/" + files[i],
+							"../../objExternalClassesresults.JSON");
 					// check for empty JSONobjects
 					if (objClasses.length() != 0) {
 						// System.out.println(obj);
@@ -90,15 +93,21 @@ public class App {
 						// System.out.println(obj);
 						mergingArraySKOS.put(objSKOS);
 					}
+					if (objExternalClasses.length() != 0) {
+						// System.out.println(obj);
+						mergingArrayobjExternalClasses.put(objExternalClasses);
+					}
 				}
 			}
 			mergedJsonObjectClasses.put("files", mergingArrayClasses);
 			mergedJsonObjectSKOS.put("files", mergingArraySKOS);
-			System.out.println(mergedJsonObjectSKOS);
-
+			mergedJsonObjectExternalClasses.put("files", mergingArrayobjExternalClasses);
+			System.out.println("ExternalClasses: " + mergedJsonObjectExternalClasses);
 			// call to organize
+			SKOSFileDecode(mergedJsonObjectSKOS);
 
-			classesFileDecode(mergedJsonObjectClasses);
+			RDFSFileDecode(mergedJsonObjectClasses);
+			externalClassesFileDecode(mergedJsonObjectExternalClasses);
 
 		} catch (ArrayIndexOutOfBoundsException e) {
 			System.out.println("ArrayIndexOutOfBoundsException caught");
@@ -216,12 +225,11 @@ public class App {
 		OntModel ontModel = ModelFactory.createOntologyModel(OntModelSpec.OWL_DL_MEM);
 		FileManager.get().readModel(ontModel, _sourceFile);
 
-		mainQuery = "PREFIX skos: <http://www.w3.org/2004/02/skos/core#> " + 
-					"SELECT  ?sNarrower ?oNarrower  WHERE {"+
-					"?sNarrower skos:narrower ?oNarrower .}";
+		mainQuery = "PREFIX skos: <http://www.w3.org/2004/02/skos/core#> " + "SELECT  ?sNarrower ?oNarrower  WHERE {"
+				+ "?sNarrower skos:narrower ?oNarrower .}";
 		QueryExecution qexec1 = QueryExecutionFactory.create(mainQuery, ontModel);
 		ResultSet result1 = qexec1.execSelect();
-		//ResultSetFormatter.outputAsJSON(System.out, result1);
+		// ResultSetFormatter.outputAsJSON(System.out, result1);
 
 		// ResultSetFormatter.out(System.out, result2);
 
@@ -252,17 +260,12 @@ public class App {
 
 		}
 
-		mainQuery = "PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>"
-				+ "PREFIX rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#>"
-				+ "PREFIX owl:  <http://www.w3.org/2002/07/owl#>" + "PREFIX foaf: <http://xmlns.com/foaf/0.1/>"
-				+ "PREFIX xsd:  <http://www.w3.org/2001/XMLSchema#>"
-				+ "PREFIX skos: <http://www.w3.org/2004/02/skos/core#> " 
-				+"SELECT  ?sBroader ?oBroader   WHERE {"
+		mainQuery = "PREFIX skos: <http://www.w3.org/2004/02/skos/core#> " + "SELECT  ?sBroader ?oBroader   WHERE {"
 				+ "?sBroader skos:broader ?oBroader .}";
 
 		QueryExecution qexec2 = QueryExecutionFactory.create(mainQuery, ontModel);
 		ResultSet result2 = qexec2.execSelect();
-		//ResultSetFormatter.outputAsJSON(System.out, result2);
+		// ResultSetFormatter.outputAsJSON(System.out, result2);
 		while (result2.hasNext()) {
 			QuerySolution binding = result2.nextSolution();
 			if (binding.get("sBroader").toString() != null) {
@@ -288,6 +291,52 @@ public class App {
 
 		// check location
 		jsonObject.put("SKOSconcepts", array);
+
+		return jsonObject;
+
+	}
+
+	public static JSONObject generateExternalRDFSJSON(String _sourceFile, String _destination) throws IOException {
+
+		org.apache.log4j.BasicConfigurator.configure(new NullAppender());
+
+		FileManager.get().addLocatorClassLoader(Main.class.getClassLoader());
+
+		OntModel ontModel = ModelFactory.createOntologyModel(OntModelSpec.OWL_DL_MEM);
+		FileManager.get().readModel(ontModel, _sourceFile);
+
+		mainQuery = "PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>"
+				+ "PREFIX rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#>"
+				+ "PREFIX owl:  <http://www.w3.org/2002/07/owl#>" + "PREFIX foaf: <http://xmlns.com/foaf/0.1/>"
+				+ "PREFIX xsd:  <http://www.w3.org/2001/XMLSchema#>"
+				+ "PREFIX skos: <http://www.w3.org/2004/02/skos/core#> " + "SELECT  ?class  WHERE {" + "?s a ?class."
+				+ " }";
+		QueryExecution qexec = QueryExecutionFactory.create(mainQuery, ontModel);
+		ResultSet result = qexec.execSelect();
+		// ResultSetFormatter.outputAsJSON(System.out, result);
+
+		// ResultSetFormatter.out(System.out, result2);
+
+		JSONObject jsonObject = new JSONObject();
+		JSONArray array = new JSONArray();
+
+		while (result.hasNext()) {
+			QuerySolution binding = result.nextSolution();
+			if (binding.get("class").toString() != null) {
+				Resource externalClass = (Resource) binding.get("class");
+
+				JSONObject obj = new JSONObject();
+
+				obj.put("externalClass", externalClass.getURI());
+
+				File file = new File(_sourceFile);
+				obj.put("fileName", file.getName());
+				array.put(obj);
+			} else
+				continue;
+		}
+		// check location
+		jsonObject.put("externalClasses", array);
 
 		return jsonObject;
 
@@ -370,7 +419,73 @@ public class App {
 		return conceptTrimmed;
 	}
 
-	public static void classesFileDecode(JSONObject obj) {
+	public static void externalClassesFileDecode(JSONObject obj) {
+
+		try {
+			JSONObject rootJSON = obj;
+			JSONArray orginzedArray = new JSONArray();
+			JSONArray dataList = (JSONArray) rootJSON.get("files");
+			for (Object projectObj : dataList) {
+				JSONObject project = (JSONObject) projectObj;
+				JSONArray issueList = (JSONArray) project.get("externalClasses");
+				if (issueList.length() > 0) {
+					//System.out.println("\nParent ::" + issueList);
+					for (Object issueObj : issueList) {
+						JSONObject issue = (JSONObject) issueObj;
+						orginzedArray.put(issue);
+					}
+				}
+			}
+			try (FileWriter file = new FileWriter("../../externalClassesResults.JSON")) {
+				file.write(orginzedArray.toString());
+
+				System.out.println("Successfully Copied externalClassesJSON Object to File...");
+				// System.out.println("\nJSON Object: " + mergedJsonObject);
+				// trim();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		} catch (JSONException e) {
+			// do smth
+			e.printStackTrace();
+		}
+
+	}
+
+	public static void SKOSFileDecode(JSONObject obj) {
+
+		try {
+			JSONObject rootJSON = obj;
+			JSONArray orginzedArray = new JSONArray();
+			JSONArray dataList = (JSONArray) rootJSON.get("files");
+			for (Object projectObj : dataList) {
+				JSONObject project = (JSONObject) projectObj;
+				JSONArray issueList = (JSONArray) project.get("SKOSconcepts");
+				if (issueList.length() > 0) {
+					System.out.println("\nParent ::" + issueList);
+					for (Object issueObj : issueList) {
+						JSONObject issue = (JSONObject) issueObj;
+						orginzedArray.put(issue);
+					}
+				}
+			}
+			try (FileWriter file = new FileWriter("../../SKOSResults.JSON")) {
+				file.write(orginzedArray.toString());
+
+				System.out.println("Successfully Copied SKOSJSON Object to File...");
+				// System.out.println("\nJSON Object: " + mergedJsonObject);
+				// trim();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		} catch (JSONException e) {
+			// do smth
+			e.printStackTrace();
+		}
+
+	}
+
+	public static void RDFSFileDecode(JSONObject obj) {
 
 		try {
 			JSONObject rootJSON = obj;

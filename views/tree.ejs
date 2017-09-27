@@ -50,13 +50,13 @@
         <div class="inline fields">
           <div class="field">
             <div class="ui radio checkbox">
-              <input type="radio" name="myRadios" onchange="handleChange1();" value="1" checked="checked">
+              <input type="radio" name="myRadios" id="RDFSViewCheckBox" onchange="handleChange1();" value="1" checked="checked">
               <label style="padding-right:50px">RDF(S) View</label>
             </div>
           </div>
           <div class="field">
             <div class="ui radio checkbox">
-              <input type="radio" name="myRadios" onchange="handleChange2();" value="2">
+              <input type="radio" name="myRadios" id="SKOSViewCheckBox" onchange="handleChange2();" value="2">
               <label style="padding-right:50px">SKOS View</label>
             </div>
           </div>
@@ -75,18 +75,18 @@
         </div>
       </div>
     </div>
-    <div class="ui message" id="notFoundMessage" style="display:none">
-      <div class="header">
-        message
-      </div>
-      <ul class="list">
-        <li>No concept was found!!</li>
-        <li>try another one</li>
-      </ul>
-    </div>
+
 
     <div class="col-sm-12  col-md-6">
       <br/>
+      <div class="ui icon message" id="notFoundMessage" style="display:none">
+        <i class="inbox icon"></i>
+        <div class="content">
+          <div class="header">
+            No concept was found!! </div>
+          <p>Search another concept.</p>
+        </div>
+      </div>
       <div id="tree" class="mygrid-wrapper-div" style="height:800px;width:auto"></div>
     </div>
     <div class="col-sm-12 col-md-6" style="padding-top:20px;">
@@ -128,6 +128,28 @@
       // get all the data from route.tree.js
       var viewDataRendered = <%- JSON.stringify(data) %>;
       var currentTreeData = viewDataRendered;
+      var mixConceptsURI = <%- JSON.stringify(externalAndInternalConcepts) %>;
+      var mixConcepts = [];
+      mixConceptsURI.forEach(function(item) {
+        mixConcepts.push(trimHash(trimSlash(item)));
+      });
+      var existInMixConcepts = [];
+
+      // get existing concepts to find external concepts
+      function getExistInMixConcepts() {
+        mixConceptsURI.forEach(function(item) {
+          for (var i = 0; i < viewDataRendered.length; i++) {
+            if (trimHash(trimSlash(item)) === viewDataRendered[i].concept) {
+              existInMixConcepts.push(trimHash(trimSlash(item)));
+            }
+          }
+        });
+      }
+      getExistInMixConcepts();
+      var externalConcepts = $(mixConcepts).not(existInMixConcepts).get();
+
+
+      //alert(externalConcepts);
 
       // store the selected concept
       var conceptSelected = "";
@@ -145,84 +167,67 @@
       $('input:radio')
         .on('change', function(event) {
           if ($(this).prop('checked'))
-            alert($(this).attr('id'));
-        });
-      // check if showType or showfile checkboxes were clicked
-      $('input:checkbox')
-        .on('change', function(event) {
-          event.preventDefault();
-          var viewData = currentTreeData; //TODO: get this data with AJAX request.
-          var isCheckedshowFilesCheckBox = ($(this).prop('checked') && $(this).attr('id') == 'showFilesCheckBox') ? true : false;
-          if (isCheckedshowFilesCheckBox)
-            $('#showTypesCheckBox').prop('checked', false);
-          var isCheckedshowTypesCheckBox = ($(this).prop('checked') && $(this).attr('id') == 'showTypesCheckBox') ? true : false;
-          if (isCheckedshowTypesCheckBox)
-            $('#showFilesCheckBox').prop('checked', false);
+            //alert($(this).attr('id'));
+            console.log($(this).attr('id'));
+          alert(mixConcepts);
 
-          for (var i = 0; i < viewData.length; i++) {
-            viewData[i].text = viewData[i].concept;
-          }
-          if (isCheckedshowFilesCheckBox) {
-            for (var i = 0; i < viewData.length; i++) {
-              viewData[i].text = viewData[i].concept + '<div class="pull-right"><label>' + viewData[i].fileName + '</label></div>';
+        });
+
+        //Comparer Function
+        function GetSortOrder(prop) {
+            return function(a, b) {
+                if (a[prop] > b[prop]) {
+                    return 1;
+                } else if (a[prop] < b[prop]) {
+                    return -1;
+                }
+                return 0;
             }
-          }
-          if (isCheckedshowTypesCheckBox) {
-            for (var i = 0; i < viewData.length; i++) {
-              viewData[i].text = viewData[i].concept + '<div class="pull-right"><label>' + viewData[i].RDFType + '</label></div>';
-            }
-          }
-          var allParents = getUniqueParents(viewData);
-          var data = [];
-          var j = 0;
-          for (var i = 0; i < allParents.length; i++) {
-            if (allParents[i])
-              data[j++] = getParentWithChildren(viewData, allParents[i]);
-          }
+        }
+      var isCheckedshowTypesCheckBox;
+      var isCheckedshowFilesCheckBox;
+      //show treeview with types or files
+      function showTypesAndFiles(isCheckedshowFilesCheckBox, isCheckedshowTypesCheckBox) {
+        //event.preventDefault();
+        var viewData = currentTreeData; //TODO: get this data with AJAX request.
+        if (isCheckedshowFilesCheckBox)
+          $('#showTypesCheckBox').prop('checked', false);
+        if (isCheckedshowTypesCheckBox)
+          $('#showFilesCheckBox').prop('checked', false);
+
+        for (var i = 0; i < viewData.length; i++) {
+          viewData[i].text = viewData[i].concept;
+        }
+        if (isCheckedshowFilesCheckBox) {
           for (var i = 0; i < viewData.length; i++) {
-            data[j++] = viewData[i];
+            viewData[i].text = viewData[i].concept + '<div  class="ui red tag label">' + viewData[i].fileName + '</div>';
           }
+        }
+        if (isCheckedshowTypesCheckBox) {
+          for (var i = 0; i < viewData.length; i++) {
+            viewData[i].text = viewData[i].concept + '<div   class="ui teal tag label">' + viewData[i].RDFType + '</div>';
+          }
+        }
+
+        var allParents = getUniqueParents(viewData);
+        var data = [];
+        var j = 0;
+
+        for (var i = 0; i < allParents.length; i++) {
+          if (allParents[i])
+            data[j++] = getParentWithChildren(viewData, allParents[i]);
+        }
+        for (var i = 0; i < externalConcepts.length; i++) {
+            data[j++] =   getExternals(externalConcepts[i]);
+        }
+        for (var i = 0; i < viewData.length; i++) {
+          data[j++] = viewData[i];
+        }
+        // sorting the tree before viewing
+        data.sort(GetSortOrder("text"));
+        //alert(JSON.stringify(data));
           $('#tree').treeview({
-            data: data, // data is not optional
-            levels: 5,
-            enableLinks: true,
-            onNodeSelected: function(event, node) {
-              if (node.concept) {
-                $('#graph').empty();
-                event.stopPropagation();
-                $('#viewList').show();
-                exec(node.concept);
-                showInstances(node.concept);
-                showTurtleSource(node.concept);
-                conceptSelected = node.concept;
-              } else {
-                var parentNode = node.text;
-                parentNode = parentNode.split('<');
-                var str = parentNode[0];
-                exec(str);
-              }
-            }
-          });
-        });
-
-      // ckeck if user checked RDFSView or SKOSView
-      $(function() {
-        $('input:radio[name="myRadios"]').change(function() {
-          if ($(this).val() == '1') {
-            // hide the notFound Msg from SKOS radio
-            showFullTree();
-          } else {
-            conceptNotFoundMessage();
-          }
-        });
-      });
-
-      // declartion of show tree function
-      function showFullTree() {
-        $('#notFoundMessage').hide();
-        $("#tree").show();
-        $('#tree').treeview({
-          data: getTreeData(), // data is not optional
+          data: data, // data is not optional
           levels: 5,
           enableLinks: true,
           onNodeSelected: function(event, node) {
@@ -242,24 +247,52 @@
             }
           }
         });
+        debugger;
+      }
 
+      // check if showType or showfile checkboxes were clicked
+      $('input:checkbox')
+        .on('change', function(event) {
+          event.preventDefault();
+          isCheckedshowFilesCheckBox = ($(this).prop('checked') && $(this).attr('id') == 'showFilesCheckBox') ? true : false;
+          isCheckedshowTypesCheckBox = ($(this).prop('checked') && $(this).attr('id') == 'showTypesCheckBox') ? true : false;
+          showTypesAndFiles(isCheckedshowFilesCheckBox, isCheckedshowTypesCheckBox);
+        });
+
+      // ckeck if user checked RDFSView or SKOSView
+      $(function() {
+        $('input:radio[name="myRadios"]').change(function() {
+          if ($(this).val() == '1') {
+            // hide the notFound Msg from SKOS radio
+            showFullTree();
+          } else {
+            conceptNotFoundMessage();
+          }
+        });
+      });
+
+      // declartion of show tree function
+      function showFullTree() {
+        $('#notFoundMessage').hide();
+        $("#tree").show();
+        showTypesAndFiles(isCheckedshowFilesCheckBox, isCheckedshowTypesCheckBox);
       }
 
       //show concept was not found as a message
-      function conceptNotFoundMessage() {
-        hide('ALL');
+      function conceptNotFoundMessage(event) {
+        //event.preventDefault();
+        //hide('ALL');
+        $("#infoDetails").hide();
+        $("#tree").hide();
         $('#notFoundMessage').show();
       }
 
       // To hide element from page
       function hide(element) {
         if (element = 'ALL') {
-          $("#instanceHead").html();
-          $("#instanceDetailsTable").html("");
           $("#instanceHead").hide();
           $("#viewList").hide();
           $("#instanceDetailsTable").hide();
-          $("#conceptHead").html("");
           $("#conceptHead").hide();
           $("#infoDetails").hide();
           $("#showGraph").hide();
@@ -267,29 +300,11 @@
         }
       }
 
-
       // Init a timeout variable to be used below
       var timeout = null;
-
-      // // Listen for keystroke events
-      // textInput.onkeyup = function(e) {
-      //
-      //   // Clear the timeout if it has already been set.
-      //   // This will prevent the previous task from executing
-      //   // if it has been less than <MILLISECONDS>
-      //   clearTimeout(timeout);
-      //
-      //   // Make a new timeout set to go off in 800ms
-      //   timeout = setTimeout(function() {
-      //
-      //   }, 500);
-      // };
-
       // Instant search on fly on concept
       var search = function(e) {
-
         clearTimeout(timeout);
-
         // Make a new timeout set to go off in 800ms
         var pattern = $('#input-search').val();
         var options = {
@@ -345,10 +360,19 @@
           var parentNode = parent; //+ '<div class = "pull-right" > <a id =' + parent + ' onmousedown = "showTypeFunc(this)" href = "#" class = "btn btn-default btn-xs" role = "button"> Show Type </a><a id=' + parent +
         //   ' onmousedown="showFileFunc(this)" href="#" class="btn btn-danger btn-xs" role="button">Show File(s)</a> </div>';
         else
-          var parentNode = parent; // + '<div class = "pull-right" > <a id =' + parent + ' href = "#" class = "btn btn-default btn-xs" role = "button"> External </a> </div>';
+          var parentNode = parent + '<div class="ui left pointing blue basic label">  External </div>';
         var node = {
           text: parentNode,
           nodes: children
+        };
+        return node;
+      }
+
+      // get nodes which are parents
+      function getExternals(data) {
+
+        var node = {
+          text: data +'<div class="ui left pointing blue basic label"> External </div>'
         };
         return node;
       }
@@ -444,81 +468,13 @@
             text = text.trim();
           if (text === "ALL Files") {
             currentTreeData = getTreeData();
-            $('#tree').treeview({
-              data: getTreeData(), // data is not optional
-              levels: 5,
-              enableLinks: true,
-              onNodeSelected: function(event, node) {
-                if (node.concept) {
-                  $('#graph').empty();
-                  event.stopPropagation();
-                  $('#viewList').show();
-                  exec(node.concept);
-                  showInstances(node.concept);
-                  showTurtleSource(node.concept);
-                  conceptSelected = node.concept;
-                } else {
-                  var parentNode = node.text;
-                  parentNode = parentNode.split('<');
-                  var str = parentNode[0];
-                  exec(str);
-                }
-              }
-            });
+            showTypesAndFiles(isCheckedshowFilesCheckBox, isCheckedshowTypesCheckBox);
           } else {
             currentTreeData = getTreeData('fileName', text);
-            $('#tree').treeview({
-              data: getTreeData('fileName', text), // data is not optional
-              levels: 5,
-              enableLinks: true,
-              onNodeSelected: function(event, node) {
-                if (node.concept) {
-                  $('#graph').empty();
-                  event.stopPropagation();
-                  $('#viewList').show();
-                  exec(node.concept);
-                  showInstances(node.concept);
-                  showTurtleSource(node.concept);
-                  conceptSelected = node.concept;
-                } else {
-                  var parentNode = node.text;
-                  parentNode = parentNode.split('<');
-                  var str = parentNode[0];
-                  exec(str);
-                }
-              }
-            });
+            showTypesAndFiles(isCheckedshowFilesCheckBox, isCheckedshowTypesCheckBox);
           }
         }
       }
-
-      // // show file where the concept is found
-      // showFileFunc = function(event) {
-      //   var conceptFile = [];
-      //   for (var i = 0; i < viewDataRendered.length; i++) {
-      //     if (event.id === viewDataRendered[i].concept) {
-      //       conceptFile.push(viewDataRendered[i].fileName);
-      //     }
-      //   }
-      //   var unique = [...new Set(conceptFile.map(item => item))];
-      //   if (unique.length > 0)
-      //     event.text = unique;
-      // }
-      //
-      // //show RDFType of the concept
-      // showTypeFunc = function(event) {
-      //   //event.stopPropagation();
-      //   var conceptRDFType = [];
-      //   for (var i = 0; i < viewDataRendered.length; i++) {
-      //     if (event.id === viewDataRendered[i].concept) {
-      //       conceptRDFType.push(viewDataRendered[i].RDFType);
-      //     }
-      //   }
-      //   var unique = [...new Set(conceptRDFType.map(item => item))];
-      //   if (unique.length > 0) {
-      //     event.text = unique;
-      //   }
-      // }
 
       // show info. details of clicked instance
       function showInstanceDetails(instanceURI) {
@@ -625,6 +581,7 @@
             $("#instancesTable").html('<p>No node was selected !!!</p>');
         }
       }
+
       // To display Turtle source for the selected node
       function showTurtleSource(item) {
         var conceptURI;
@@ -766,7 +723,6 @@
         else {
           $("#rangeTable").hide();
         }
-        debugger;
         $("#detailTable").html(table);
         $("#domainTable").html(domainTable);
         $("#rangeTable").html(rangeTable);
