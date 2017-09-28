@@ -13,11 +13,11 @@
           </div>
           <div class="four wide field">
             <div class="ui large radio checkbox">
-              <input type="radio" id="chk-ignore-case" name="searchOptions" checked="checked">
+              <input type="radio" id="chk-ignore-case" name="searchOptions" checked="checked" value="false">
               <label>Ignore Case</label>
             </div>
             <div class="ui large  radio checkbox">
-              <input type="radio" id="chk-exact-match" name="searchOptions">
+              <input type="radio" id="chk-exact-match" name="searchOptions" value="false">
               <label>Exact Match</label>
             </div>
           </div>
@@ -50,13 +50,13 @@
         <div class="inline fields">
           <div class="field">
             <div class="ui radio checkbox">
-              <input type="radio" name="myRadios" id="RDFSViewCheckBox" onchange="handleChange1();" value="1" checked="checked">
+              <input type="radio" name="myRadios" id="RDFSViewCheckBox" value="1" checked="checked">
               <label style="padding-right:50px">RDF(S) View</label>
             </div>
           </div>
           <div class="field">
             <div class="ui radio checkbox">
-              <input type="radio" name="myRadios" id="SKOSViewCheckBox" onchange="handleChange2();" value="2">
+              <input type="radio" name="myRadios" id="SKOSViewCheckBox" value="2">
               <label style="padding-right:50px">SKOS View</label>
             </div>
           </div>
@@ -75,12 +75,10 @@
         </div>
       </div>
     </div>
-
-
     <div class="col-sm-12  col-md-6">
       <br/>
       <div class="ui icon message" id="notFoundMessage" style="display:none">
-        <i class="inbox icon"></i>
+        <i class="warning circle icon"></i>
         <div class="content">
           <div class="header">
             No concept was found!! </div>
@@ -90,10 +88,11 @@
       <div id="tree" class="mygrid-wrapper-div" style="height:800px;width:auto"></div>
     </div>
     <div class="col-sm-12 col-md-6" style="padding-top:20px;">
+      <div id="externalInfo"></div>
       <ul id="viewList" class="nav nav-tabs" style="display: none">
-        <li class="active"><a class="nav-link active" data-toggle="tab" href="#Documentation">Documentation</a></li>
-        <li><a class="nav-link" data-toggle="tab" href="#sourceCode" onmousedown="showTurtleSource()">Turtle source</a></li>
-        <li><a class="nav-link" data-toggle="tab" href="#showGraph">Concept graph</a></li>
+        <li class="active"><a class="nav-link active" data-toggle="tab" id="documentationTab" href="#Documentation">Documentation</a></li>
+        <li><a class="nav-link" data-toggle="tab" id="sourceCodeTab"  href="#sourceCode" onmousedown="showTurtleSource()">Turtle source</a></li>
+        <li><a class="nav-link" data-toggle="tab" id="graphTab" href="#showGraph">Concept graph</a></li>
       </ul>
       <div class="tab-content">
         <div class="tab-pane active" id="Documentation" role="tabpanel">
@@ -127,9 +126,54 @@
     <script>
       // get all the data from route.tree.js
       var viewDataRendered = <%- JSON.stringify(data) %>;
+      var SKOSData = <%- JSON.stringify(SKOSData) %>;
       var currentTreeData = viewDataRendered;
       var mixConceptsURI = <%- JSON.stringify(externalAndInternalConcepts) %>;
       var mixConcepts = [];
+      ///////////////////////////////////////////////////////////////////////
+      // show SKOS concepts
+      function showSKOSData() {
+        var viewData = SKOSData; //TODO: get this data with AJAX request.
+        for (var i = 0; i < viewData.length; i++) {
+          viewData[i].text = viewData[i].child;
+        }
+        //   if (isCheckedshowFilesCheckBox) {
+        //    for (var i = 0; i < viewData.length; i++) {
+        //       viewData[i].text = viewData[i].child + '<div  class="ui pink tag label">' + viewData[i].fileName + '</div>';
+        //    }
+        //  }
+        //  if (isCheckedshowTypesCheckBox) {
+        // for (var i = 0; i < viewData.length; i++) {
+        //   viewData[i].text = viewData[i].child ; + '<div   class="ui teal tag label">' + viewData[i].RDFType + '</div>';
+        // }
+        // }
+
+        var allParents = getUniqueParents(viewData);
+        var data = [];
+        var j = 0;
+        console.log(allParents);
+        for (var i = 0; i < allParents.length; i++) {
+          if (allParents[i])
+            data[j++] = getParentWithChildren(viewData, allParents[i]);
+        }
+        console.log(data);
+        for (var i = 0; i < viewData.length; i++) {
+          data[j++] = viewData[i];
+        }
+        // for (var i = 0; i < viewData.length; i++) {
+        //   data[j++] = viewData[i];
+        // }
+        // sorting the tree before viewing
+        data.sort(GetSortOrder("text"));
+        // make array unique
+        data = uniqueArray(data);
+        // rebuild tree with the new data
+        rebuildTree(data);
+      }
+      /////////////////////////////////////////////////////////////////////
+
+
+      // get concpt from URI for some concepts
       mixConceptsURI.forEach(function(item) {
         mixConcepts.push(trimHash(trimSlash(item)));
       });
@@ -162,28 +206,113 @@
       // since RDFS checkbox is clicked by default
       showFullTree();
 
-      // do test for radio clicks
-      //alert($('#chk-ignore-case').is(':checked'));
+      // check for radios RDFS or SKOS Views
       $('input:radio')
         .on('change', function(event) {
-          if ($(this).prop('checked'))
-            //alert($(this).attr('id'));
-            console.log($(this).attr('id'));
-          alert(mixConcepts);
-
+          if ($(this).prop('checked')) {
+            if ($(this).attr('id') == 'SKOSViewCheckBox')
+              showSKOSData();
+            if ($(this).attr('id') == 'RDFSViewCheckBox')
+              showFullTree();
+          }
         });
 
-        //Comparer Function
-        function GetSortOrder(prop) {
-            return function(a, b) {
-                if (a[prop] > b[prop]) {
-                    return 1;
-                } else if (a[prop] < b[prop]) {
-                    return -1;
-                }
-                return 0;
+      // make unique concept in  tree
+      function uniqueArray(array) {
+        var a = array.concat();
+        for (var i = 0; i < a.length; i++) {
+          for (var j = i + 1; j < a.length; j++) {
+            if (a[i].text === a[j].text) {
+              a.splice(j--, 1);
             }
+          }
         }
+        return a;
+      }
+
+      // show info. for external Concepts and thier instaces
+      function showExternalInfo(str) {
+        var ExteralURI;
+        for (var i = 0; i < mixConceptsURI.length; i++) {
+          var item = mixConceptsURI[i];
+          if (trimHash(trimSlash(item)) == str) {
+            ExteralURI = item;
+          }
+        }
+        var externalURITable = '<table class="table table-striped" >' +
+          '<colgroup> <col class="col-md-4"> </colgroup>' +
+          '<tr>' +
+          '<th> This concept is outside this Ontology :</th>' +
+          '</tr>';
+        var link = '<a href=' + ExteralURI + '>' + ExteralURI + '</a>';
+        externalURITable += '<tr>    <td> For more details click the link  below <br/>' + link + '</td>  </tr>';
+        externalURITable += '</table>';
+        $('#viewList').show();
+        $('#sourceCodeTab').hide();
+        $('#graphTab').hide();
+        $('#infoDetails').show();
+        $("#domainTable").hide();
+        $("#rangeTable").hide();
+        $("#rangeTable").hide();
+        $("#instancesTable").html("");
+        $("#instancesTable").hide();
+        $("#instanceHead").hide();
+        $("#instanceDetailsTable").hide();
+        $("#conceptHead").html('<p > Concept Details for :<code>' + trimHash(trimSlash(ExteralURI)) + '</code></p>');
+        $('#detailTable').html(externalURITable);
+        //$('#externalInfo').html('<p> This is external concept for more details click the following link..  '+ ExteralURI +'</p>');
+        var endpoint = "http://localhost:3030/ds/sparql?query=";
+        var querystring = 'SELECT  ?s WHERE { ?s  a <' + ExteralURI + '> }';
+        var method = "POST";
+        // You REALLY want async = true.
+        var async = true;
+        var request = new XMLHttpRequest();
+        request.onload = function() {
+          var status = request.status; // HTTP response status, e.g., 200 for "200 OK"
+          var data = JSON.parse(request.responseText); // Returned data, e.g., an HTML document.
+          var instances = data.results.bindings;
+          if (instances[0] != null) {
+            var instancesTable = '<table class="table table-striped" >' +
+              '<colgroup> <col class="col-md-4"> </colgroup>' +
+              '<tr>' +
+              '<th>Instances</th>' +
+              '</tr>';
+            //  console.log(instances);
+            for (var i = 0; i < instances.length; i++) {
+              var instanceURI = instances[i]["s"].value;
+              var key1 = trimSlash(instances[i]["s"].value);
+              key1 = '<a href="#" onmousedown="showInstanceDetails(&quot;' + instanceURI + '&quot;); return false; ">' + key1 + '</a>';
+              instancesTable += '<tr>    <td>' + key1 + '</td>  </tr>';
+            }
+            instancesTable += '</table> ';
+            $("#instancesTable").show();
+            $("#instancesTable").html(instancesTable);
+          } else {
+            $("#instancesTable").html("");
+            $("#instancesTable").hide();
+            $("#instanceHead").hide();
+            $("#instanceDetailsTable").hide();
+          }
+        }
+        request.open(method, endpoint + querystring, true);
+        request.setRequestHeader("Content-Type", 'application/x-www-form-urlencoded');
+        // Actually sends the request to the server.
+        request.send();
+        debugger;
+      }
+
+      //Comparer Function
+      function GetSortOrder(prop) {
+        return function(a, b) {
+          if (a[prop] > b[prop]) {
+            return 1;
+          } else if (a[prop] < b[prop]) {
+            return -1;
+          }
+          return 0;
+        }
+      }
+
       var isCheckedshowTypesCheckBox;
       var isCheckedshowFilesCheckBox;
       //show treeview with types or files
@@ -200,7 +329,7 @@
         }
         if (isCheckedshowFilesCheckBox) {
           for (var i = 0; i < viewData.length; i++) {
-            viewData[i].text = viewData[i].concept + '<div  class="ui red tag label">' + viewData[i].fileName + '</div>';
+            viewData[i].text = viewData[i].concept + '<div  class="ui pink tag label">' + viewData[i].fileName + '</div>';
           }
         }
         if (isCheckedshowTypesCheckBox) {
@@ -218,15 +347,21 @@
             data[j++] = getParentWithChildren(viewData, allParents[i]);
         }
         for (var i = 0; i < externalConcepts.length; i++) {
-            data[j++] =   getExternals(externalConcepts[i]);
+          data[j++] = getExternals(externalConcepts[i]);
         }
         for (var i = 0; i < viewData.length; i++) {
           data[j++] = viewData[i];
         }
         // sorting the tree before viewing
         data.sort(GetSortOrder("text"));
-        //alert(JSON.stringify(data));
-          $('#tree').treeview({
+        // make array unique
+        data = uniqueArray(data);
+        // rebuild tree with the new data
+        rebuildTree(data);
+      }
+
+      function rebuildTree(data) {
+        $('#tree').treeview({
           data: data, // data is not optional
           levels: 5,
           enableLinks: true,
@@ -234,6 +369,8 @@
             if (node.concept) {
               $('#graph').empty();
               event.stopPropagation();
+              $('#externalInfo').hide();
+              $('#infoDetails').show();
               $('#viewList').show();
               exec(node.concept);
               showInstances(node.concept);
@@ -243,11 +380,11 @@
               var parentNode = node.text;
               parentNode = parentNode.split('<');
               var str = parentNode[0];
-              exec(str);
+
+              showExternalInfo(str);
             }
           }
         });
-        debugger;
       }
 
       // check if showType or showfile checkboxes were clicked
@@ -258,18 +395,6 @@
           isCheckedshowTypesCheckBox = ($(this).prop('checked') && $(this).attr('id') == 'showTypesCheckBox') ? true : false;
           showTypesAndFiles(isCheckedshowFilesCheckBox, isCheckedshowTypesCheckBox);
         });
-
-      // ckeck if user checked RDFSView or SKOSView
-      $(function() {
-        $('input:radio[name="myRadios"]').change(function() {
-          if ($(this).val() == '1') {
-            // hide the notFound Msg from SKOS radio
-            showFullTree();
-          } else {
-            conceptNotFoundMessage();
-          }
-        });
-      });
 
       // declartion of show tree function
       function showFullTree() {
@@ -304,35 +429,20 @@
       var timeout = null;
       // Instant search on fly on concept
       var search = function(e) {
+        //alert('chk-ignore-case'+$('#chk-ignore-case').is(':checked'));
+        //alert('chk-exact-match'+$('#chk-exact-match').is(':checked'));
         clearTimeout(timeout);
         // Make a new timeout set to go off in 800ms
         var pattern = $('#input-search').val();
         var options = {
-          ignoreCase: $('#chk-ignore-case').is(':checked'),
-          exactMatch: $('#chk-exact-match').is(':checked')
+          // ignoreCase: $('#chk-ignore-case').is(':checked'),
+          // exactMatch: $('#chk-exact-match').is(':checked'),
+          ignoreCase: false,
+          exactMatch: true,
         };
         var results = $('#tree').treeview('search', [pattern, options]);
-        $('#tree').treeview({
-          data: results, // data is not optional
-          levels: 5,
-          enableLinks: true,
-          onNodeSelected: function(event, node) {
-            if (node.concept) {
-              $('#graph').empty();
-              event.stopPropagation();
-              $('#viewList').show();
-              exec(node.concept);
-              showInstances(node.concept);
-              showTurtleSource(node.concept);
-              conceptSelected = node.concept;
-            } else {
-              var parentNode = node.text;
-              parentNode = parentNode.split('<');
-              var str = parentNode[0];
-              exec(str);
-            }
-          }
-        });
+        // rebuild the tree with the search pattern
+        rebuildTree(results);
         timeout = setTimeout(function() {
           if (results.length == 0)
             conceptNotFoundMessage();
@@ -349,7 +459,7 @@
         return unique;
       }
 
-      // get nodes which are parents
+      // get nodes which are parents and have children
       function getParentWithChildren(data, parent) {
         var children = [];
         for (var i = 0; i < data.length; i++) {
@@ -357,25 +467,52 @@
             children.push(data[i]);
         };
         if (isConceptAvailable(parent))
-          var parentNode = parent; //+ '<div class = "pull-right" > <a id =' + parent + ' onmousedown = "showTypeFunc(this)" href = "#" class = "btn btn-default btn-xs" role = "button"> Show Type </a><a id=' + parent +
-        //   ' onmousedown="showFileFunc(this)" href="#" class="btn btn-danger btn-xs" role="button">Show File(s)</a> </div>';
+          var parentNode = parent;
         else
           var parentNode = parent + '<div class="ui left pointing blue basic label">  External </div>';
         var node = {
           text: parentNode,
           nodes: children
         };
+        //debugger;
         return node;
       }
+
+      // // get nodes which are parents and have children
+      // function getSKOSParentWithChildren(data, parent) {
+      //   var children = [];
+      //   for (var i = 0; i < data.length; i++) {
+      //     if (data[i].parent === parent)
+      //       children.push(data[i]);
+      //     //  debugger;
+      //   };
+      //   if (isConceptAvailable(parent))
+      //     var parentNode = parent; //+ '<div class = "pull-right" > <a id =' + parent + ' onmousedown = "showTypeFunc(this)" href = "#" class = "btn btn-default btn-xs" role = "button"> Show Type </a><a id=' + parent +
+      //   //   ' onmousedown="showFileFunc(this)" href="#" class="btn btn-danger btn-xs" role="button">Show File(s)</a> </div>';
+      //   else
+      //     var parentNode = parent + '<div class="ui left pointing blue basic label">  External </div>';
+      //   var node = {
+      //     text: parentNode,
+      //     nodes: children
+      //   };
+      //   return node;
+      // }
 
       // get nodes which are parents
       function getExternals(data) {
-
         var node = {
-          text: data +'<div class="ui left pointing blue basic label"> External </div>'
+          text: data + '<div class="ui left pointing blue basic label"> External </div>'
         };
         return node;
       }
+
+      // // get nodes which are parents
+      // function getSKOSNode(data) {
+      //   var node = {
+      //     text: data //+ '<div class="ui left pointing blue basic label"> External </div>'
+      //   };
+      //   return node;
+      // }
 
       // get elements of the tree to display either filtered by file or without
       function getTreeData(propertyName, selectedFileName) {
@@ -384,7 +521,10 @@
         // viewDataRendered
         var viewData = viewDataRendered; //TODO: get this data with AJAX request.
         for (var i = 0; i < viewData.length; i++) {
-          viewData[i].text = viewData[i].concept; //+ '<div class="pull-right"><a id=' + viewData[i].concept + ' onmousedown="showTypeFunc(this)" href="#" class="btn btn-default btn-xs" role="button">Show Type</a><a id=' + viewData[i]
+          if (viewData[i].concept)
+            viewData[i].text = viewData[i].concept; //+ '<div class="pull-right"><a id=' + viewData[i].concept + ' onmousedown="showTypeFunc(this)" href="#" class="btn btn-default btn-xs" role="button">Show Type</a><a id=' + viewData[i]
+          //else
+          //viewData[i].text = viewData[i].child;// for SKOS
           //   .concept + '  href="#" onmousedown="showFileFunc(this)" class="btn btn-danger btn-xs" role="button" >Show File(s)</a></div>';
         }
         var allParents = getUniqueParents(viewData);
@@ -531,6 +671,10 @@
       function showInstances(item) {
         var conceptURI;
         var isURIExist = false;
+        // if(item && uri){
+        //   isURIExist=true;
+        //   conceptURI = uri;
+        // }
         if (item) {
           for (var i = 0; i < viewDataRendered.length; i++) {
             if (item.toLowerCase() === viewDataRendered[i].concept.toLowerCase()) {
@@ -615,6 +759,7 @@
           request.onload = function() {
             var status = request.status; // HTTP response status, e.g., 200 for "200 OK"
             var data = request.responseText; // Returned data, e.g., an HTML document.
+            $('#sourceCodeTab').show();
             $('#code').html(data);
           }
           request.open(method, endpoint + querystring, true);
@@ -714,6 +859,7 @@
         $("#conceptHead").show();
         $("#conceptHead ").html('<p > Concept Details :<code>' + conceptSelected + '</code></p>');
         $("#infoDetails").show();
+        $("#viewList").show();
         if (!conceptHasDomain == "")
           $("#domainTable").show();
         else
@@ -737,6 +883,7 @@
         };
         d3sparql.forcegraph(json, config);
         $('#graph').html('');
+        $('#graphTab').show();
         $('div.d3sparql.forcegraph').appendTo($('#graph'));
       }
 

@@ -86,6 +86,14 @@ router.get('/', function(req, res) {
     }
     return out;
   }
+  // arrange SKOS in parent and child relationship
+  // function getSKOSInParentChildren(data){
+  //   var skosElemet = {};
+  //   var concepts = [];
+  //
+  //
+  //
+  // }
 
   // translation of concept to URI
   function findURI(array, item) {
@@ -110,16 +118,40 @@ router.get('/', function(req, res) {
   });
   files.sort(SortFiles);
   files = uniquefileNames(files);
+
+  /////////////////////////////////////////////////////////////////
+  console.log(SKOSData);
+  //var SKOSInParentChildren =   getSKOSInParentChildren(SKOSData);
   //console.log(SKOSData);
+//   var skosConcept = {};
+//   var concept = []
+//   skosConcept.concept = concept;
+//   console.log(sitePersonel);
+//
+//
+//   function onGeneratedRow(SKOSData)
+// {
+//     var jsonData = {};
+//     SKOSData.forEach(function(column)
+//     {
+//         var columnName = column.metadata.colName;
+//         jsonData[columnName] = column.value;
+//     });
+//     viewData.employees.push(jsonData);
+//  }
+
+//////////////////////////////////////////////////////
+
   var concepts = [];
   var concepts = filterExternalConcept(externalClassesData);
-  console.log(concepts);
+  //console.log(concepts);
 
   res.render('tree.ejs', {
     title: 'tree',
     data: treeData,
     fileNames: files,
-    externalAndInternalConcepts: concepts
+    externalAndInternalConcepts: concepts,
+    SKOSData:SKOSData
   });
 
 });

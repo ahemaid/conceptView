@@ -244,13 +244,16 @@ public class App {
 				Resource oNarrower = (Resource) binding.get("oNarrower");
 
 				JSONObject obj = new JSONObject();
+				
+				// URI for child 
+				obj.put("URI", sNarrower.getURI());
 
-				obj.put("sNarrowerURI", sNarrower.getURI());
+				obj.put("child", trim(sNarrower.getURI().toString()));
 
-				// trimming of the concept from URI
-				obj.put("sNarrower", trim(sNarrower.getURI().toString()));
+				obj.put("parent", trim(oNarrower.getURI().toString()));
+				
+				obj.put("RDFType", "skos:narrower");
 
-				obj.put("oNarrower", trim(oNarrower.getURI().toString()));
 
 				File file = new File(_sourceFile);
 				obj.put("fileName", file.getName());
@@ -274,12 +277,15 @@ public class App {
 				Resource oBroader = (Resource) binding.get("oBroader");
 				JSONObject obj = new JSONObject();
 
-				// trimming of the concept from URI
-				obj.put("sBroaderURI", sBroader.getURI());
+				//  URI for parent
+				obj.put("URI", sBroader.getURI());
 
-				obj.put("sBroader", trim(sBroader.getURI().toString()));
+				obj.put("parent", trim(sBroader.getURI().toString()));
 
-				obj.put("oBroader", trim(oBroader.getURI().toString()));
+				obj.put("child", trim(oBroader.getURI().toString()));
+				
+				obj.put("RDFType", "skos:broader");
+
 
 				File file = new File(_sourceFile);
 				obj.put("fileName", file.getName());
