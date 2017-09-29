@@ -91,7 +91,7 @@
       <div id="externalInfo"></div>
       <ul id="viewList" class="nav nav-tabs" style="display: none">
         <li class="active"><a class="nav-link active" data-toggle="tab" id="documentationTab" href="#Documentation">Documentation</a></li>
-        <li><a class="nav-link" data-toggle="tab" id="sourceCodeTab"  href="#sourceCode" onmousedown="showTurtleSource()">Turtle source</a></li>
+        <li><a class="nav-link" data-toggle="tab" id="sourceCodeTab" href="#sourceCode" onmousedown="showTurtleSource()">Turtle source</a></li>
         <li><a class="nav-link" data-toggle="tab" id="graphTab" href="#showGraph">Concept graph</a></li>
       </ul>
       <div class="tab-content">
@@ -133,10 +133,12 @@
       ///////////////////////////////////////////////////////////////////////
       // show SKOS concepts
       function showSKOSData() {
-        var viewData = SKOSData; //TODO: get this data with AJAX request.
-        for (var i = 0; i < viewData.length; i++) {
-          viewData[i].text = viewData[i].child;
-        }
+
+        var viewData = SKOSData;
+        currentTreeData = SKOSData;
+        // for (var i = 0; i < viewData.length; i++) {
+        //   viewData[i].text = viewData[i].child;
+        // }
         //   if (isCheckedshowFilesCheckBox) {
         //    for (var i = 0; i < viewData.length; i++) {
         //       viewData[i].text = viewData[i].child + '<div  class="ui pink tag label">' + viewData[i].fileName + '</div>';
@@ -151,15 +153,19 @@
         var allParents = getUniqueParents(viewData);
         var data = [];
         var j = 0;
-        console.log(allParents);
         for (var i = 0; i < allParents.length; i++) {
           if (allParents[i])
-            data[j++] = getParentWithChildren(viewData, allParents[i]);
+            data[j++] = getParentWithChildren(viewData, allParents[i], "SKOS");
         }
         console.log(data);
         for (var i = 0; i < viewData.length; i++) {
+          //if(viewData[i].parent)
+          viewData[i].text = viewData[i].child;
           data[j++] = viewData[i];
+
         }
+        console.log(data);
+
         // for (var i = 0; i < viewData.length; i++) {
         //   data[j++] = viewData[i];
         // }
@@ -167,6 +173,8 @@
         data.sort(GetSortOrder("text"));
         // make array unique
         data = uniqueArray(data);
+        //debugger;
+
         // rebuild tree with the new data
         rebuildTree(data);
       }
@@ -213,6 +221,7 @@
             if ($(this).attr('id') == 'SKOSViewCheckBox')
               showSKOSData();
             if ($(this).attr('id') == 'RDFSViewCheckBox')
+            currentTreeData = viewDataRendered;
               showFullTree();
           }
         });
@@ -222,8 +231,8 @@
         var a = array.concat();
         for (var i = 0; i < a.length; i++) {
           for (var j = i + 1; j < a.length; j++) {
-            if (a[i].text === a[j].text) {
-              a.splice(j--, 1);
+              if (a[i].text === a[j].text) {
+                a.splice(j--, 1);
             }
           }
         }
@@ -298,7 +307,7 @@
         request.setRequestHeader("Content-Type", 'application/x-www-form-urlencoded');
         // Actually sends the request to the server.
         request.send();
-        debugger;
+        //debugger;
       }
 
       //Comparer Function
@@ -355,11 +364,11 @@
         // sorting the tree before viewing
         data.sort(GetSortOrder("text"));
         // make array unique
-        data = uniqueArray(data);
+        data = uniqueArray(data,"parent");
         // rebuild tree with the new data
         rebuildTree(data);
       }
-
+      // regenerate the tree according to the new data
       function rebuildTree(data) {
         $('#tree').treeview({
           data: data, // data is not optional
@@ -376,11 +385,20 @@
               showInstances(node.concept);
               showTurtleSource(node.concept);
               conceptSelected = node.concept;
+            } else if (node.concept) {
+              $('#graph').empty();
+              event.stopPropagation();
+              $('#externalInfo').hide();
+              $('#infoDetails').show();
+              $('#viewList').show();
+              exec(node.concept);
+              showInstances(node.concept);
+              showTurtleSource(node.concept);
+              conceptSelected = node.concept;
             } else {
               var parentNode = node.text;
               parentNode = parentNode.split('<');
               var str = parentNode[0];
-
               showExternalInfo(str);
             }
           }
@@ -435,10 +453,8 @@
         // Make a new timeout set to go off in 800ms
         var pattern = $('#input-search').val();
         var options = {
-          // ignoreCase: $('#chk-ignore-case').is(':checked'),
-          // exactMatch: $('#chk-exact-match').is(':checked'),
-          ignoreCase: false,
-          exactMatch: true,
+          ignoreCase: $('#chk-ignore-case').is(':checked'),
+          exactMatch: $('#chk-exact-match').is(':checked'),
         };
         var results = $('#tree').treeview('search', [pattern, options]);
         // rebuild the tree with the search pattern
@@ -460,7 +476,7 @@
       }
 
       // get nodes which are parents and have children
-      function getParentWithChildren(data, parent) {
+      function getParentWithChildren(data, parent, str) {
         var children = [];
         for (var i = 0; i < data.length; i++) {
           if (data[i].parent === parent)
@@ -468,6 +484,9 @@
         };
         if (isConceptAvailable(parent))
           var parentNode = parent;
+        else if (str === "SKOS")
+          var parentNode = parent + '<div class="ui left pointing blue basic label">  SKOS Parent </div>';
+
         else
           var parentNode = parent + '<div class="ui left pointing blue basic label">  External </div>';
         var node = {
@@ -628,7 +647,7 @@
           var status = request.status; // HTTP response status, e.g., 200 for "200 OK"
           var data = JSON.parse(request.responseText); // Returned data, e.g., an HTML document.
           var instances = data.results.bindings;
-          console.log(instances);
+          //console.log(instances);
           if (instances[0] != null) {
             var instancesDetailsTable = '<table class="table table-striped" >' +
               '<colgroup> <col class="col-md-2"><col class="col-md-4"> </colgroup>' +
