@@ -135,51 +135,38 @@
       function showSKOSData() {
 
         var viewData = SKOSData;
-        currentTreeData = SKOSData;
-        // for (var i = 0; i < viewData.length; i++) {
-        //   viewData[i].text = viewData[i].child;
-        // }
-        //   if (isCheckedshowFilesCheckBox) {
-        //    for (var i = 0; i < viewData.length; i++) {
-        //       viewData[i].text = viewData[i].child + '<div  class="ui pink tag label">' + viewData[i].fileName + '</div>';
-        //    }
-        //  }
-        //  if (isCheckedshowTypesCheckBox) {
-        // for (var i = 0; i < viewData.length; i++) {
-        //   viewData[i].text = viewData[i].child ; + '<div   class="ui teal tag label">' + viewData[i].RDFType + '</div>';
-        // }
-        // }
+        currentTreeData = SKOSData; // set as current data tree to check for types or files show checkbox clicks
 
         var allParents = getUniqueParents(viewData);
         var data = [];
         var j = 0;
         for (var i = 0; i < allParents.length; i++) {
           if (allParents[i])
-            data[j++] = getParentWithChildren(viewData, allParents[i], "SKOS");
+            data[j++] = getParentWithChildren(viewData, allParents[i]);
+        }
+        // for (var i = 0; i < viewData.length; i++) {
+        //   viewData[i].text = viewData[i].child;
+        // }
+        for (var i = 0; i < data.length; i++) {
+          if (data[i].hasOwnProperty('nodes'))
+            for (var j = 0; j < data[i].nodes.length; j++) {
+              data[i].nodes[j].text = data[i].nodes[j].child;
+              debugger;
+            }
         }
         console.log(data);
-        for (var i = 0; i < viewData.length; i++) {
-          //if(viewData[i].parent)
-          viewData[i].text = viewData[i].child;
-          data[j++] = viewData[i];
-
-        }
-        console.log(data);
-
         // for (var i = 0; i < viewData.length; i++) {
         //   data[j++] = viewData[i];
         // }
+        debugger;
+        console.log(data);
         // sorting the tree before viewing
         data.sort(GetSortOrder("text"));
         // make array unique
         data = uniqueArray(data);
-        //debugger;
-
-        // rebuild tree with the new data
+        // rebuild tree with the new SKOS data
         rebuildTree(data);
       }
-      /////////////////////////////////////////////////////////////////////
-
 
       // get concpt from URI for some concepts
       mixConceptsURI.forEach(function(item) {
@@ -220,9 +207,10 @@
           if ($(this).prop('checked')) {
             if ($(this).attr('id') == 'SKOSViewCheckBox')
               showSKOSData();
-            if ($(this).attr('id') == 'RDFSViewCheckBox')
-            currentTreeData = viewDataRendered;
+            if ($(this).attr('id') == 'RDFSViewCheckBox') {
+              currentTreeData = viewDataRendered;
               showFullTree();
+            }
           }
         });
 
@@ -231,8 +219,8 @@
         var a = array.concat();
         for (var i = 0; i < a.length; i++) {
           for (var j = i + 1; j < a.length; j++) {
-              if (a[i].text === a[j].text) {
-                a.splice(j--, 1);
+            if (a[i].text === a[j].text) {
+              a.splice(j--, 1);
             }
           }
         }
@@ -364,7 +352,7 @@
         // sorting the tree before viewing
         data.sort(GetSortOrder("text"));
         // make array unique
-        data = uniqueArray(data,"parent");
+        data = uniqueArray(data, "parent");
         // rebuild tree with the new data
         rebuildTree(data);
       }
@@ -476,7 +464,7 @@
       }
 
       // get nodes which are parents and have children
-      function getParentWithChildren(data, parent, str) {
+      function getParentWithChildren(data, parent) {
         var children = [];
         for (var i = 0; i < data.length; i++) {
           if (data[i].parent === parent)
@@ -484,8 +472,8 @@
         };
         if (isConceptAvailable(parent))
           var parentNode = parent;
-        else if (str === "SKOS")
-          var parentNode = parent + '<div class="ui left pointing blue basic label">  SKOS Parent </div>';
+        // else if (str === "SKOS")
+        //   var parentNode = parent + '<div class="ui left pointing blue basic label">  SKOS Parent </div>';
 
         else
           var parentNode = parent + '<div class="ui left pointing blue basic label">  External </div>';
