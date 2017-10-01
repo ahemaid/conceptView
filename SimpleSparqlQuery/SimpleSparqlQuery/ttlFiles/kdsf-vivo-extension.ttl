@@ -1,0 +1,548 @@
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix vitro: <http://vitro.mannlib.cornell.edu/ns/vitro/0.7#> .
+@prefix Meta: <http://kerndatensatz-forschung.de/owl/Meta:#> .
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+@prefix obo: <http://purl.obolibrary.org/obo/> .
+
+<http://lod.tib.eu/onto/kdsf/>
+  a owl:Ontology ;
+  owl:versionIRI <http://lod.tib.eu/onto/kdsf/2016/04-01/> ;
+  rdfs:comment "This ontology was created by Tatiana Walther, Anna Kasprzik and Christian Hauschke (Technische Informationsbibliothek (TIB)) as a KDSF extension of VIVO-ISF. It is tested with VIVO 1.9.\""^^xsd:string ;
+  vitro:ontologyPrefixAnnot "kdsf-vivo" ;
+  rdfs:label "KDSF-VIVO Extension"@de .
+
+<http://lod.tib.eu/onto/kdsf/hatAltersgruppe>
+  a owl:ObjectProperty, owl:FunctionalProperty ;
+  rdfs:subPropertyOf owl:topObjectProperty ;
+  rdfs:domain <http://kerndatensatz-forschung.de/owl/Basis#Person> ;
+  rdfs:range <http://lod.tib.eu/onto/kdsf/Altersgruppe> ;
+  Meta:inhaltlicheDefinition "Be52" ;
+  vitro:selectFromExistingAnnot "true"^^xsd:boolean ;
+  vitro:displayRankAnnot "1"^^xsd:int ;
+  vitro:hiddenFromDisplayBelowRoleLevelAnnot <http://vitro.mannlib.cornell.edu/ns/vitro/role#public> ;
+  vitro:hiddenFromPublishBelowRoleLevelAnnot <http://vitro.mannlib.cornell.edu/ns/vitro/role#public> ;
+  vitro:prohibitedFromUpdateBelowRoleLevelAnnot <http://vitro.mannlib.cornell.edu/ns/vitro/role#public> ;
+  vitro:publicDescriptionAnnot "Altersgruppe der Beschäftigten zum Erfassungsstichtag. Zu berichten in Fünf-Jahres-Gruppen analog zu Destatis, Fachserie 11, Reihe 4.4: unter 25 Jahren, 25 bis unter 30, 30 bis unter 35, 35 bis unter 40, 40 bis unter 45, 45 bis unter 50, 50 bis unter 55, 55 bis unter 60, 60 bis unter 65, 65 und älter. Hinweis: Es wird empfohlen, diese Angabe aus entsprechenden Zeitpunktdaten zu berechnen, sofern eine Einrichtung diese intern vorhält. " ;
+  rdfs:label "Altersgruppe"@de .
+
+<http://lod.tib.eu/onto/kdsf/AltersgruppeBeiAbschluss>
+  a owl:ObjectProperty, owl:FunctionalProperty ;
+  rdfs:subPropertyOf owl:topObjectProperty ;
+  rdfs:domain <http://kerndatensatz-forschung.de/owl/Basis#Qualifizierungsverfahren> ;
+  rdfs:range <http://lod.tib.eu/onto/kdsf/Altersgruppe> ;
+  Meta:inhaltlicheDefinition "Na69", "Na71" ;
+  vitro:selectFromExistingAnnot "true"^^xsd:boolean ;
+  vitro:hiddenFromDisplayBelowRoleLevelAnnot <http://vitro.mannlib.cornell.edu/ns/vitro/role#public> ;
+  vitro:hiddenFromPublishBelowRoleLevelAnnot <http://vitro.mannlib.cornell.edu/ns/vitro/role#public> ;
+  vitro:prohibitedFromUpdateBelowRoleLevelAnnot <http://vitro.mannlib.cornell.edu/ns/vitro/role#public> ;
+  rdfs:label "Altersgruppe bei Abschluss"@de .
+
+<http://lod.tib.eu/onto/kdsf/hatGemeinsameBerufung>
+  a owl:ObjectProperty ;
+  rdfs:subPropertyOf owl:topObjectProperty ;
+  rdfs:domain <http://kerndatensatz-forschung.de/owl/Basis#Professoren> ;
+  rdfs:range foaf:Organization ;
+  Meta:inhaltlicheDefinition "Be4a" ;
+  vitro:hiddenFromDisplayBelowRoleLevelAnnot <http://vitro.mannlib.cornell.edu/ns/vitro/role#public> ;
+  vitro:hiddenFromPublishBelowRoleLevelAnnot <http://vitro.mannlib.cornell.edu/ns/vitro/role#public> ;
+  vitro:prohibitedFromUpdateBelowRoleLevelAnnot <http://vitro.mannlib.cornell.edu/ns/vitro/role#public> ;
+  vitro:selectFromExistingAnnot "true"^^xsd:boolean ;
+  vitro:offerCreateNewOptionAnnot "true"^^xsd:boolean ;
+  rdfs:label "hat gemeinsame Berufung"@de .
+
+<http://lod.tib.eu/onto/kdsf/hatGeschlecht>
+  a owl:ObjectProperty, owl:FunctionalProperty ;
+  rdfs:subPropertyOf owl:topObjectProperty ;
+  rdfs:domain <http://kerndatensatz-forschung.de/owl/Basis#Person> ;
+  rdfs:range <http://lod.tib.eu/onto/kdsf/Geschlechtsangabe> ;
+  vitro:displayRankAnnot "2"^^xsd:int ;
+  vitro:hiddenFromDisplayBelowRoleLevelAnnot <http://vitro.mannlib.cornell.edu/ns/vitro/role#public> ;
+  vitro:hiddenFromPublishBelowRoleLevelAnnot <http://vitro.mannlib.cornell.edu/ns/vitro/role#public> ;
+  vitro:prohibitedFromUpdateBelowRoleLevelAnnot <http://vitro.mannlib.cornell.edu/ns/vitro/role#public> ;
+  vitro:selectFromExistingAnnot "true"^^xsd:boolean ;
+  rdfs:label "hat Geschlecht"@de .
+
+<http://lod.tib.eu/onto/kdsf/hatRessourceart>
+  a owl:ObjectProperty ;
+  rdfs:subPropertyOf owl:topObjectProperty ;
+  rdfs:domain <http://kerndatensatz-forschung.de/owl/Basis#Publikation> ;
+  rdfs:range <http://lod.tib.eu/onto/kdsf/Ressourceart> ;
+  vitro:hiddenFromDisplayBelowRoleLevelAnnot <http://vitro.mannlib.cornell.edu/ns/vitro/role#public> ;
+  vitro:hiddenFromPublishBelowRoleLevelAnnot <http://vitro.mannlib.cornell.edu/ns/vitro/role#public> ;
+  vitro:prohibitedFromUpdateBelowRoleLevelAnnot <http://vitro.mannlib.cornell.edu/ns/vitro/role#public> ;
+  vitro:selectFromExistingAnnot "true"^^xsd:boolean ;
+  rdfs:label "hat Ressourceart"@de .
+
+<http://lod.tib.eu/onto/kdsf/istUebergeordnetesProjektVon>
+  a owl:ObjectProperty ;
+  rdfs:subPropertyOf owl:topObjectProperty ;
+  owl:inverseOf <http://kerndatensatz-forschung.de/owl/Basis#hatUebergeordnetesProjekt> ;
+  rdfs:domain <http://kerndatensatz-forschung.de/owl/Basis#Drittmittelprojekt> ;
+  rdfs:range <http://kerndatensatz-forschung.de/owl/Basis#Drittmittelprojekt> ;
+  vitro:hiddenFromDisplayBelowRoleLevelAnnot <http://vitro.mannlib.cornell.edu/ns/vitro/role#public> ;
+  vitro:hiddenFromPublishBelowRoleLevelAnnot <http://vitro.mannlib.cornell.edu/ns/vitro/role#public> ;
+  vitro:prohibitedFromUpdateBelowRoleLevelAnnot <http://vitro.mannlib.cornell.edu/ns/vitro/role#public> ;
+  vitro:offerCreateNewOptionAnnot "true"^^xsd:boolean ;
+  vitro:selectFromExistingAnnot "true"^^xsd:boolean ;
+  rdfs:label "ist übergeordnetes Projekt von"@de .
+
+<http://lod.tib.eu/onto/kdsf/hatZugriffsrechte>
+  a owl:ObjectProperty ;
+  rdfs:subPropertyOf owl:topObjectProperty ;
+  rdfs:domain <http://kerndatensatz-forschung.de/owl/Basis#Publikation> ;
+  rdfs:range <http://lod.tib.eu/onto/kdsf/Zugriffsrechte> ;
+  vitro:hiddenFromDisplayBelowRoleLevelAnnot <http://vitro.mannlib.cornell.edu/ns/vitro/role#public> ;
+  vitro:hiddenFromPublishBelowRoleLevelAnnot <http://vitro.mannlib.cornell.edu/ns/vitro/role#public> ;
+  vitro:prohibitedFromUpdateBelowRoleLevelAnnot <http://vitro.mannlib.cornell.edu/ns/vitro/role#public> ;
+  vitro:publicDescriptionAnnot "Die Beschreibung der Zugangsrechte erfolgt entlang der OpenAire-Guidelines." ;
+  vitro:selectFromExistingAnnot "true"^^xsd:boolean ;
+  rdfs:label "hat Zugriffsrechte"@de .
+
+<http://lod.tib.eu/onto/kdsf/hatPromotionsberechtigungAus>
+  a owl:ObjectProperty, owl:FunctionalProperty ;
+  rdfs:subPropertyOf owl:topObjectProperty ;
+  rdfs:domain <http://kerndatensatz-forschung.de/owl/Basis#Person> ;
+  rdfs:range <http://lod.tib.eu/onto/kdsf/LandKategorie> ;
+  vitro:displayRankAnnot "8"^^xsd:int ;
+  vitro:hiddenFromDisplayBelowRoleLevelAnnot <http://vitro.mannlib.cornell.edu/ns/vitro/role#public> ;
+  vitro:hiddenFromPublishBelowRoleLevelAnnot <http://vitro.mannlib.cornell.edu/ns/vitro/role#public> ;
+  vitro:prohibitedFromUpdateBelowRoleLevelAnnot <http://vitro.mannlib.cornell.edu/ns/vitro/role#public> ;
+  vitro:publicDescriptionAnnot "Es wird unterschieden zwischen Inland und Ausland. Personen mit Promotionsberechtigungen aus mehreren Ländern, die sowohl in Deutschland als auch weiteren Ländern erworben wurden, werden nur der Kategorie Inland zugeordnet."@de ;
+  vitro:selectFromExistingAnnot "true"^^xsd:boolean ;
+  rdfs:label "hat Promotionsberechtigung aus"@de .
+
+<http://lod.tib.eu/onto/kdsf/hatStaatsangehoerigkeit>
+  a owl:ObjectProperty, owl:FunctionalProperty ;
+  rdfs:subPropertyOf owl:topObjectProperty ;
+  rdfs:domain <http://kerndatensatz-forschung.de/owl/Basis#Person> ;
+  rdfs:range <http://lod.tib.eu/onto/kdsf/LandKategorie> ;
+  vitro:displayRankAnnot "3"^^xsd:int ;
+  vitro:hiddenFromDisplayBelowRoleLevelAnnot <http://vitro.mannlib.cornell.edu/ns/vitro/role#public> ;
+  vitro:hiddenFromPublishBelowRoleLevelAnnot <http://vitro.mannlib.cornell.edu/ns/vitro/role#public> ;
+  vitro:prohibitedFromUpdateBelowRoleLevelAnnot <http://vitro.mannlib.cornell.edu/ns/vitro/role#public> ;
+  vitro:publicDescriptionAnnot "Es wird unterschieden zwischen Inland und Ausland. Personen mit mehreren Staatsangehörigkeiten, die sowohl dem deutschen als auch weiteren Staaten angehören, werden nur der Kategorie Inland zugeordnet."@de ;
+  vitro:selectFromExistingAnnot "true"^^xsd:boolean ;
+  rdfs:label "hat Staatsangehörigkeit"@de .
+
+<http://lod.tib.eu/onto/kdsf/hatBesoldung>
+  a owl:ObjectProperty, owl:FunctionalProperty ;
+  rdfs:subPropertyOf owl:topObjectProperty ;
+  rdfs:domain <http://kerndatensatz-forschung.de/owl/Basis#Professoren> ;
+  rdfs:range <http://lod.tib.eu/onto/kdsf/Besoldungsart> ;
+  vitro:hiddenFromDisplayBelowRoleLevelAnnot <http://vitro.mannlib.cornell.edu/ns/vitro/role#public> ;
+  vitro:hiddenFromPublishBelowRoleLevelAnnot <http://vitro.mannlib.cornell.edu/ns/vitro/role#public> ;
+  vitro:prohibitedFromUpdateBelowRoleLevelAnnot <http://vitro.mannlib.cornell.edu/ns/vitro/role#public> ;
+  vitro:selectFromExistingAnnot "true"^^xsd:boolean ;
+  rdfs:label "hat Besoldung"@de .
+
+<http://lod.tib.eu/onto/kdsf/hatVertrag>
+  a owl:ObjectProperty ;
+  rdfs:subPropertyOf owl:topObjectProperty ;
+  owl:inverseOf <http://lod.tib.eu/onto/kdsf/vertragVon> ;
+  rdfs:domain <http://kerndatensatz-forschung.de/owl/Basis#Beschaeftigter> ;
+  rdfs:range <http://lod.tib.eu/onto/kdsf/Vertrag> ;
+  vitro:displayRankAnnot "9"^^xsd:int ;
+  vitro:hiddenFromDisplayBelowRoleLevelAnnot <http://vitro.mannlib.cornell.edu/ns/vitro/role#public> ;
+  vitro:hiddenFromPublishBelowRoleLevelAnnot <http://vitro.mannlib.cornell.edu/ns/vitro/role#public> ;
+  vitro:prohibitedFromUpdateBelowRoleLevelAnnot <http://vitro.mannlib.cornell.edu/ns/vitro/role#public> ;
+  vitro:selectFromExistingAnnot "true"^^xsd:boolean ;
+  rdfs:label "hat Vertrag"@de .
+
+<http://lod.tib.eu/onto/kdsf/vertragVon>
+  a owl:ObjectProperty ;
+  vitro:hiddenFromDisplayBelowRoleLevelAnnot <http://vitro.mannlib.cornell.edu/ns/vitro/role#public> ;
+  vitro:hiddenFromPublishBelowRoleLevelAnnot <http://vitro.mannlib.cornell.edu/ns/vitro/role#public> ;
+  vitro:prohibitedFromUpdateBelowRoleLevelAnnot <http://vitro.mannlib.cornell.edu/ns/vitro/role#public> ;
+  vitro:selectFromExistingAnnot "true"^^xsd:boolean ;
+  rdfs:label "ist Vertrag von"@de .
+
+<http://lod.tib.eu/onto/kdsf/koordinatorEinrichtung>
+  a owl:ObjectProperty, owl:FunctionalProperty ;
+  rdfs:subPropertyOf owl:topObjectProperty ;
+  rdfs:domain <http://kerndatensatz-forschung.de/owl/Basis#Drittmittelprojekt> ;
+  rdfs:range foaf:Organization ;
+  Meta:inhaltlicheDefinition "Dr19a" ;
+  vitro:hiddenFromDisplayBelowRoleLevelAnnot <http://vitro.mannlib.cornell.edu/ns/vitro/role#public> ;
+  vitro:hiddenFromPublishBelowRoleLevelAnnot <http://vitro.mannlib.cornell.edu/ns/vitro/role#public> ;
+  vitro:prohibitedFromUpdateBelowRoleLevelAnnot <http://vitro.mannlib.cornell.edu/ns/vitro/role#public> ;
+  vitro:offerCreateNewOptionAnnot "true"^^xsd:boolean ;
+  vitro:selectFromExistingAnnot "true"^^xsd:boolean ;
+  rdfs:label "Sprechereinrichtung / Konsortialführer"@de .
+
+<http://lod.tib.eu/onto/kdsf/hatBefristung>
+  a owl:DatatypeProperty, owl:FunctionalProperty ;
+  rdfs:domain <http://lod.tib.eu/onto/kdsf/Vertrag> ;
+  rdfs:range xsd:boolean ;
+  vitro:displayRankAnnot "9"^^xsd:int ;
+  vitro:hiddenFromDisplayBelowRoleLevelAnnot <http://vitro.mannlib.cornell.edu/ns/vitro/role#public> ;
+  vitro:hiddenFromPublishBelowRoleLevelAnnot <http://vitro.mannlib.cornell.edu/ns/vitro/role#public> ;
+  vitro:prohibitedFromUpdateBelowRoleLevelAnnot <http://vitro.mannlib.cornell.edu/ns/vitro/role#public> ;
+  rdfs:label "hat Befristung"@de .
+
+<http://lod.tib.eu/onto/kdsf/Altersgruppe>
+  a owl:Class ;
+  Meta:inhaltlicheDefinition "Be52" ;
+  rdfs:label "Altersgruppe"@de .
+
+<http://lod.tib.eu/onto/kdsf/Zugriffsrechte>
+  a owl:Class ;
+  obo:IAO_0000115 "Zugriffsrechte nach  OpenAIRE Guidelines for Literature Repositories" ;
+  vitro:hiddenFromDisplayBelowRoleLevelAnnot <http://vitro.mannlib.cornell.edu/ns/vitro/role#public> ;
+  vitro:hiddenFromPublishBelowRoleLevelAnnot <http://vitro.mannlib.cornell.edu/ns/vitro/role#public> ;
+  vitro:prohibitedFromUpdateBelowRoleLevelAnnot <http://vitro.mannlib.cornell.edu/ns/vitro/role#public> ;
+  rdfs:label "Zugriffsrechte"@de .
+
+<http://lod.tib.eu/onto/kdsf/Geschlechtsangabe>
+  a owl:Class ;
+  vitro:descriptionAnnot "Das Geschlecht ist als \"männlich\", \"weiblich\" oder \"ohne Angabe\" anzugeben." ;
+  vitro:hiddenFromDisplayBelowRoleLevelAnnot <http://vitro.mannlib.cornell.edu/ns/vitro/role#public> ;
+  vitro:hiddenFromPublishBelowRoleLevelAnnot <http://vitro.mannlib.cornell.edu/ns/vitro/role#public> ;
+  vitro:prohibitedFromUpdateBelowRoleLevelAnnot <http://vitro.mannlib.cornell.edu/ns/vitro/role#public> ;
+  rdfs:label "Geschlechtsangabe"@de .
+
+<http://lod.tib.eu/onto/kdsf/Ressourceart>
+  a owl:Class ;
+  vitro:displayLimitAnnot "-1"^^xsd:int ;
+  vitro:displayRankAnnot "-1"^^xsd:int ;
+  vitro:hiddenFromDisplayBelowRoleLevelAnnot <http://vitro.mannlib.cornell.edu/ns/vitro/role#public> ;
+  vitro:hiddenFromPublishBelowRoleLevelAnnot <http://vitro.mannlib.cornell.edu/ns/vitro/role#public> ;
+  vitro:prohibitedFromUpdateBelowRoleLevelAnnot <http://vitro.mannlib.cornell.edu/ns/vitro/role#public> ;
+  rdfs:label "Ressourceart"@de .
+
+<http://lod.tib.eu/onto/kdsf/LandKategorie>
+  a owl:Class ;
+  vitro:hiddenFromDisplayBelowRoleLevelAnnot <http://vitro.mannlib.cornell.edu/ns/vitro/role#public> ;
+  vitro:hiddenFromPublishBelowRoleLevelAnnot <http://vitro.mannlib.cornell.edu/ns/vitro/role#public> ;
+  vitro:prohibitedFromUpdateBelowRoleLevelAnnot <http://vitro.mannlib.cornell.edu/ns/vitro/role#public> ;
+  vitro:publicDescriptionAnnot "Die Klasse wurde erstellt, um die Staatsangehörigkeit und das Land des zur Aufnahme einer Promotion berechtigenden Studienabschlusses abzubilden."@de ;
+  rdfs:label "Landkategorie"@de .
+
+<http://lod.tib.eu/onto/kdsf/Besoldungsart>
+  a owl:Class ;
+  vitro:hiddenFromDisplayBelowRoleLevelAnnot <http://vitro.mannlib.cornell.edu/ns/vitro/role#public> ;
+  vitro:hiddenFromPublishBelowRoleLevelAnnot <http://vitro.mannlib.cornell.edu/ns/vitro/role#public> ;
+  vitro:prohibitedFromUpdateBelowRoleLevelAnnot <http://vitro.mannlib.cornell.edu/ns/vitro/role#public> ;
+  vitro:publicDescriptionAnnot "Die Klasse wurde erstellt, um die Besoldungsarten zusammenzufassen."@de ;
+  rdfs:label "Besoldungsart"@de .
+
+<http://lod.tib.eu/onto/kdsf/Vertrag>
+  a owl:Class ;
+  rdfs:subClassOf [
+    a owl:Restriction ;
+    owl:onProperty <http://vivoweb.org/ontology/core#dateTimeInterval> ;
+    owl:allValuesFrom <http://vivoweb.org/ontology/core#DateTimeInterval>
+  ] ;
+  vitro:hiddenFromDisplayBelowRoleLevelAnnot <http://vitro.mannlib.cornell.edu/ns/vitro/role#public> ;
+  vitro:hiddenFromPublishBelowRoleLevelAnnot <http://vitro.mannlib.cornell.edu/ns/vitro/role#public> ;
+  vitro:prohibitedFromUpdateBelowRoleLevelAnnot <http://vitro.mannlib.cornell.edu/ns/vitro/role#public> ;
+  vitro:publicDescriptionAnnot "Die Klasse wurde erstellt, um das befristete/ unbefristete Verhältnis abzubilden."@de ;
+  rdfs:label "Vertrag"@de .
+
+<http://vivoweb.org/ontology/core#DateTimeInterval> a owl:Class .
+<http://lod.tib.eu/onto/kdsf/Ausland>
+  a owl:NamedIndividual, <http://lod.tib.eu/onto/kdsf/LandKategorie> ;
+  rdfs:label "Ausland"@de .
+
+<http://lod.tib.eu/onto/kdsf/Inland>
+  a owl:NamedIndividual, <http://lod.tib.eu/onto/kdsf/LandKategorie> ;
+  rdfs:label "Inland"@de .
+
+<http://lod.tib.eu/onto/kdsf/Audio>
+  a owl:NamedIndividual, <http://lod.tib.eu/onto/kdsf/Ressourceart> ;
+  rdfs:label "Audio"@de .
+
+<http://lod.tib.eu/onto/kdsf/B1>
+  a owl:NamedIndividual, <http://lod.tib.eu/onto/kdsf/Besoldungsart> ;
+  rdfs:label "B1"@de .
+
+<http://lod.tib.eu/onto/kdsf/B10>
+  a owl:NamedIndividual, <http://lod.tib.eu/onto/kdsf/Besoldungsart> ;
+  rdfs:label "B10"@de .
+
+<http://lod.tib.eu/onto/kdsf/B11>
+  a owl:NamedIndividual, <http://lod.tib.eu/onto/kdsf/Besoldungsart> ;
+  rdfs:label "B11"@de .
+
+<http://lod.tib.eu/onto/kdsf/B2>
+  a owl:NamedIndividual, <http://lod.tib.eu/onto/kdsf/Besoldungsart> ;
+  rdfs:label "B2"@de .
+
+<http://lod.tib.eu/onto/kdsf/B3>
+  a owl:NamedIndividual, <http://lod.tib.eu/onto/kdsf/Besoldungsart> ;
+  rdfs:label "B3"@de .
+
+<http://lod.tib.eu/onto/kdsf/B4>
+  a owl:NamedIndividual, <http://lod.tib.eu/onto/kdsf/Besoldungsart> ;
+  rdfs:label "B4"@de .
+
+<http://lod.tib.eu/onto/kdsf/B5>
+  a owl:NamedIndividual, <http://lod.tib.eu/onto/kdsf/Besoldungsart> ;
+  rdfs:label "B5"@de .
+
+<http://lod.tib.eu/onto/kdsf/B6>
+  a owl:NamedIndividual, <http://lod.tib.eu/onto/kdsf/Besoldungsart> ;
+  rdfs:label "B6"@de .
+
+<http://lod.tib.eu/onto/kdsf/B7>
+  a owl:NamedIndividual, <http://lod.tib.eu/onto/kdsf/Besoldungsart> ;
+  rdfs:label "B7"@de .
+
+<http://lod.tib.eu/onto/kdsf/B8>
+  a owl:NamedIndividual, <http://lod.tib.eu/onto/kdsf/Besoldungsart> ;
+  rdfs:label "B8"@de .
+
+<http://lod.tib.eu/onto/kdsf/B9>
+  a owl:NamedIndividual, <http://lod.tib.eu/onto/kdsf/Besoldungsart> ;
+  rdfs:label "B9"@de .
+
+<http://lod.tib.eu/onto/kdsf/BewegteBilder>
+  a owl:NamedIndividual, <http://lod.tib.eu/onto/kdsf/Ressourceart> ;
+  rdfs:label "Bewegte Bilder"@de .
+
+<http://lod.tib.eu/onto/kdsf/Bild>
+  a owl:NamedIndividual, <http://lod.tib.eu/onto/kdsf/Ressourceart> ;
+  rdfs:label "Bild"@de .
+
+<http://lod.tib.eu/onto/kdsf/Bund>
+  a owl:NamedIndividual, <http://kerndatensatz-forschung.de/owl/Basis#Mittelgeber> ;
+  rdfs:label "Bund"@de .
+
+<http://lod.tib.eu/onto/kdsf/Bundeslaender>
+  a owl:NamedIndividual, <http://kerndatensatz-forschung.de/owl/Basis#Mittelgeber> ;
+  rdfs:label "Bundesländer"@de .
+
+<http://lod.tib.eu/onto/kdsf/C2>
+  a owl:NamedIndividual, <http://lod.tib.eu/onto/kdsf/Besoldungsart> ;
+  rdfs:label "C2"@de .
+
+<http://lod.tib.eu/onto/kdsf/DFG>
+  a owl:NamedIndividual, <http://kerndatensatz-forschung.de/owl/Basis#Mittelgeber> ;
+  rdfs:label "Deutsche Forschungsgemeinschaft"@de .
+
+<http://lod.tib.eu/onto/kdsf/EU>
+  a owl:NamedIndividual, <http://kerndatensatz-forschung.de/owl/Basis#Mittelgeber> ;
+  rdfs:label "Europäische Union"@de .
+
+<http://lod.tib.eu/onto/kdsf/GewerblicheWirtschaftlicheUndSonstigeBereiche>
+  a owl:NamedIndividual, <http://kerndatensatz-forschung.de/owl/Basis#Mittelgeber> ;
+  rdfs:label "Gewerbliche Wirtschaftliche und Sonstige Bereiche"@de .
+
+<http://lod.tib.eu/onto/kdsf/Habilitiert>
+  a owl:NamedIndividual, <http://kerndatensatz-forschung.de/owl/Basis#Qualifikation> ;
+  rdfs:label "Habilitiert"@de .
+
+<http://lod.tib.eu/onto/kdsf/Lokal>
+  a owl:NamedIndividual, <http://kerndatensatz-forschung.de/owl/Basis#Forschungsinfrastrukturart> ;
+  rdfs:label "Lokal"@de .
+
+<http://lod.tib.eu/onto/kdsf/Maennlich>
+  a owl:NamedIndividual, <http://lod.tib.eu/onto/kdsf/Geschlechtsangabe> ;
+  rdfs:label "Männlich"@de .
+
+<http://lod.tib.eu/onto/kdsf/Nebenberuflich>
+  a owl:NamedIndividual, <http://kerndatensatz-forschung.de/owl/Basis#Taetigkeitsart> ;
+  rdfs:label "Nebenberuflich"@de .
+
+<http://lod.tib.eu/onto/kdsf/NichtErklärtOeffentlicheMittelgeber>
+  a owl:NamedIndividual, <http://kerndatensatz-forschung.de/owl/Basis#Mittelgeber> ;
+  rdfs:label "Nicht erklärte öffentliche Mittelgeber"@de .
+
+<http://lod.tib.eu/onto/kdsf/NichtErklärtPrivateMittelgeber>
+  a owl:NamedIndividual, <http://kerndatensatz-forschung.de/owl/Basis#Mittelgeber> ;
+  rdfs:label "Nicht erklärte private Mittelgeber"@de .
+
+<http://lod.tib.eu/onto/kdsf/Ohne_Angabe>
+  a owl:NamedIndividual, <http://lod.tib.eu/onto/kdsf/Geschlechtsangabe> ;
+  rdfs:label "Ohne Angabe"@de .
+
+<http://lod.tib.eu/onto/kdsf/OpenAccessFIZugangsart>
+  a owl:NamedIndividual, <http://kerndatensatz-forschung.de/owl/Basis#Zugangsart> ;
+  rdfs:label "Open Access"@de .
+
+<http://lod.tib.eu/onto/kdsf/Promoviert>
+  a owl:NamedIndividual, <http://kerndatensatz-forschung.de/owl/Basis#Qualifikation> ;
+  rdfs:label "Promoviert"@de .
+
+<http://lod.tib.eu/onto/kdsf/SharedAccessFIZugangsart>
+  a owl:NamedIndividual, <http://kerndatensatz-forschung.de/owl/Basis#Zugangsart> ;
+  rdfs:label "Shared Access"@de .
+
+<http://lod.tib.eu/onto/kdsf/SonstigeDrittmittelgeber>
+  a owl:NamedIndividual, <http://kerndatensatz-forschung.de/owl/Basis#Mittelgeber> ;
+  rdfs:label "Sonstige Drittmittelgeber"@de .
+
+<http://lod.tib.eu/onto/kdsf/SonstigeInternationaleOrganisationen>
+  a owl:NamedIndividual, <http://kerndatensatz-forschung.de/owl/Basis#Mittelgeber> ;
+  rdfs:label "Sonstige internationale Organisationen"@de .
+
+<http://lod.tib.eu/onto/kdsf/Teilzeit>
+  a owl:NamedIndividual, <http://kerndatensatz-forschung.de/owl/Basis#Taetigkeitsart> ;
+  rdfs:label "Teilzeit"@de .
+
+<http://lod.tib.eu/onto/kdsf/Drittmittel>
+  a owl:NamedIndividual, <http://kerndatensatz-forschung.de/owl/Basis#Finanzierungsform> ;
+  rdfs:label "Drittmittel"@de .
+
+<http://lod.tib.eu/onto/kdsf/GrundmittelUndInstitutionelleMittel>
+  a owl:NamedIndividual, <http://kerndatensatz-forschung.de/owl/Basis#Finanzierungsform> ;
+  rdfs:label "Grundmittel und institutionelle Mittel"@de .
+
+<http://lod.tib.eu/onto/kdsf/Mischfinanzierung>
+  a owl:NamedIndividual, <http://kerndatensatz-forschung.de/owl/Basis#Finanzierungsform> ;
+  rdfs:label "Mischfinanzierung"@de .
+
+<http://lod.tib.eu/onto/kdsf/Sondermittel>
+  a owl:NamedIndividual, <http://kerndatensatz-forschung.de/owl/Basis#Finanzierungsform> ;
+  rdfs:label "Sondermittel"@de .
+
+<http://lod.tib.eu/onto/kdsf/Text>
+  a owl:NamedIndividual, <http://lod.tib.eu/onto/kdsf/Ressourceart> ;
+  rdfs:label "Text"@de .
+
+<http://lod.tib.eu/onto/kdsf/UserAccessFIZugangsart>
+  a owl:NamedIndividual, <http://kerndatensatz-forschung.de/owl/Basis#Zugangsart> ;
+  rdfs:label "User Access"@de .
+
+<http://lod.tib.eu/onto/kdsf/Verteilt>
+  a owl:NamedIndividual, <http://kerndatensatz-forschung.de/owl/Basis#Forschungsinfrastrukturart> ;
+  rdfs:label "Verteilt"@de .
+
+<http://lod.tib.eu/onto/kdsf/Virtuell>
+  a owl:NamedIndividual, <http://kerndatensatz-forschung.de/owl/Basis#Forschungsinfrastrukturart> ;
+  rdfs:label "Virtuell"@de .
+
+<http://lod.tib.eu/onto/kdsf/Vollzeit>
+  a owl:NamedIndividual, <http://kerndatensatz-forschung.de/owl/Basis#Taetigkeitsart> ;
+  rdfs:label "Vollzeit"@de .
+
+<http://lod.tib.eu/onto/kdsf/W1>
+  a owl:NamedIndividual, <http://lod.tib.eu/onto/kdsf/Besoldungsart> ;
+  rdfs:label "W1"@de .
+
+<http://lod.tib.eu/onto/kdsf/W2_C3>
+  a owl:NamedIndividual, <http://lod.tib.eu/onto/kdsf/Besoldungsart> ;
+  rdfs:label "W2/C3"@de .
+
+<http://lod.tib.eu/onto/kdsf/W3_C4>
+  a owl:NamedIndividual, <http://lod.tib.eu/onto/kdsf/Besoldungsart> ;
+  rdfs:label "W3/C4"@de .
+
+<http://lod.tib.eu/onto/kdsf/Weiblich>
+  a owl:NamedIndividual, <http://lod.tib.eu/onto/kdsf/Geschlechtsangabe> ;
+  rdfs:label "Weiblich"@de .
+
+<http://lod.tib.eu/onto/kdsf/Hauptberuflich>
+  a owl:NamedIndividual, <http://kerndatensatz-forschung.de/owl/Basis#Taetigkeitsart> ;
+  rdfs:label "Hauptberuflich"@de .
+
+<http://lod.tib.eu/onto/kdsf/Unter25>
+  a owl:NamedIndividual, <http://lod.tib.eu/onto/kdsf/Altersgruppe> ;
+  rdfs:label "unter 25 Jahren"@de .
+
+<http://lod.tib.eu/onto/kdsf/25BisUnter30>
+  a owl:NamedIndividual, <http://lod.tib.eu/onto/kdsf/Altersgruppe> ;
+  rdfs:label "25 bis unter 30 Jahren"@de .
+
+<http://lod.tib.eu/onto/kdsf/30BisUnter35>
+  a owl:NamedIndividual, <http://lod.tib.eu/onto/kdsf/Altersgruppe> ;
+  rdfs:label "30 bis unter 35 Jahren"@de .
+
+<http://lod.tib.eu/onto/kdsf/35BisUnter40>
+  a owl:NamedIndividual, <http://lod.tib.eu/onto/kdsf/Altersgruppe> ;
+  rdfs:label "35 bis unter 40 Jahren"@de .
+
+<http://lod.tib.eu/onto/kdsf/40BisUnter45>
+  a owl:NamedIndividual, <http://lod.tib.eu/onto/kdsf/Altersgruppe> ;
+  rdfs:label "40 bis unter 45"@de .
+
+<http://lod.tib.eu/onto/kdsf/45BisUnter50>
+  a owl:NamedIndividual, <http://lod.tib.eu/onto/kdsf/Altersgruppe> ;
+  rdfs:label "45 bis unter 50"@de .
+
+<http://lod.tib.eu/onto/kdsf/50BisUnter55>
+  a owl:NamedIndividual, <http://lod.tib.eu/onto/kdsf/Altersgruppe> ;
+  rdfs:label "50 bis unter 55"@de .
+
+<http://lod.tib.eu/onto/kdsf/55BisUnter60>
+  a owl:NamedIndividual, <http://lod.tib.eu/onto/kdsf/Altersgruppe> ;
+  rdfs:label "55 bis unter 60"@de .
+
+<http://lod.tib.eu/onto/kdsf/60BisUnter65>
+  a owl:NamedIndividual, <http://lod.tib.eu/onto/kdsf/Altersgruppe> ;
+  rdfs:label "60 bis unter 65"@de .
+
+<http://lod.tib.eu/onto/kdsf/65undAelter>
+  a owl:NamedIndividual, <http://lod.tib.eu/onto/kdsf/Altersgruppe> ;
+  rdfs:label "65 und älter"@de .
+
+[]
+  a owl:AllDifferent ;
+  owl:distinctMembers (
+   <http://lod.tib.eu/onto/kdsf/Ausland>
+   <http://lod.tib.eu/onto/kdsf/Inland>
+ ) .
+
+[]
+  a owl:AllDifferent ;
+  owl:distinctMembers (
+   <http://lod.tib.eu/onto/kdsf/B1>
+   <http://lod.tib.eu/onto/kdsf/B10>
+   <http://lod.tib.eu/onto/kdsf/B11>
+   <http://lod.tib.eu/onto/kdsf/B2>
+   <http://lod.tib.eu/onto/kdsf/B3>
+   <http://lod.tib.eu/onto/kdsf/B4>
+   <http://lod.tib.eu/onto/kdsf/B5>
+   <http://lod.tib.eu/onto/kdsf/B6>
+   <http://lod.tib.eu/onto/kdsf/B7>
+   <http://lod.tib.eu/onto/kdsf/B8>
+   <http://lod.tib.eu/onto/kdsf/B9>
+   <http://lod.tib.eu/onto/kdsf/C2>
+   <http://lod.tib.eu/onto/kdsf/W1>
+   <http://lod.tib.eu/onto/kdsf/W2_C3>
+   <http://lod.tib.eu/onto/kdsf/W3_C4>
+ ) .
+
+[]
+  a owl:AllDifferent ;
+  owl:distinctMembers (
+   <http://lod.tib.eu/onto/kdsf/Unter25>
+   <http://lod.tib.eu/onto/kdsf/25BisUnter30>
+   <http://lod.tib.eu/onto/kdsf/30BisUnter35>
+   <http://lod.tib.eu/onto/kdsf/35BisUnter40>
+   <http://lod.tib.eu/onto/kdsf/40BisUnter45>
+   <http://lod.tib.eu/onto/kdsf/45BisUnter50>
+   <http://lod.tib.eu/onto/kdsf/50BisUnter55>
+   <http://lod.tib.eu/onto/kdsf/55BisUnter60>
+   <http://lod.tib.eu/onto/kdsf/60BisUnter65>
+   <http://lod.tib.eu/onto/kdsf/65undAelter>
+ ) .
+
+[]
+  a owl:AllDifferent ;
+  owl:distinctMembers (
+   <http://lod.tib.eu/onto/kdsf/Maennlich>
+   <http://lod.tib.eu/onto/kdsf/Ohne_Angabe>
+ ) .
+
+[]
+  a owl:AllDifferent ;
+  owl:distinctMembers (
+   <http://lod.tib.eu/onto/kdsf/Maennlich>
+   <http://lod.tib.eu/onto/kdsf/Weiblich>
+ ) .
+
+[]
+  a owl:AllDifferent ;
+  owl:distinctMembers (
+   <http://lod.tib.eu/onto/kdsf/Ohne_Angabe>
+   <http://lod.tib.eu/onto/kdsf/Weiblich>
+ ) .
+
+[]
+  a owl:AllDifferent ;
+  owl:distinctMembers (
+   <http://lod.tib.eu/onto/kdsf/Teilzeit>
+   <http://lod.tib.eu/onto/kdsf/Vollzeit>
+ ) .

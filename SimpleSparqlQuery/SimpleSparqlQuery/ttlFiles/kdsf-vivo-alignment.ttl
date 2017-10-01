@@ -1,0 +1,1045 @@
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix dc: <http://purl.org/dc/terms/> .
+@prefix vitro: <http://vitro.mannlib.cornell.edu/ns/vitro/0.7#> .
+@prefix Meta: <http://kerndatensatz-forschung.de/owl/Meta#> .
+@prefix obo: <http://purl.obolibrary.org/obo/> .
+@prefix bibo: <http://purl.org/ontology/bibo/> .
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+
+<http://kerndatensatz-forschung.de/owl/Basis>
+  a owl:Ontology ;
+  rdfs:comment "This ontology is an adoption of the Research Core Dataset (KDSF). This alignment was created by Tatiana Walther, Anna Kasprzik and Christian Hauschke (Technische Informationsbibliothek (TIB)) for use in current research information system VIVO. It is tested with VIVO 1.9.\""^^xsd:string, "This ontology is available under the Creative Commons Attribution-ShareAlike 4.0 International."^^xsd:string ;
+  dc:rights <https://creativecommons.org/licenses/by-sa/4.0/> ;
+  vitro:ontologyPrefixAnnot "kdsf" ;
+  rdfs:label "KDSF-VIVO Alignment"@de ;
+  owl:versionInfo "2017-01-04"^^xsd:string .
+
+<http://kerndatensatz-forschung.de/owl/Basis#hatErstbetreuer>
+  a owl:ObjectProperty ;
+  rdfs:subPropertyOf owl:topObjectProperty ;
+  rdfs:domain <http://kerndatensatz-forschung.de/owl/Basis#Promotion> ;
+  rdfs:range <http://kerndatensatz-forschung.de/owl/Basis#Person> ;
+  Meta:inhaltlicheDefinition "Na47" ;
+  vitro:hiddenFromDisplayBelowRoleLevelAnnot <http://vitro.mannlib.cornell.edu/ns/vitro/role#public> ;
+  vitro:hiddenFromPublishBelowRoleLevelAnnot <http://vitro.mannlib.cornell.edu/ns/vitro/role#public> ;
+  vitro:prohibitedFromUpdateBelowRoleLevelAnnot <http://vitro.mannlib.cornell.edu/ns/vitro/role#public> ;
+  vitro:selectFromExistingAnnot true ;
+  vitro:offerCreateNewOptionAnnot true ;
+  rdfs:label "hat Erstbetreuerin / Erstbetreuer"@de .
+
+<http://kerndatensatz-forschung.de/owl/Basis#hatFach>
+  a owl:ObjectProperty ;
+  rdfs:subPropertyOf owl:topObjectProperty ;
+  rdfs:domain [
+    a owl:Class ;
+    owl:unionOf (
+     <http://kerndatensatz-forschung.de/owl/Basis#Beschaeftigter>
+     <http://kerndatensatz-forschung.de/owl/Basis#Drittmittelprojekt>
+     <http://kerndatensatz-forschung.de/owl/Basis#Publikation>
+     <http://kerndatensatz-forschung.de/owl/Basis#StrukturiertesPromotionsprogramm>
+   )
+  ] ;
+  rdfs:range <http://kerndatensatz-forschung.de/owl/Basis#Fach> ;
+  Meta:inhaltlicheDefinition "Be38", "Dr28", "Na2", "Pa1", "Pu138" ;
+  vitro:hiddenFromDisplayBelowRoleLevelAnnot <http://vitro.mannlib.cornell.edu/ns/vitro/role#public> ;
+  vitro:hiddenFromPublishBelowRoleLevelAnnot <http://vitro.mannlib.cornell.edu/ns/vitro/role#public> ;
+  vitro:prohibitedFromUpdateBelowRoleLevelAnnot <http://vitro.mannlib.cornell.edu/ns/vitro/role#public> ;
+  vitro:selectFromExistingAnnot true ;
+  rdfs:label "hat Fach"@de .
+
+<http://kerndatensatz-forschung.de/owl/Basis#Beschaeftigter>
+  a owl:Class ;
+  rdfs:subClassOf <http://kerndatensatz-forschung.de/owl/Basis#Person> ;
+  vitro:hiddenFromDisplayBelowRoleLevelAnnot <http://vitro.mannlib.cornell.edu/ns/vitro/role#public> ;
+  vitro:hiddenFromPublishBelowRoleLevelAnnot <http://vitro.mannlib.cornell.edu/ns/vitro/role#public> ;
+  vitro:inClassGroup <http://vivoweb.org/ontology#vitroClassGrouppeople> ;
+  vitro:prohibitedFromUpdateBelowRoleLevelAnnot <http://vitro.mannlib.cornell.edu/ns/vitro/role#public> ;
+  rdfs:comment "Personen, die in einem Beschäftigungsverhältnis sind." ;
+  rdfs:label "Beschäftigte / Beschäftigter"@de .
+
+<http://kerndatensatz-forschung.de/owl/Basis#Drittmittelprojekt>
+  a owl:Class ;
+  rdfs:subClassOf <http://purl.obolibrary.org/obo/ERO_0000014> ;
+  Meta:inhaltlicheDefinition "Dr2a", "Dr30" ;
+  obo:IAO_0000115 "Drittmittelprojekte im Sinne des Kerndatensatzes sind zeitlich befristet geförderte Forschungsaktivitäten mit Startdatum, Enddatum und Forschungsgegenstand, deren Finanzierung aus Drittmitteln erfolgt." ;
+  vitro:hiddenFromDisplayBelowRoleLevelAnnot <http://vitro.mannlib.cornell.edu/ns/vitro/role#public> ;
+  vitro:hiddenFromPublishBelowRoleLevelAnnot <http://vitro.mannlib.cornell.edu/ns/vitro/role#public> ;
+  vitro:inClassGroup <http://vivoweb.org/ontology#vitroClassGroupactivities> ;
+  vitro:prohibitedFromUpdateBelowRoleLevelAnnot <http://vitro.mannlib.cornell.edu/ns/vitro/role#public> ;
+  rdfs:label "Drittmittelprojekt"@de .
+
+<http://kerndatensatz-forschung.de/owl/Basis#Publikation>
+  a owl:Class ;
+  owl:equivalentClass bibo:Document ;
+  Meta:inhaltlicheDefinition "Pu1", "Pu4a" ;
+  vitro:hiddenFromDisplayBelowRoleLevelAnnot <http://vitro.mannlib.cornell.edu/ns/vitro/role#public> ;
+  vitro:hiddenFromPublishBelowRoleLevelAnnot <http://vitro.mannlib.cornell.edu/ns/vitro/role#public> ;
+  vitro:inClassGroup <http://vivoweb.org/ontology#vitroClassGrouppublications> ;
+  vitro:prohibitedFromUpdateBelowRoleLevelAnnot <http://vitro.mannlib.cornell.edu/ns/vitro/role#public> ;
+  rdfs:label "Publikation"@de .
+
+<http://kerndatensatz-forschung.de/owl/Basis#StrukturiertesPromotionsprogramm>
+  a owl:Class ;
+  rdfs:subClassOf <http://vivoweb.org/ontology/core#Program> ;
+  Meta:inhaltlicheDefinition "Na3", "Na48" ;
+  vitro:inClassGroup <http://vivoweb.org/ontology#vitroClassGrouporganizations> ;
+  vitro:hiddenFromDisplayBelowRoleLevelAnnot <http://vitro.mannlib.cornell.edu/ns/vitro/role#public> ;
+  vitro:hiddenFromPublishBelowRoleLevelAnnot <http://vitro.mannlib.cornell.edu/ns/vitro/role#public> ;
+  vitro:prohibitedFromUpdateBelowRoleLevelAnnot <http://vitro.mannlib.cornell.edu/ns/vitro/role#public> ;
+  rdfs:label "Strukturiertes Promotionsprogramm"@de .
+
+<http://kerndatensatz-forschung.de/owl/Basis#hatFinanzierungsform>
+  a owl:ObjectProperty ;
+  rdfs:subPropertyOf owl:topObjectProperty ;
+  rdfs:domain [
+    a owl:Class ;
+    owl:unionOf (
+     <http://kerndatensatz-forschung.de/owl/Basis#Beschaeftigter>
+     <http://kerndatensatz-forschung.de/owl/Basis#StrukturiertesPromotionsprogramm>
+   )
+  ] ;
+  rdfs:range <http://kerndatensatz-forschung.de/owl/Basis#Finanzierungsform> ;
+  Meta:inhaltlicheDefinition "Be8", "Na14" ;
+  vitro:displayRankAnnot "10"^^xsd:int ;
+  vitro:hiddenFromDisplayBelowRoleLevelAnnot <http://vitro.mannlib.cornell.edu/ns/vitro/role#public> ;
+  vitro:hiddenFromPublishBelowRoleLevelAnnot <http://vitro.mannlib.cornell.edu/ns/vitro/role#public> ;
+  vitro:prohibitedFromUpdateBelowRoleLevelAnnot <http://vitro.mannlib.cornell.edu/ns/vitro/role#public> ;
+  vitro:selectFromExistingAnnot true ;
+  rdfs:label "hat Finanzierungsform"@de .
+
+<http://kerndatensatz-forschung.de/owl/Basis#hatMittelgeber>
+  a owl:ObjectProperty ;
+  rdfs:subPropertyOf owl:topObjectProperty ;
+  rdfs:domain <http://kerndatensatz-forschung.de/owl/Basis#Drittmittelprojekt> ;
+  rdfs:range <http://kerndatensatz-forschung.de/owl/Basis#Mittelgeber> ;
+  Meta:inhaltlicheDefinition "Dr12" ;
+  vitro:hiddenFromDisplayBelowRoleLevelAnnot <http://vitro.mannlib.cornell.edu/ns/vitro/role#public> ;
+  vitro:hiddenFromPublishBelowRoleLevelAnnot <http://vitro.mannlib.cornell.edu/ns/vitro/role#public> ;
+  vitro:prohibitedFromUpdateBelowRoleLevelAnnot <http://vitro.mannlib.cornell.edu/ns/vitro/role#public> ;
+  vitro:selectFromExistingAnnot true ;
+  rdfs:label "hat Mittelgeber"@de .
+
+<http://kerndatensatz-forschung.de/owl/Basis#hatOrganisationseinheit>
+  a owl:ObjectProperty ;
+  rdfs:subPropertyOf owl:topObjectProperty ;
+  rdfs:domain [
+    a owl:Class ;
+    owl:unionOf (
+     <http://kerndatensatz-forschung.de/owl/Basis#Beschaeftigter>
+     <http://kerndatensatz-forschung.de/owl/Basis#Drittmittelprojekt>
+     <http://kerndatensatz-forschung.de/owl/Basis#Publikation>
+     <http://kerndatensatz-forschung.de/owl/Basis#StrukturiertesPromotionsprogramm>
+   )
+  ] ;
+  rdfs:range <http://kerndatensatz-forschung.de/owl/Basis#Organisationseinheit> ;
+  Meta:inhaltlicheDefinition "Be75", "Dr121", "Na92", "Pa35", "Pu140" ;
+  vitro:hiddenFromDisplayBelowRoleLevelAnnot <http://vitro.mannlib.cornell.edu/ns/vitro/role#public> ;
+  vitro:hiddenFromPublishBelowRoleLevelAnnot <http://vitro.mannlib.cornell.edu/ns/vitro/role#public> ;
+  vitro:prohibitedFromUpdateBelowRoleLevelAnnot <http://vitro.mannlib.cornell.edu/ns/vitro/role#public> ;
+  vitro:selectFromExistingAnnot true ;
+  vitro:offerCreateNewOptionAnnot true ;
+  rdfs:label "hat Organisationseinheit"@de .
+
+<http://kerndatensatz-forschung.de/owl/Basis#hatQualifikation>
+  a owl:ObjectProperty ;
+  rdfs:subPropertyOf owl:topObjectProperty ;
+  rdfs:domain <http://kerndatensatz-forschung.de/owl/Basis#Person> ;
+  rdfs:range <http://kerndatensatz-forschung.de/owl/Basis#Qualifikation> ;
+  Meta:inhaltlicheDefinition "Be9" ;
+  vitro:displayRankAnnot "6"^^xsd:int ;
+  vitro:hiddenFromDisplayBelowRoleLevelAnnot <http://vitro.mannlib.cornell.edu/ns/vitro/role#public> ;
+  vitro:hiddenFromPublishBelowRoleLevelAnnot <http://vitro.mannlib.cornell.edu/ns/vitro/role#public> ;
+  vitro:prohibitedFromUpdateBelowRoleLevelAnnot <http://vitro.mannlib.cornell.edu/ns/vitro/role#public> ;
+  vitro:selectFromExistingAnnot true ;
+  rdfs:label "hat Qualifikation"@de .
+
+<http://kerndatensatz-forschung.de/owl/Basis#hatQualifizierungsverfahren>
+  a owl:ObjectProperty ;
+  rdfs:subPropertyOf owl:topObjectProperty ;
+  rdfs:domain <http://kerndatensatz-forschung.de/owl/Basis#Person> ;
+  rdfs:range <http://kerndatensatz-forschung.de/owl/Basis#Qualifizierungsverfahren> ;
+  Meta:inhaltlicheDefinition "Na4a" ;
+  vitro:displayRankAnnot "7"^^xsd:int ;
+  vitro:hiddenFromDisplayBelowRoleLevelAnnot <http://vitro.mannlib.cornell.edu/ns/vitro/role#public> ;
+  vitro:hiddenFromPublishBelowRoleLevelAnnot <http://vitro.mannlib.cornell.edu/ns/vitro/role#public> ;
+  vitro:prohibitedFromUpdateBelowRoleLevelAnnot <http://vitro.mannlib.cornell.edu/ns/vitro/role#public> ;
+  vitro:selectFromExistingAnnot true ;
+  vitro:offerCreateNewOptionAnnot true ;
+  rdfs:label "hat Qualifizierungsverfahren"@de .
+
+<http://kerndatensatz-forschung.de/owl/Basis#hatTaetigkeitsart>
+  a owl:ObjectProperty ;
+  rdfs:subPropertyOf owl:topObjectProperty ;
+  rdfs:domain <http://kerndatensatz-forschung.de/owl/Basis#Beschaeftigter> ;
+  rdfs:range <http://kerndatensatz-forschung.de/owl/Basis#Taetigkeitsart> ;
+  Meta:inhaltlicheDefinition "Be32" ;
+  vitro:displayRankAnnot "5"^^xsd:int ;
+  vitro:hiddenFromDisplayBelowRoleLevelAnnot <http://vitro.mannlib.cornell.edu/ns/vitro/role#public> ;
+  vitro:hiddenFromPublishBelowRoleLevelAnnot <http://vitro.mannlib.cornell.edu/ns/vitro/role#public> ;
+  vitro:prohibitedFromUpdateBelowRoleLevelAnnot <http://vitro.mannlib.cornell.edu/ns/vitro/role#public> ;
+  vitro:selectFromExistingAnnot true ;
+  rdfs:label "hat Tätigkeitsart"@de .
+
+<http://kerndatensatz-forschung.de/owl/Basis#hatUebergeordnetesProjekt>
+  a owl:ObjectProperty ;
+  rdfs:subPropertyOf owl:topObjectProperty ;
+  rdfs:domain <http://kerndatensatz-forschung.de/owl/Basis#Drittmittelprojekt> ;
+  rdfs:range <http://kerndatensatz-forschung.de/owl/Basis#Drittmittelprojekt> ;
+  Meta:inhaltlicheDefinition "Dr10" ;
+  vitro:hiddenFromDisplayBelowRoleLevelAnnot <http://vitro.mannlib.cornell.edu/ns/vitro/role#public> ;
+  vitro:hiddenFromPublishBelowRoleLevelAnnot <http://vitro.mannlib.cornell.edu/ns/vitro/role#public> ;
+  vitro:prohibitedFromUpdateBelowRoleLevelAnnot <http://vitro.mannlib.cornell.edu/ns/vitro/role#public> ;
+  vitro:offerCreateNewOptionAnnot true ;
+  vitro:selectFromExistingAnnot true ;
+  rdfs:label "hat übergeordnetes Projekt"@de .
+
+<http://kerndatensatz-forschung.de/owl/Basis#hatUnterstuetzungDurch>
+  a owl:ObjectProperty ;
+  rdfs:subPropertyOf <http://vivoweb.org/ontology/core#informationResourceSupportedBy> ;
+  rdfs:domain <http://kerndatensatz-forschung.de/owl/Basis#Publikation> ;
+  rdfs:range [
+    a owl:Class ;
+    owl:unionOf (
+     <http://kerndatensatz-forschung.de/owl/Basis#Drittmittelprojekt>
+     <http://kerndatensatz-forschung.de/owl/Basis#StrukturiertesPromotionsprogramm>
+   )
+  ] ;
+  Meta:inhaltlicheDefinition "Pu86", "Pu90" ;
+  Meta:pgbid "dcterms.funding", "kds.funding.grantnumber" ;
+  vitro:hiddenFromDisplayBelowRoleLevelAnnot <http://vitro.mannlib.cornell.edu/ns/vitro/role#public> ;
+  vitro:hiddenFromPublishBelowRoleLevelAnnot <http://vitro.mannlib.cornell.edu/ns/vitro/role#public> ;
+  vitro:prohibitedFromUpdateBelowRoleLevelAnnot <http://vitro.mannlib.cornell.edu/ns/vitro/role#public> ;
+  vitro:selectFromExistingAnnot true ;
+  vitro:offerCreateNewOptionAnnot true ;
+  rdfs:comment "Alternativ zu den direkten Eigenschaften Förderer (Pu86) und Förderkennzeichen (Pu90), kann eine Verbindung zu Drittmittelprojekt bzw. Promotionsprogramm angegeben werden, worüber sich Förderer und Förderkennzeichen ableiten lassen" ;
+  rdfs:label "hat Unterstützung durch"@de .
+
+<http://kerndatensatz-forschung.de/owl/Basis#hatArt>
+  a owl:ObjectProperty ;
+  rdfs:subPropertyOf owl:topObjectProperty ;
+  rdfs:domain <http://kerndatensatz-forschung.de/owl/Basis#Forschungsinfrastruktur> ;
+  rdfs:range <http://kerndatensatz-forschung.de/owl/Basis#Forschungsinfrastrukturart> ;
+  Meta:inhaltlicheDefinition "Fi5" ;
+  vitro:hiddenFromDisplayBelowRoleLevelAnnot <http://vitro.mannlib.cornell.edu/ns/vitro/role#public> ;
+  vitro:hiddenFromPublishBelowRoleLevelAnnot <http://vitro.mannlib.cornell.edu/ns/vitro/role#public> ;
+  vitro:prohibitedFromUpdateBelowRoleLevelAnnot <http://vitro.mannlib.cornell.edu/ns/vitro/role#public> ;
+  vitro:selectFromExistingAnnot true ;
+  rdfs:label "hat Art"@de .
+
+<http://kerndatensatz-forschung.de/owl/Basis#hatZugangsart>
+  a owl:ObjectProperty ;
+  rdfs:subPropertyOf owl:topObjectProperty ;
+  rdfs:domain <http://kerndatensatz-forschung.de/owl/Basis#Forschungsinfrastruktur> ;
+  rdfs:range <http://kerndatensatz-forschung.de/owl/Basis#Zugangsart> ;
+  Meta:inhaltlicheDefinition "Fi6" ;
+  vitro:hiddenFromDisplayBelowRoleLevelAnnot <http://vitro.mannlib.cornell.edu/ns/vitro/role#public> ;
+  vitro:hiddenFromPublishBelowRoleLevelAnnot <http://vitro.mannlib.cornell.edu/ns/vitro/role#public> ;
+  vitro:prohibitedFromUpdateBelowRoleLevelAnnot <http://vitro.mannlib.cornell.edu/ns/vitro/role#public> ;
+  vitro:selectFromExistingAnnot true ;
+  rdfs:label "Art des Zugangs"@de .
+
+<http://kerndatensatz-forschung.de/owl/Basis#hatPublikation>
+  a owl:ObjectProperty ;
+  rdfs:subPropertyOf owl:topObjectProperty ;
+  rdfs:domain <http://kerndatensatz-forschung.de/owl/Basis#Forschungsinfrastruktur> ;
+  rdfs:range <http://kerndatensatz-forschung.de/owl/Basis#Publikation> ;
+  Meta:inhaltlicheDefinition "Fi14" ;
+  vitro:hiddenFromDisplayBelowRoleLevelAnnot <http://vitro.mannlib.cornell.edu/ns/vitro/role#public> ;
+  vitro:hiddenFromPublishBelowRoleLevelAnnot <http://vitro.mannlib.cornell.edu/ns/vitro/role#public> ;
+  vitro:prohibitedFromUpdateBelowRoleLevelAnnot <http://vitro.mannlib.cornell.edu/ns/vitro/role#public> ;
+  vitro:offerCreateNewOptionAnnot true ;
+  vitro:selectFromExistingAnnot true ;
+  rdfs:label "hat Publikation"@de .
+
+<http://kerndatensatz-forschung.de/owl/Basis#hatBetreiber>
+  a owl:ObjectProperty ;
+  rdfs:subPropertyOf owl:topObjectProperty ;
+  rdfs:domain <http://kerndatensatz-forschung.de/owl/Basis#Forschungsinfrastruktur> ;
+  rdfs:range <http://kerndatensatz-forschung.de/owl/Basis#Organisationseinheit> ;
+  Meta:inhaltlicheDefinition "Fi11" ;
+  vitro:hiddenFromDisplayBelowRoleLevelAnnot <http://vitro.mannlib.cornell.edu/ns/vitro/role#public> ;
+  vitro:hiddenFromPublishBelowRoleLevelAnnot <http://vitro.mannlib.cornell.edu/ns/vitro/role#public> ;
+  vitro:prohibitedFromUpdateBelowRoleLevelAnnot <http://vitro.mannlib.cornell.edu/ns/vitro/role#public> ;
+  vitro:selectFromExistingAnnot true ;
+  vitro:offerCreateNewOptionAnnot true ;
+  rdfs:label "hat Betreiber"@de .
+
+<http://kerndatensatz-forschung.de/owl/Basis#hatBetriebspersonal>
+  a owl:ObjectProperty ;
+  rdfs:subPropertyOf owl:topObjectProperty ;
+  rdfs:domain <http://kerndatensatz-forschung.de/owl/Basis#Forschungsinfrastruktur> ;
+  rdfs:range <http://kerndatensatz-forschung.de/owl/Basis#Beschaeftigter> ;
+  Meta:inhaltlicheDefinition "Fi13" ;
+  vitro:hiddenFromDisplayBelowRoleLevelAnnot <http://vitro.mannlib.cornell.edu/ns/vitro/role#public> ;
+  vitro:hiddenFromPublishBelowRoleLevelAnnot <http://vitro.mannlib.cornell.edu/ns/vitro/role#public> ;
+  vitro:prohibitedFromUpdateBelowRoleLevelAnnot <http://vitro.mannlib.cornell.edu/ns/vitro/role#public> ;
+  vitro:offerCreateNewOptionAnnot true ;
+  vitro:selectFromExistingAnnot true ;
+  rdfs:label "hat Betriebspersonal"@de .
+
+<http://kerndatensatz-forschung.de/owl/Basis#hatKoordinator>
+  a owl:ObjectProperty ;
+  rdfs:subPropertyOf owl:topObjectProperty ;
+  rdfs:domain <http://kerndatensatz-forschung.de/owl/Basis#Forschungsinfrastruktur> ;
+  rdfs:range <http://kerndatensatz-forschung.de/owl/Basis#Organisationseinheit> ;
+  Meta:inhaltlicheDefinition "Fi12" ;
+  vitro:hiddenFromDisplayBelowRoleLevelAnnot <http://vitro.mannlib.cornell.edu/ns/vitro/role#public> ;
+  vitro:hiddenFromPublishBelowRoleLevelAnnot <http://vitro.mannlib.cornell.edu/ns/vitro/role#public> ;
+  vitro:prohibitedFromUpdateBelowRoleLevelAnnot <http://vitro.mannlib.cornell.edu/ns/vitro/role#public> ;
+  vitro:selectFromExistingAnnot true ;
+  vitro:offerCreateNewOptionAnnot true ;
+  rdfs:label "hat Koordinator"@de .
+
+<http://kerndatensatz-forschung.de/owl/Basis#hatSprecher>
+  a owl:ObjectProperty ;
+  rdfs:subPropertyOf owl:topObjectProperty ;
+  rdfs:domain <http://kerndatensatz-forschung.de/owl/Basis#StrukturiertesPromotionsprogramm> ;
+  rdfs:range <http://kerndatensatz-forschung.de/owl/Basis#Person> ;
+  Meta:inhaltlicheDefinition "Na17" ;
+  vitro:hiddenFromDisplayBelowRoleLevelAnnot <http://vitro.mannlib.cornell.edu/ns/vitro/role#public> ;
+  vitro:hiddenFromPublishBelowRoleLevelAnnot <http://vitro.mannlib.cornell.edu/ns/vitro/role#public> ;
+  vitro:prohibitedFromUpdateBelowRoleLevelAnnot <http://vitro.mannlib.cornell.edu/ns/vitro/role#public> ;
+  vitro:selectFromExistingAnnot true ;
+  vitro:offerCreateNewOptionAnnot true ;
+  rdfs:label "hat Sprecher"@de .
+
+<http://kerndatensatz-forschung.de/owl/Basis#AnzahlGenutzteStunden>
+  a owl:DatatypeProperty ;
+  rdfs:label "Anzahl genutzte Stunden"@de ;
+  Meta:inhaltlicheDefinition "Fi28" ;
+  rdfs:domain <http://kerndatensatz-forschung.de/owl/Basis#Forschungsinfrastruktur> ;
+  rdfs:range xsd:nonNegativeInteger ;
+  vitro:hiddenFromDisplayBelowRoleLevelAnnot <http://vitro.mannlib.cornell.edu/ns/vitro/role#public> ;
+  vitro:hiddenFromPublishBelowRoleLevelAnnot <http://vitro.mannlib.cornell.edu/ns/vitro/role#public> ;
+  vitro:prohibitedFromUpdateBelowRoleLevelAnnot <http://vitro.mannlib.cornell.edu/ns/vitro/role#public> .
+
+<http://kerndatensatz-forschung.de/owl/Basis#AnzahlNutzer>
+  a owl:DatatypeProperty ;
+  rdfs:label "Anzahl Nutzer"@de ;
+  Meta:inhaltlicheDefinition "Fi7" ;
+  rdfs:domain <http://kerndatensatz-forschung.de/owl/Basis#Forschungsinfrastruktur> ;
+  rdfs:range xsd:nonNegativeInteger ;
+  vitro:hiddenFromDisplayBelowRoleLevelAnnot <http://vitro.mannlib.cornell.edu/ns/vitro/role#public> ;
+  vitro:hiddenFromPublishBelowRoleLevelAnnot <http://vitro.mannlib.cornell.edu/ns/vitro/role#public> ;
+  vitro:prohibitedFromUpdateBelowRoleLevelAnnot <http://vitro.mannlib.cornell.edu/ns/vitro/role#public> .
+
+<http://kerndatensatz-forschung.de/owl/Basis#AnzahlNutzungszugriffe>
+  a owl:DatatypeProperty ;
+  rdfs:label "Anzahl Nutzungszugriffe"@de ;
+  Meta:inhaltlicheDefinition "Fi29" ;
+  rdfs:domain <http://kerndatensatz-forschung.de/owl/Basis#Forschungsinfrastruktur> ;
+  rdfs:range xsd:nonNegativeInteger ;
+  vitro:hiddenFromDisplayBelowRoleLevelAnnot <http://vitro.mannlib.cornell.edu/ns/vitro/role#public> ;
+  vitro:hiddenFromPublishBelowRoleLevelAnnot <http://vitro.mannlib.cornell.edu/ns/vitro/role#public> ;
+  vitro:prohibitedFromUpdateBelowRoleLevelAnnot <http://vitro.mannlib.cornell.edu/ns/vitro/role#public> .
+
+<http://kerndatensatz-forschung.de/owl/Basis#Bewilligungssume>
+  a owl:DatatypeProperty, owl:FunctionalProperty ;
+  rdfs:domain <http://kerndatensatz-forschung.de/owl/Basis#Drittmittelprojekt> ;
+  rdfs:range xsd:integer ;
+  Meta:inhaltlicheDefinition "Dr88" ;
+  vitro:hiddenFromDisplayBelowRoleLevelAnnot <http://vitro.mannlib.cornell.edu/ns/vitro/role#public> ;
+  vitro:hiddenFromPublishBelowRoleLevelAnnot <http://vitro.mannlib.cornell.edu/ns/vitro/role#public> ;
+  vitro:prohibitedFromUpdateBelowRoleLevelAnnot <http://vitro.mannlib.cornell.edu/ns/vitro/role#public> ;
+  rdfs:label "Bewilligungssume"@de .
+
+<http://kerndatensatz-forschung.de/owl/Basis#BezeichnungDerProfessur>
+  a owl:DatatypeProperty ;
+  rdfs:domain <http://kerndatensatz-forschung.de/owl/Basis#Professor> ;
+  rdfs:range xsd:string ;
+  Meta:inhaltlicheDefinition "Be41" ;
+  vitro:hiddenFromDisplayBelowRoleLevelAnnot <http://vitro.mannlib.cornell.edu/ns/vitro/role#public> ;
+  vitro:hiddenFromPublishBelowRoleLevelAnnot <http://vitro.mannlib.cornell.edu/ns/vitro/role#public> ;
+  vitro:prohibitedFromUpdateBelowRoleLevelAnnot <http://vitro.mannlib.cornell.edu/ns/vitro/role#public> ;
+  rdfs:label "Bezeichnung der Professur"@de .
+
+<http://kerndatensatz-forschung.de/owl/Basis#Drittmitteleinnahmen>
+  a owl:DatatypeProperty, owl:FunctionalProperty ;
+  rdfs:domain <http://kerndatensatz-forschung.de/owl/Basis#Drittmittelprojekt> ;
+  rdfs:range xsd:float ;
+  Meta:inhaltlicheDefinition "Dr1a" ;
+  vitro:hiddenFromDisplayBelowRoleLevelAnnot <http://vitro.mannlib.cornell.edu/ns/vitro/role#public> ;
+  vitro:hiddenFromPublishBelowRoleLevelAnnot <http://vitro.mannlib.cornell.edu/ns/vitro/role#public> ;
+  vitro:prohibitedFromUpdateBelowRoleLevelAnnot <http://vitro.mannlib.cornell.edu/ns/vitro/role#public> ;
+  rdfs:label "Drittmitteleinnahmen"@de .
+
+<http://kerndatensatz-forschung.de/owl/Basis#Drittmittelertraege>
+  a owl:DatatypeProperty, owl:FunctionalProperty ;
+  rdfs:domain <http://kerndatensatz-forschung.de/owl/Basis#Drittmittelprojekt> ;
+  rdfs:range xsd:float ;
+  Meta:inhaltlicheDefinition "Dr1b" ;
+  vitro:hiddenFromDisplayBelowRoleLevelAnnot <http://vitro.mannlib.cornell.edu/ns/vitro/role#public> ;
+  vitro:hiddenFromPublishBelowRoleLevelAnnot <http://vitro.mannlib.cornell.edu/ns/vitro/role#public> ;
+  vitro:prohibitedFromUpdateBelowRoleLevelAnnot <http://vitro.mannlib.cornell.edu/ns/vitro/role#public> ;
+  rdfs:label "Drittmittelerträge"@de .
+
+<http://kerndatensatz-forschung.de/owl/Basis#FoerderkennzeichenDrittmittelprojekt>
+  a owl:DatatypeProperty ;
+  rdfs:domain <http://kerndatensatz-forschung.de/owl/Basis#Drittmittelprojekt> ;
+  rdfs:range xsd:string ;
+  Meta:inhaltlicheDefinition "Dr13" ;
+  vitro:hiddenFromDisplayBelowRoleLevelAnnot <http://vitro.mannlib.cornell.edu/ns/vitro/role#public> ;
+  vitro:hiddenFromPublishBelowRoleLevelAnnot <http://vitro.mannlib.cornell.edu/ns/vitro/role#public> ;
+  vitro:prohibitedFromUpdateBelowRoleLevelAnnot <http://vitro.mannlib.cornell.edu/ns/vitro/role#public> ;
+  rdfs:label "Förderkennzeichen des Drittmittelprojekts"@de .
+
+<http://kerndatensatz-forschung.de/owl/Basis#FoerderkennzeichenPublikation>
+  a owl:DatatypeProperty, owl:FunctionalProperty ;
+  rdfs:domain <http://kerndatensatz-forschung.de/owl/Basis#Publikation> ;
+  rdfs:range xsd:string ;
+  Meta:inhaltlicheDefinition "Pu90" ;
+  Meta:pgbid "kds.funding.grantnumber" ;
+  vitro:hiddenFromDisplayBelowRoleLevelAnnot <http://vitro.mannlib.cornell.edu/ns/vitro/role#public> ;
+  vitro:hiddenFromPublishBelowRoleLevelAnnot <http://vitro.mannlib.cornell.edu/ns/vitro/role#public> ;
+  vitro:prohibitedFromUpdateBelowRoleLevelAnnot <http://vitro.mannlib.cornell.edu/ns/vitro/role#public> ;
+  vitro:publicDescriptionAnnot "Das Förderkennzeichen des Mittelgebers, sofern in der Publikation angegeben. " ;
+  rdfs:label "Förderkennzeichen der Publikation"@de .
+
+<http://kerndatensatz-forschung.de/owl/Basis#Koordinationsrolle>
+  a owl:DatatypeProperty, owl:FunctionalProperty ;
+  rdfs:domain <http://kerndatensatz-forschung.de/owl/Basis#Drittmittelprojekt> ;
+  rdfs:range xsd:boolean ;
+  Meta:inhaltlicheDefinition "Dr142" ;
+  vitro:hiddenFromDisplayBelowRoleLevelAnnot <http://vitro.mannlib.cornell.edu/ns/vitro/role#public> ;
+  vitro:hiddenFromPublishBelowRoleLevelAnnot <http://vitro.mannlib.cornell.edu/ns/vitro/role#public> ;
+  vitro:prohibitedFromUpdateBelowRoleLevelAnnot <http://vitro.mannlib.cornell.edu/ns/vitro/role#public> ;
+  rdfs:label "Koordinationsrolle (Einrichtung)"@de .
+
+<http://kerndatensatz-forschung.de/owl/Basis#AUF>
+  a owl:Class ;
+  rdfs:subClassOf <http://kerndatensatz-forschung.de/owl/Basis#Promotionskooperationspartner> ;
+  Meta:inhaltlicheDefinition "Na94" ;
+  rdfs:label "Außeruniversitäre Forschungseinrichtung"@de ;
+  vitro:inClassGroup <http://vivoweb.org/ontology#vitroClassGrouporganizations> ;
+  vitro:hiddenFromDisplayBelowRoleLevelAnnot <http://vitro.mannlib.cornell.edu/ns/vitro/role#public> ;
+  vitro:hiddenFromPublishBelowRoleLevelAnnot <http://vitro.mannlib.cornell.edu/ns/vitro/role#public> ;
+  vitro:prohibitedFromUpdateBelowRoleLevelAnnot <http://vitro.mannlib.cornell.edu/ns/vitro/role#public> .
+
+<http://kerndatensatz-forschung.de/owl/Basis#ArbeitspapierForschungsbericht>
+  a owl:Class ;
+  owl:equivalentClass bibo:Report ;
+  rdfs:subClassOf <http://kerndatensatz-forschung.de/owl/Basis#Publikation> ;
+  Meta:inhaltlicheDefinition "Pu37" ;
+  vitro:hiddenFromDisplayBelowRoleLevelAnnot <http://vitro.mannlib.cornell.edu/ns/vitro/role#public> ;
+  vitro:hiddenFromPublishBelowRoleLevelAnnot <http://vitro.mannlib.cornell.edu/ns/vitro/role#public> ;
+  vitro:inClassGroup <http://vivoweb.org/ontology#vitroClassGrouppublications> ;
+  vitro:prohibitedFromUpdateBelowRoleLevelAnnot <http://vitro.mannlib.cornell.edu/ns/vitro/role#public> ;
+  rdfs:label "Arbeitspapier/Forschungsbericht"@de .
+
+<http://kerndatensatz-forschung.de/owl/Basis#Artikel>
+  a owl:Class ;
+  rdfs:subClassOf <http://kerndatensatz-forschung.de/owl/Basis#Publikation>, bibo:Article ;
+  Meta:inhaltlicheDefinition "Pu25" ;
+  vitro:hiddenFromDisplayBelowRoleLevelAnnot <http://vitro.mannlib.cornell.edu/ns/vitro/role#public> ;
+  vitro:hiddenFromPublishBelowRoleLevelAnnot <http://vitro.mannlib.cornell.edu/ns/vitro/role#public> ;
+  vitro:inClassGroup <http://vivoweb.org/ontology#vitroClassGrouppublications> ;
+  vitro:prohibitedFromUpdateBelowRoleLevelAnnot <http://vitro.mannlib.cornell.edu/ns/vitro/role#public> ;
+  rdfs:label "Artikel"@de .
+
+<http://kerndatensatz-forschung.de/owl/Basis#Ausgruendung>
+  a owl:Class ;
+  rdfs:subClassOf <http://vivoweb.org/ontology/core#Company> ;
+  Meta:inhaltlicheDefinition "Pa39" ;
+  vitro:inClassGroup <http://vivoweb.org/ontology#vitroClassGrouporganizations> ;
+  rdfs:label "Ausgründung"@de .
+
+<http://kerndatensatz-forschung.de/owl/Basis#AusserplanmaessigeProfessoren>
+  a owl:Class ;
+  rdfs:subClassOf <http://kerndatensatz-forschung.de/owl/Basis#Professoren> ;
+  Meta:inhaltlicheDefinition "Be89" ;
+  vitro:hiddenFromDisplayBelowRoleLevelAnnot <http://vitro.mannlib.cornell.edu/ns/vitro/role#public> ;
+  vitro:hiddenFromPublishBelowRoleLevelAnnot <http://vitro.mannlib.cornell.edu/ns/vitro/role#public> ;
+  vitro:prohibitedFromUpdateBelowRoleLevelAnnot <http://vitro.mannlib.cornell.edu/ns/vitro/role#public> ;
+  vitro:inClassGroup <http://vivoweb.org/ontology#vitroClassGrouppeople> ;
+  rdfs:label "Ausserplanmässiger Professor"@de .
+
+<http://kerndatensatz-forschung.de/owl/Basis#HauptberuflicheGastprofessoren>
+  a owl:Class ;
+  rdfs:subClassOf <http://kerndatensatz-forschung.de/owl/Basis#Professoren> ;
+  Meta:inhaltlicheDefinition "Be30" ;
+  vitro:hiddenFromDisplayBelowRoleLevelAnnot <http://vitro.mannlib.cornell.edu/ns/vitro/role#public> ;
+  vitro:hiddenFromPublishBelowRoleLevelAnnot <http://vitro.mannlib.cornell.edu/ns/vitro/role#public> ;
+  vitro:prohibitedFromUpdateBelowRoleLevelAnnot <http://vitro.mannlib.cornell.edu/ns/vitro/role#public> ;
+  vitro:inClassGroup <http://vivoweb.org/ontology#vitroClassGrouppeople> ;
+  rdfs:label "Hauptberuflicher Gastprofessor"@de .
+
+<http://kerndatensatz-forschung.de/owl/Basis#Juniorprofessoren>
+  a owl:Class ;
+  rdfs:subClassOf <http://kerndatensatz-forschung.de/owl/Basis#Professoren> ;
+  Meta:inhaltlicheDefinition "Be29" ;
+  vitro:hiddenFromDisplayBelowRoleLevelAnnot <http://vitro.mannlib.cornell.edu/ns/vitro/role#public> ;
+  vitro:hiddenFromPublishBelowRoleLevelAnnot <http://vitro.mannlib.cornell.edu/ns/vitro/role#public> ;
+  vitro:prohibitedFromUpdateBelowRoleLevelAnnot <http://vitro.mannlib.cornell.edu/ns/vitro/role#public> ;
+  vitro:inClassGroup <http://vivoweb.org/ontology#vitroClassGrouppeople> ;
+  rdfs:label "Juniorprofessor"@de .
+
+<http://kerndatensatz-forschung.de/owl/Basis#Seniorprofessoren>
+  a owl:Class ;
+  rdfs:subClassOf <http://kerndatensatz-forschung.de/owl/Basis#Professoren> ;
+  Meta:inhaltlicheDefinition "Be31" ;
+  vitro:hiddenFromDisplayBelowRoleLevelAnnot <http://vitro.mannlib.cornell.edu/ns/vitro/role#public> ;
+  vitro:hiddenFromPublishBelowRoleLevelAnnot <http://vitro.mannlib.cornell.edu/ns/vitro/role#public> ;
+  vitro:prohibitedFromUpdateBelowRoleLevelAnnot <http://vitro.mannlib.cornell.edu/ns/vitro/role#public> ;
+  vitro:inClassGroup <http://vivoweb.org/ontology#vitroClassGrouppeople> ;
+  rdfs:label "Seniorprofessor"@de .
+
+<http://kerndatensatz-forschung.de/owl/Basis#Stiftungsprofessoren>
+  a owl:Class ;
+  rdfs:subClassOf <http://kerndatensatz-forschung.de/owl/Basis#Professoren> ;
+  Meta:inhaltlicheDefinition "Be59" ;
+  vitro:hiddenFromDisplayBelowRoleLevelAnnot <http://vitro.mannlib.cornell.edu/ns/vitro/role#public> ;
+  vitro:hiddenFromPublishBelowRoleLevelAnnot <http://vitro.mannlib.cornell.edu/ns/vitro/role#public> ;
+  vitro:prohibitedFromUpdateBelowRoleLevelAnnot <http://vitro.mannlib.cornell.edu/ns/vitro/role#public> ;
+  vitro:inClassGroup <http://vivoweb.org/ontology#vitroClassGrouppeople> ;
+  rdfs:label "Stiftungsprofessor"@de .
+
+<http://kerndatensatz-forschung.de/owl/Basis#Vertretungsprofessoren>
+  a owl:Class ;
+  rdfs:subClassOf <http://kerndatensatz-forschung.de/owl/Basis#Professoren> ;
+  Meta:inhaltlicheDefinition "Be58" ;
+  vitro:hiddenFromDisplayBelowRoleLevelAnnot <http://vitro.mannlib.cornell.edu/ns/vitro/role#public> ;
+  vitro:hiddenFromPublishBelowRoleLevelAnnot <http://vitro.mannlib.cornell.edu/ns/vitro/role#public> ;
+  vitro:prohibitedFromUpdateBelowRoleLevelAnnot <http://vitro.mannlib.cornell.edu/ns/vitro/role#public> ;
+  vitro:inClassGroup <http://vivoweb.org/ontology#vitroClassGrouppeople> ;
+  rdfs:label "Vertretungsprofessor/Lehrstuhlvertreter"@de .
+
+<http://kerndatensatz-forschung.de/owl/Basis#BeitraegeInterviewsInNicht-wissenschaftlichenMedien>
+  a owl:Class ;
+  owl:equivalentClass bibo:Interview ;
+  rdfs:subClassOf <http://kerndatensatz-forschung.de/owl/Basis#Publikation> ;
+  Meta:inhaltlicheDefinition "Pu39" ;
+  vitro:hiddenFromDisplayBelowRoleLevelAnnot <http://vitro.mannlib.cornell.edu/ns/vitro/role#public> ;
+  vitro:hiddenFromPublishBelowRoleLevelAnnot <http://vitro.mannlib.cornell.edu/ns/vitro/role#public> ;
+  vitro:inClassGroup <http://vivoweb.org/ontology#vitroClassGrouppublications> ;
+  vitro:prohibitedFromUpdateBelowRoleLevelAnnot <http://vitro.mannlib.cornell.edu/ns/vitro/role#public> ;
+  rdfs:label "Beiträge bzw. Interviews in nicht-wissenschaftlichen Medien"@de .
+
+<http://kerndatensatz-forschung.de/owl/Basis#BibliographieDokumenttyp>
+  a owl:Class ;
+  rdfs:subClassOf <http://kerndatensatz-forschung.de/owl/Basis#Journalartikel> ;
+  Meta:inhaltlicheDefinition "Pu129" ;
+  vitro:hiddenFromDisplayBelowRoleLevelAnnot <http://vitro.mannlib.cornell.edu/ns/vitro/role#public> ;
+  vitro:hiddenFromPublishBelowRoleLevelAnnot <http://vitro.mannlib.cornell.edu/ns/vitro/role#public> ;
+  vitro:inClassGroup <http://vivoweb.org/ontology#vitroClassGrouppublications> ;
+  vitro:prohibitedFromUpdateBelowRoleLevelAnnot <http://vitro.mannlib.cornell.edu/ns/vitro/role#public> ;
+  rdfs:label "Bibliographie [Journalartikel]"@de .
+
+<http://kerndatensatz-forschung.de/owl/Basis#BibliographiePublikationstyp>
+  a owl:Class ;
+  rdfs:subClassOf <http://kerndatensatz-forschung.de/owl/Basis#Buch> ;
+  Meta:inhaltlicheDefinition "Pu24" ;
+  vitro:hiddenFromDisplayBelowRoleLevelAnnot <http://vitro.mannlib.cornell.edu/ns/vitro/role#public> ;
+  vitro:hiddenFromPublishBelowRoleLevelAnnot <http://vitro.mannlib.cornell.edu/ns/vitro/role#public> ;
+  vitro:inClassGroup <http://vivoweb.org/ontology#vitroClassGrouppublications> ;
+  vitro:prohibitedFromUpdateBelowRoleLevelAnnot <http://vitro.mannlib.cornell.edu/ns/vitro/role#public> ;
+  rdfs:label "Bibliographie [Buch]"@de .
+
+<http://kerndatensatz-forschung.de/owl/Basis#Buch>
+  a owl:Class ;
+  owl:equivalentClass bibo:Book ;
+  rdfs:subClassOf <http://kerndatensatz-forschung.de/owl/Basis#Publikation> ;
+  Meta:inhaltlicheDefinition "Pu22" ;
+  vitro:hiddenFromDisplayBelowRoleLevelAnnot <http://vitro.mannlib.cornell.edu/ns/vitro/role#public> ;
+  vitro:hiddenFromPublishBelowRoleLevelAnnot <http://vitro.mannlib.cornell.edu/ns/vitro/role#public> ;
+  vitro:inClassGroup <http://vivoweb.org/ontology#vitroClassGrouppublications> ;
+  vitro:prohibitedFromUpdateBelowRoleLevelAnnot <http://vitro.mannlib.cornell.edu/ns/vitro/role#public> ;
+  rdfs:label "Buch"@de .
+
+<http://kerndatensatz-forschung.de/owl/Basis#Datensammlung>
+  a owl:Class ;
+  owl:equivalentClass <http://vivoweb.org/ontology/core#Dataset> ;
+  rdfs:subClassOf <http://kerndatensatz-forschung.de/owl/Basis#Publikation> ;
+  Meta:inhaltlicheDefinition "Pu38" ;
+  vitro:hiddenFromDisplayBelowRoleLevelAnnot <http://vitro.mannlib.cornell.edu/ns/vitro/role#public> ;
+  vitro:hiddenFromPublishBelowRoleLevelAnnot <http://vitro.mannlib.cornell.edu/ns/vitro/role#public> ;
+  vitro:inClassGroup <http://vivoweb.org/ontology#vitroClassGrouppublications> ;
+  vitro:prohibitedFromUpdateBelowRoleLevelAnnot <http://vitro.mannlib.cornell.edu/ns/vitro/role#public> ;
+  rdfs:label "Datensammlung"@de .
+
+<http://kerndatensatz-forschung.de/owl/Basis#Dissertation>
+  a owl:Class ;
+  owl:equivalentClass bibo:Thesis ;
+  rdfs:subClassOf <http://kerndatensatz-forschung.de/owl/Basis#Qualifikationsschrift> ;
+  Meta:inhaltlicheDefinition "Pu34" ;
+  vitro:hiddenFromDisplayBelowRoleLevelAnnot <http://vitro.mannlib.cornell.edu/ns/vitro/role#public> ;
+  vitro:hiddenFromPublishBelowRoleLevelAnnot <http://vitro.mannlib.cornell.edu/ns/vitro/role#public> ;
+  vitro:inClassGroup <http://vivoweb.org/ontology#vitroClassGrouppublications> ;
+  vitro:prohibitedFromUpdateBelowRoleLevelAnnot <http://vitro.mannlib.cornell.edu/ns/vitro/role#public> ;
+  rdfs:label "Dissertation"@de .
+
+<http://kerndatensatz-forschung.de/owl/Basis#Editorial>
+  a owl:Class ;
+  owl:equivalentClass <http://vivoweb.org/ontology/core#EditorialArticle> ;
+  rdfs:subClassOf <http://kerndatensatz-forschung.de/owl/Basis#Journalartikel> ;
+  Meta:inhaltlicheDefinition "Pu121" ;
+  vitro:hiddenFromDisplayBelowRoleLevelAnnot <http://vitro.mannlib.cornell.edu/ns/vitro/role#public> ;
+  vitro:hiddenFromPublishBelowRoleLevelAnnot <http://vitro.mannlib.cornell.edu/ns/vitro/role#public> ;
+  vitro:inClassGroup <http://vivoweb.org/ontology#vitroClassGrouppublications> ;
+  vitro:prohibitedFromUpdateBelowRoleLevelAnnot <http://vitro.mannlib.cornell.edu/ns/vitro/role#public> ;
+  rdfs:label "Editorial"@de .
+
+<http://kerndatensatz-forschung.de/owl/Basis#FH>
+  a owl:Class ;
+  rdfs:subClassOf <http://kerndatensatz-forschung.de/owl/Basis#Promotionskooperationspartner> ;
+  Meta:inhaltlicheDefinition "Na93" ;
+  vitro:inClassGroup <http://vivoweb.org/ontology#vitroClassGrouporganizations> ;
+  vitro:hiddenFromDisplayBelowRoleLevelAnnot <http://vitro.mannlib.cornell.edu/ns/vitro/role#public> ;
+  vitro:hiddenFromPublishBelowRoleLevelAnnot <http://vitro.mannlib.cornell.edu/ns/vitro/role#public> ;
+  vitro:prohibitedFromUpdateBelowRoleLevelAnnot <http://vitro.mannlib.cornell.edu/ns/vitro/role#public> ;
+  rdfs:label "Fachhochschule"@de .
+
+<http://kerndatensatz-forschung.de/owl/Basis#Fach>
+  a owl:Class ;
+  Meta:inhaltlicheDefinition "Be38", "Dr28", "Na2", "Pa1", "Pu138" ;
+  vitro:hiddenFromDisplayBelowRoleLevelAnnot <http://vitro.mannlib.cornell.edu/ns/vitro/role#public> ;
+  vitro:hiddenFromPublishBelowRoleLevelAnnot <http://vitro.mannlib.cornell.edu/ns/vitro/role#public> ;
+  vitro:prohibitedFromUpdateBelowRoleLevelAnnot <http://vitro.mannlib.cornell.edu/ns/vitro/role#public> ;
+  rdfs:label "Fach"@de .
+
+<http://kerndatensatz-forschung.de/owl/Basis#Finanzierungsform>
+  a owl:Class ;
+  Meta:inhaltlicheDefinition "Be8", "Na14" ;
+  vitro:hiddenFromDisplayBelowRoleLevelAnnot <http://vitro.mannlib.cornell.edu/ns/vitro/role#public> ;
+  vitro:hiddenFromPublishBelowRoleLevelAnnot <http://vitro.mannlib.cornell.edu/ns/vitro/role#public> ;
+  vitro:prohibitedFromUpdateBelowRoleLevelAnnot <http://vitro.mannlib.cornell.edu/ns/vitro/role#public> ;
+  rdfs:label "Finanzierungsform"@de .
+
+<http://kerndatensatz-forschung.de/owl/Basis#Forschungsinfrastruktur>
+  a owl:Class ;
+  Meta:inhaltlicheDefinition "Fi2" ;
+  vitro:hiddenFromDisplayBelowRoleLevelAnnot <http://vitro.mannlib.cornell.edu/ns/vitro/role#public> ;
+  vitro:hiddenFromPublishBelowRoleLevelAnnot <http://vitro.mannlib.cornell.edu/ns/vitro/role#public> ;
+  vitro:inClassGroup <http://vivoweb.org/ontology#vitroClassGroupequipment> ;
+  vitro:prohibitedFromUpdateBelowRoleLevelAnnot <http://vitro.mannlib.cornell.edu/ns/vitro/role#public> ;
+  vitro:descriptionAnnot "Forschungsinfrastrukturen im Sinne des Kerndatensatzes sind umfangreiche / aufwendige Instrumente, Ressourcen oder Serviceeinrichtungen für die Forschung in allen Wissenschaftsgebieten, die sich durch eine mindestens überregionale Bedeutung für das jeweilige Wissenschaftsgebiet sowie durch eine mittel- bis langfristige Lebensdauer (mehr als 5 Jahre) auszeichnen und für eine externe Nutzung zur Verfügung stehen für die Zugangs- bzw. Nutzungsregelungen etabliert sind." ;
+  rdfs:label "Forschungsinfrastruktur"@de .
+
+<http://kerndatensatz-forschung.de/owl/Basis#Forschungsinfrastrukturart>
+  a owl:Class ;
+  rdfs:label "Art der Forschungsinfrastruktur"@de ;
+  Meta:inhaltlicheDefinition "Fi5" ;
+  vitro:hiddenFromDisplayBelowRoleLevelAnnot <http://vitro.mannlib.cornell.edu/ns/vitro/role#public> ;
+  vitro:hiddenFromPublishBelowRoleLevelAnnot <http://vitro.mannlib.cornell.edu/ns/vitro/role#public> ;
+  vitro:prohibitedFromUpdateBelowRoleLevelAnnot <http://vitro.mannlib.cornell.edu/ns/vitro/role#public> .
+
+<http://kerndatensatz-forschung.de/owl/Basis#GrossgeraeteUndInstrumente>
+  a owl:Class ;
+  rdfs:label "Großgeräte und Instrumente"@de ;
+  rdfs:subClassOf <http://vivoweb.org/ontology/core#Equipment>, obo:ERO_0000004, <http://kerndatensatz-forschung.de/owl/Basis#Forschungsinfrastruktur> ;
+  Meta:inhaltlicheDefinition "Fi15" ;
+  vitro:inClassGroup <http://vivoweb.org/ontology#vitroClassGroupequipment> ;
+  vitro:hiddenFromDisplayBelowRoleLevelAnnot <http://vitro.mannlib.cornell.edu/ns/vitro/role#public> ;
+  vitro:hiddenFromPublishBelowRoleLevelAnnot <http://vitro.mannlib.cornell.edu/ns/vitro/role#public> ;
+  vitro:prohibitedFromUpdateBelowRoleLevelAnnot <http://vitro.mannlib.cornell.edu/ns/vitro/role#public> .
+
+<http://kerndatensatz-forschung.de/owl/Basis#Habilitation>
+  a owl:Class ;
+  rdfs:subClassOf <http://kerndatensatz-forschung.de/owl/Basis#Qualifizierungsverfahren> ;
+  Meta:inhaltlicheDefinition "Be16", "Na44" ;
+  rdfs:label "Habilitation"@de .
+
+<http://kerndatensatz-forschung.de/owl/Basis#Habilitationsschrift>
+  a owl:Class ;
+  rdfs:subClassOf <http://kerndatensatz-forschung.de/owl/Basis#Qualifikationsschrift> ;
+  Meta:inhaltlicheDefinition "Pu35" ;
+  vitro:hiddenFromDisplayBelowRoleLevelAnnot <http://vitro.mannlib.cornell.edu/ns/vitro/role#public> ;
+  vitro:hiddenFromPublishBelowRoleLevelAnnot <http://vitro.mannlib.cornell.edu/ns/vitro/role#public> ;
+  vitro:inClassGroup <http://vivoweb.org/ontology#vitroClassGrouppublications> ;
+  vitro:prohibitedFromUpdateBelowRoleLevelAnnot <http://vitro.mannlib.cornell.edu/ns/vitro/role#public> ;
+  rdfs:label "Habilitationsschrift"@de .
+
+<http://kerndatensatz-forschung.de/owl/Basis#HerausgeberschaftEinesSonderheftsEinerZeitschrift>
+  a owl:Class ;
+  rdfs:subClassOf <http://kerndatensatz-forschung.de/owl/Basis#Publikation> ;
+  Meta:inhaltlicheDefinition "Pu51" ;
+  vitro:hiddenFromDisplayBelowRoleLevelAnnot <http://vitro.mannlib.cornell.edu/ns/vitro/role#public> ;
+  vitro:hiddenFromPublishBelowRoleLevelAnnot <http://vitro.mannlib.cornell.edu/ns/vitro/role#public> ;
+  vitro:inClassGroup <http://vivoweb.org/ontology#vitroClassGrouppublications> ;
+  vitro:prohibitedFromUpdateBelowRoleLevelAnnot <http://vitro.mannlib.cornell.edu/ns/vitro/role#public> ;
+  rdfs:label "Herausgeberschaft eines Sonderhefts einer Zeitschrift"@de .
+
+<http://kerndatensatz-forschung.de/owl/Basis#HerausgegebenesBuch>
+  a owl:Class ;
+  rdfs:subClassOf <http://kerndatensatz-forschung.de/owl/Basis#Buch> ;
+  Meta:inhaltlicheDefinition "Pu48" ;
+  vitro:hiddenFromDisplayBelowRoleLevelAnnot <http://vitro.mannlib.cornell.edu/ns/vitro/role#public> ;
+  vitro:hiddenFromPublishBelowRoleLevelAnnot <http://vitro.mannlib.cornell.edu/ns/vitro/role#public> ;
+  vitro:inClassGroup <http://vivoweb.org/ontology#vitroClassGrouppublications> ;
+  vitro:prohibitedFromUpdateBelowRoleLevelAnnot <http://vitro.mannlib.cornell.edu/ns/vitro/role#public> ;
+  rdfs:label "Herausgegebenes Buch"@de .
+
+<http://kerndatensatz-forschung.de/owl/Basis#InformationsUndKommunikationsinfrastrukturen>
+  a owl:Class ;
+  rdfs:label "Informations- und Kommunikationsinfrastrukturen"@de ;
+  rdfs:subClassOf <http://kerndatensatz-forschung.de/owl/Basis#Forschungsinfrastruktur> ;
+  vitro:inClassGroup <http://vivoweb.org/ontology#vitroClassGroupequipment> ;
+  Meta:inhaltlicheDefinition "Fi17" ;
+  vitro:hiddenFromDisplayBelowRoleLevelAnnot <http://vitro.mannlib.cornell.edu/ns/vitro/role#public> ;
+  vitro:hiddenFromPublishBelowRoleLevelAnnot <http://vitro.mannlib.cornell.edu/ns/vitro/role#public> ;
+  vitro:prohibitedFromUpdateBelowRoleLevelAnnot <http://vitro.mannlib.cornell.edu/ns/vitro/role#public> .
+
+<http://kerndatensatz-forschung.de/owl/Basis#Journalartikel>
+  a owl:Class ;
+  rdfs:subClassOf <http://kerndatensatz-forschung.de/owl/Basis#Artikel> ;
+  Meta:inhaltlicheDefinition "Pu11" ;
+  vitro:hiddenFromDisplayBelowRoleLevelAnnot <http://vitro.mannlib.cornell.edu/ns/vitro/role#public> ;
+  vitro:hiddenFromPublishBelowRoleLevelAnnot <http://vitro.mannlib.cornell.edu/ns/vitro/role#public> ;
+  vitro:inClassGroup <http://vivoweb.org/ontology#vitroClassGrouppublications> ;
+  vitro:prohibitedFromUpdateBelowRoleLevelAnnot <http://vitro.mannlib.cornell.edu/ns/vitro/role#public> ;
+  rdfs:label "Journalartikel"@de .
+
+<http://kerndatensatz-forschung.de/owl/Basis#Konferenzposter>
+  a owl:Class ;
+  owl:equivalentClass <http://vivoweb.org/ontology/core#ConferencePoster> ;
+  rdfs:subClassOf <http://kerndatensatz-forschung.de/owl/Basis#Publikation> ;
+  Meta:inhaltlicheDefinition "Pu26" ;
+  vitro:hiddenFromDisplayBelowRoleLevelAnnot <http://vitro.mannlib.cornell.edu/ns/vitro/role#public> ;
+  vitro:hiddenFromPublishBelowRoleLevelAnnot <http://vitro.mannlib.cornell.edu/ns/vitro/role#public> ;
+  vitro:inClassGroup <http://vivoweb.org/ontology#vitroClassGrouppublications> ;
+  vitro:prohibitedFromUpdateBelowRoleLevelAnnot <http://vitro.mannlib.cornell.edu/ns/vitro/role#public> ;
+  rdfs:label "Konferenzposter"@de .
+
+<http://kerndatensatz-forschung.de/owl/Basis#LetterToTheEditor>
+  a owl:Class ;
+  rdfs:subClassOf <http://kerndatensatz-forschung.de/owl/Basis#Journalartikel> ;
+  Meta:inhaltlicheDefinition "Pu120" ;
+  vitro:hiddenFromDisplayBelowRoleLevelAnnot <http://vitro.mannlib.cornell.edu/ns/vitro/role#public> ;
+  vitro:hiddenFromPublishBelowRoleLevelAnnot <http://vitro.mannlib.cornell.edu/ns/vitro/role#public> ;
+  vitro:inClassGroup <http://vivoweb.org/ontology#vitroClassGrouppublications> ;
+  vitro:prohibitedFromUpdateBelowRoleLevelAnnot <http://vitro.mannlib.cornell.edu/ns/vitro/role#public> ;
+  rdfs:label "Letter to the Editor"@de .
+
+<http://kerndatensatz-forschung.de/owl/Basis#MeetingAbstract>
+  a owl:Class ;
+  rdfs:subClassOf <http://kerndatensatz-forschung.de/owl/Basis#Journalartikel> ;
+  Meta:inhaltlicheDefinition "Pu48" ;
+  vitro:hiddenFromDisplayBelowRoleLevelAnnot <http://vitro.mannlib.cornell.edu/ns/vitro/role#public> ;
+  vitro:hiddenFromPublishBelowRoleLevelAnnot <http://vitro.mannlib.cornell.edu/ns/vitro/role#public> ;
+  vitro:inClassGroup <http://vivoweb.org/ontology#vitroClassGrouppublications> ;
+  vitro:prohibitedFromUpdateBelowRoleLevelAnnot <http://vitro.mannlib.cornell.edu/ns/vitro/role#public> ;
+  rdfs:label "Meeting Abstract"@de .
+
+<http://kerndatensatz-forschung.de/owl/Basis#Mittelgeber>
+  a owl:Class ;
+  Meta:inhaltlicheDefinition "Dr12" ;
+  vitro:hiddenFromDisplayBelowRoleLevelAnnot <http://vitro.mannlib.cornell.edu/ns/vitro/role#public> ;
+  vitro:hiddenFromPublishBelowRoleLevelAnnot <http://vitro.mannlib.cornell.edu/ns/vitro/role#public> ;
+  vitro:prohibitedFromUpdateBelowRoleLevelAnnot <http://vitro.mannlib.cornell.edu/ns/vitro/role#public> ;
+  rdfs:label "Mittelgeber"@de .
+
+<http://kerndatensatz-forschung.de/owl/Basis#Monographie>
+  a owl:Class ;
+  rdfs:subClassOf <http://kerndatensatz-forschung.de/owl/Basis#Buch> ;
+  Meta:inhaltlicheDefinition "Pu13" ;
+  vitro:hiddenFromDisplayBelowRoleLevelAnnot <http://vitro.mannlib.cornell.edu/ns/vitro/role#public> ;
+  vitro:hiddenFromPublishBelowRoleLevelAnnot <http://vitro.mannlib.cornell.edu/ns/vitro/role#public> ;
+  vitro:inClassGroup <http://vivoweb.org/ontology#vitroClassGrouppublications> ;
+  vitro:prohibitedFromUpdateBelowRoleLevelAnnot <http://vitro.mannlib.cornell.edu/ns/vitro/role#public> ;
+  rdfs:label "Monographie"@de .
+
+<http://kerndatensatz-forschung.de/owl/Basis#NeuerPublikationstyp>
+  a owl:Class ;
+  rdfs:subClassOf <http://kerndatensatz-forschung.de/owl/Basis#Publikation> ;
+  Meta:inhaltlicheDefinition "Pu111" ;
+  vitro:hiddenFromDisplayBelowRoleLevelAnnot <http://vitro.mannlib.cornell.edu/ns/vitro/role#public> ;
+  vitro:hiddenFromPublishBelowRoleLevelAnnot <http://vitro.mannlib.cornell.edu/ns/vitro/role#public> ;
+  vitro:inClassGroup <http://vivoweb.org/ontology#vitroClassGrouppublications> ;
+  vitro:prohibitedFromUpdateBelowRoleLevelAnnot <http://vitro.mannlib.cornell.edu/ns/vitro/role#public> ;
+  rdfs:label "Neuer Publikations- oder Dokumenttyp"@de .
+
+<http://kerndatensatz-forschung.de/owl/Basis#OrdentlicheProfessoren>
+  a owl:Class ;
+  rdfs:subClassOf <http://kerndatensatz-forschung.de/owl/Basis#Professoren> ;
+  Meta:inhaltlicheDefinition "Be37" ;
+  vitro:hiddenFromDisplayBelowRoleLevelAnnot <http://vitro.mannlib.cornell.edu/ns/vitro/role#public> ;
+  vitro:hiddenFromPublishBelowRoleLevelAnnot <http://vitro.mannlib.cornell.edu/ns/vitro/role#public> ;
+  vitro:inClassGroup <http://vivoweb.org/ontology#vitroClassGrouppeople> ;
+  vitro:prohibitedFromUpdateBelowRoleLevelAnnot <http://vitro.mannlib.cornell.edu/ns/vitro/role#public> ;
+  rdfs:label "Ordentlicher Professor"@de .
+
+<http://kerndatensatz-forschung.de/owl/Basis#Organisationseinheit>
+  a owl:Class ;
+  owl:equivalentClass <http://vivoweb.org/ontology/core#Division> ;
+  Meta:inhaltlicheDefinition "Be75", "Dr121", "Na92", "Pa35", "Pu140" ;
+  vitro:hiddenFromDisplayBelowRoleLevelAnnot <http://vitro.mannlib.cornell.edu/ns/vitro/role#public> ;
+  vitro:hiddenFromPublishBelowRoleLevelAnnot <http://vitro.mannlib.cornell.edu/ns/vitro/role#public> ;
+  vitro:inClassGroup <http://vivoweb.org/ontology#vitroClassGrouporganizations> ;
+  vitro:prohibitedFromUpdateBelowRoleLevelAnnot <http://vitro.mannlib.cornell.edu/ns/vitro/role#public> ;
+  rdfs:label "Organisationseinheit"@de .
+
+<http://kerndatensatz-forschung.de/owl/Basis#Person>
+  a owl:Class ;
+  owl:equivalentClass foaf:Person ;
+  vitro:hiddenFromDisplayBelowRoleLevelAnnot <http://vitro.mannlib.cornell.edu/ns/vitro/role#public> ;
+  vitro:hiddenFromPublishBelowRoleLevelAnnot <http://vitro.mannlib.cornell.edu/ns/vitro/role#public> ;
+  vitro:inClassGroup <http://vivoweb.org/ontology#vitroClassGrouppeople> ;
+  vitro:prohibitedFromUpdateBelowRoleLevelAnnot <http://vitro.mannlib.cornell.edu/ns/vitro/role#public> ;
+  rdfs:comment "Zusammenfassendes Konzept für die Darstellung aller personenbezogenen Eigenschaften und Attribute" ;
+  rdfs:label "Person"@de .
+
+<http://kerndatensatz-forschung.de/owl/Basis#Patent>
+  a owl:Class ;
+  owl:equivalentClass bibo:Patent ;
+  Meta:inhaltlicheDefinition "Pa2", "Pa25" ;
+  vitro:hiddenFromDisplayBelowRoleLevelAnnot <http://vitro.mannlib.cornell.edu/ns/vitro/role#public> ;
+  vitro:hiddenFromPublishBelowRoleLevelAnnot <http://vitro.mannlib.cornell.edu/ns/vitro/role#public> ;
+  vitro:inClassGroup <http://vivoweb.org/ontology#vitroClassGrouppublications> ;
+  vitro:prohibitedFromUpdateBelowRoleLevelAnnot <http://vitro.mannlib.cornell.edu/ns/vitro/role#public> ;
+  rdfs:comment "Technisch einmalige erteilte Patente. Erteilungen für die gleiche Erfindung in zwei oder mehr Ländern werden nur einfach gezählt. Wenn ein technisch einmaliges erteiltes Patent im Vorjahr gezählt wurde, kann es nicht noch einmal aufgeführt werden." ;
+  rdfs:label "Patent"@de .
+
+<http://kerndatensatz-forschung.de/owl/Basis#Professoren>
+  a owl:Class ;
+  rdfs:subClassOf <http://kerndatensatz-forschung.de/owl/Basis#WissenschaftlichesUndKuenstlerischesPersonal>, <http://vivoweb.org/ontology/core#FacultyMember> ;
+  Meta:inhaltlicheDefinition "Be19" ;
+  vitro:hiddenFromDisplayBelowRoleLevelAnnot <http://vitro.mannlib.cornell.edu/ns/vitro/role#public> ;
+  vitro:hiddenFromPublishBelowRoleLevelAnnot <http://vitro.mannlib.cornell.edu/ns/vitro/role#public> ;
+  vitro:prohibitedFromUpdateBelowRoleLevelAnnot <http://vitro.mannlib.cornell.edu/ns/vitro/role#public> ;
+  vitro:inClassGroup <http://vivoweb.org/ontology#vitroClassGrouppeople> ;
+  rdfs:label "Professor"@de .
+
+<http://kerndatensatz-forschung.de/owl/Basis#Promotion>
+  a owl:Class ;
+  rdfs:subClassOf <http://kerndatensatz-forschung.de/owl/Basis#Qualifizierungsverfahren> ;
+  Meta:inhaltlicheDefinition "Be17", "Na43" ;
+  rdfs:label "Promotion"@de .
+
+<http://kerndatensatz-forschung.de/owl/Basis#Promotionskooperationspartner>
+  a owl:Class ;
+  Meta:inhaltlicheDefinition "Na86" ;
+  vitro:hiddenFromDisplayBelowRoleLevelAnnot <http://vitro.mannlib.cornell.edu/ns/vitro/role#public> ;
+  vitro:hiddenFromPublishBelowRoleLevelAnnot <http://vitro.mannlib.cornell.edu/ns/vitro/role#public> ;
+  vitro:inClassGroup <http://vivoweb.org/ontology#vitroClassGrouporganizations> ;
+  vitro:prohibitedFromUpdateBelowRoleLevelAnnot <http://vitro.mannlib.cornell.edu/ns/vitro/role#public> ;
+  rdfs:label "Promotionskooperationspartner"@de .
+
+<http://kerndatensatz-forschung.de/owl/Basis#Qualifikation>
+  a owl:Class ;
+  Meta:inhaltlicheDefinition "Be9" ;
+  vitro:hiddenFromDisplayBelowRoleLevelAnnot <http://vitro.mannlib.cornell.edu/ns/vitro/role#public> ;
+  vitro:hiddenFromPublishBelowRoleLevelAnnot <http://vitro.mannlib.cornell.edu/ns/vitro/role#public> ;
+  vitro:prohibitedFromUpdateBelowRoleLevelAnnot <http://vitro.mannlib.cornell.edu/ns/vitro/role#public> ;
+  rdfs:label "Qualifikation"@de .
+
+<http://kerndatensatz-forschung.de/owl/Basis#Qualifikationsschrift>
+  a owl:Class ;
+  rdfs:subClassOf <http://kerndatensatz-forschung.de/owl/Basis#Publikation> ;
+  Meta:inhaltlicheDefinition "Pu146" ;
+  vitro:hiddenFromDisplayBelowRoleLevelAnnot <http://vitro.mannlib.cornell.edu/ns/vitro/role#public> ;
+  vitro:hiddenFromPublishBelowRoleLevelAnnot <http://vitro.mannlib.cornell.edu/ns/vitro/role#public> ;
+  vitro:inClassGroup <http://vivoweb.org/ontology#vitroClassGrouppublications> ;
+  vitro:prohibitedFromUpdateBelowRoleLevelAnnot <http://vitro.mannlib.cornell.edu/ns/vitro/role#public> ;
+  rdfs:label "Qualifikationsschrift"@de .
+
+<http://kerndatensatz-forschung.de/owl/Basis#Qualifizierungsverfahren>
+  a owl:Class ;
+  rdfs:subClassOf <http://vivoweb.org/ontology/core#EducationalProcess> ;
+  Meta:inhaltlicheDefinition "Na4a" ;
+  vitro:hiddenFromDisplayBelowRoleLevelAnnot <http://vitro.mannlib.cornell.edu/ns/vitro/role#public> ;
+  vitro:hiddenFromPublishBelowRoleLevelAnnot <http://vitro.mannlib.cornell.edu/ns/vitro/role#public> ;
+  vitro:prohibitedFromUpdateBelowRoleLevelAnnot <http://vitro.mannlib.cornell.edu/ns/vitro/role#public> ;
+  rdfs:label "Qualifizierungsverfahren"@de .
+
+<http://kerndatensatz-forschung.de/owl/Basis#QuelleneditionDokumenttyp>
+  a owl:Class ;
+  rdfs:subClassOf <http://kerndatensatz-forschung.de/owl/Basis#Journalartikel> ;
+  Meta:inhaltlicheDefinition "Pu130" ;
+  vitro:hiddenFromDisplayBelowRoleLevelAnnot <http://vitro.mannlib.cornell.edu/ns/vitro/role#public> ;
+  vitro:hiddenFromPublishBelowRoleLevelAnnot <http://vitro.mannlib.cornell.edu/ns/vitro/role#public> ;
+  vitro:inClassGroup <http://vivoweb.org/ontology#vitroClassGrouppublications> ;
+  vitro:prohibitedFromUpdateBelowRoleLevelAnnot <http://vitro.mannlib.cornell.edu/ns/vitro/role#public> ;
+  rdfs:label "Quellenedition [Journalartikel]"@de .
+
+<http://kerndatensatz-forschung.de/owl/Basis#QuelleneditionPublikationstyp>
+  a owl:Class ;
+  rdfs:subClassOf <http://kerndatensatz-forschung.de/owl/Basis#Buch> ;
+  Meta:inhaltlicheDefinition "Pu47" ;
+  vitro:hiddenFromDisplayBelowRoleLevelAnnot <http://vitro.mannlib.cornell.edu/ns/vitro/role#public> ;
+  vitro:hiddenFromPublishBelowRoleLevelAnnot <http://vitro.mannlib.cornell.edu/ns/vitro/role#public> ;
+  vitro:inClassGroup <http://vivoweb.org/ontology#vitroClassGrouppublications> ;
+  vitro:prohibitedFromUpdateBelowRoleLevelAnnot <http://vitro.mannlib.cornell.edu/ns/vitro/role#public> ;
+  rdfs:label "Quellenedition [Buch]"@de .
+
+<http://kerndatensatz-forschung.de/owl/Basis#Review>
+  a owl:Class ;
+  rdfs:subClassOf <http://kerndatensatz-forschung.de/owl/Basis#Journalartikel> ;
+  Meta:inhaltlicheDefinition "Pu114" ;
+  vitro:hiddenFromDisplayBelowRoleLevelAnnot <http://vitro.mannlib.cornell.edu/ns/vitro/role#public> ;
+  vitro:hiddenFromPublishBelowRoleLevelAnnot <http://vitro.mannlib.cornell.edu/ns/vitro/role#public> ;
+  vitro:inClassGroup <http://vivoweb.org/ontology#vitroClassGrouppublications> ;
+  vitro:prohibitedFromUpdateBelowRoleLevelAnnot <http://vitro.mannlib.cornell.edu/ns/vitro/role#public> ;
+  rdfs:label "Review"@de .
+
+<http://kerndatensatz-forschung.de/owl/Basis#Rezension>
+  a owl:Class ;
+  owl:equivalentClass <http://vivoweb.org/ontology/core#Review> ;
+  rdfs:subClassOf <http://kerndatensatz-forschung.de/owl/Basis#Journalartikel> ;
+  Meta:inhaltlicheDefinition "Pu30" ;
+  vitro:hiddenFromDisplayBelowRoleLevelAnnot <http://vitro.mannlib.cornell.edu/ns/vitro/role#public> ;
+  vitro:hiddenFromPublishBelowRoleLevelAnnot <http://vitro.mannlib.cornell.edu/ns/vitro/role#public> ;
+  vitro:inClassGroup <http://vivoweb.org/ontology#vitroClassGrouppublications> ;
+  vitro:prohibitedFromUpdateBelowRoleLevelAnnot <http://vitro.mannlib.cornell.edu/ns/vitro/role#public> ;
+  rdfs:label "Rezension"@de .
+
+<http://kerndatensatz-forschung.de/owl/Basis#Sammelband>
+  a owl:Class ;
+  rdfs:subClassOf <http://kerndatensatz-forschung.de/owl/Basis#Buch> ;
+  Meta:inhaltlicheDefinition "Pu23" ;
+  vitro:hiddenFromDisplayBelowRoleLevelAnnot <http://vitro.mannlib.cornell.edu/ns/vitro/role#public> ;
+  vitro:hiddenFromPublishBelowRoleLevelAnnot <http://vitro.mannlib.cornell.edu/ns/vitro/role#public> ;
+  vitro:inClassGroup <http://vivoweb.org/ontology#vitroClassGrouppublications> ;
+  vitro:prohibitedFromUpdateBelowRoleLevelAnnot <http://vitro.mannlib.cornell.edu/ns/vitro/role#public> ;
+  rdfs:label "Sammelband"@de .
+
+<http://kerndatensatz-forschung.de/owl/Basis#Sammelbandbeitrag>
+  a owl:Class ;
+  rdfs:subClassOf <http://kerndatensatz-forschung.de/owl/Basis#Artikel> ;
+  Meta:inhaltlicheDefinition "Pu110" ;
+  vitro:hiddenFromDisplayBelowRoleLevelAnnot <http://vitro.mannlib.cornell.edu/ns/vitro/role#public> ;
+  vitro:hiddenFromPublishBelowRoleLevelAnnot <http://vitro.mannlib.cornell.edu/ns/vitro/role#public> ;
+  vitro:inClassGroup <http://vivoweb.org/ontology#vitroClassGrouppublications> ;
+  vitro:prohibitedFromUpdateBelowRoleLevelAnnot <http://vitro.mannlib.cornell.edu/ns/vitro/role#public> ;
+  rdfs:label "Sammelbandbeitrag"@de .
+
+<http://kerndatensatz-forschung.de/owl/Basis#Software>
+  a owl:Class ;
+  owl:equivalentClass obo:ERO_0000071 ;
+  rdfs:subClassOf <http://kerndatensatz-forschung.de/owl/Basis#Publikation> ;
+  Meta:inhaltlicheDefinition "Pu45" ;
+  vitro:hiddenFromDisplayBelowRoleLevelAnnot <http://vitro.mannlib.cornell.edu/ns/vitro/role#public> ;
+  vitro:hiddenFromPublishBelowRoleLevelAnnot <http://vitro.mannlib.cornell.edu/ns/vitro/role#public> ;
+  vitro:inClassGroup <http://vivoweb.org/ontology#vitroClassGrouppublications> ;
+  vitro:prohibitedFromUpdateBelowRoleLevelAnnot <http://vitro.mannlib.cornell.edu/ns/vitro/role#public> ;
+  rdfs:label "Software"@de .
+
+<http://kerndatensatz-forschung.de/owl/Basis#Taetigkeitsart>
+  a owl:Class ;
+  Meta:inhaltlicheDefinition "Be32" ;
+  vitro:hiddenFromDisplayBelowRoleLevelAnnot <http://vitro.mannlib.cornell.edu/ns/vitro/role#public> ;
+  vitro:hiddenFromPublishBelowRoleLevelAnnot <http://vitro.mannlib.cornell.edu/ns/vitro/role#public> ;
+  vitro:prohibitedFromUpdateBelowRoleLevelAnnot <http://vitro.mannlib.cornell.edu/ns/vitro/role#public> ;
+  rdfs:label "Tätigkeitsart"@de .
+
+<http://kerndatensatz-forschung.de/owl/Basis#Universitaet>
+  a owl:Class ;
+  rdfs:subClassOf <http://kerndatensatz-forschung.de/owl/Basis#Promotionskooperationspartner> ;
+  owl:equivalentClass <http://vivoweb.org/ontology/core#University> ;
+  Meta:inhaltlicheDefinition "Na96" ;
+  vitro:inClassGroup <http://vivoweb.org/ontology#vitroClassGrouporganizations> ;
+  vitro:hiddenFromDisplayBelowRoleLevelAnnot <http://vitro.mannlib.cornell.edu/ns/vitro/role#public> ;
+  vitro:hiddenFromPublishBelowRoleLevelAnnot <http://vitro.mannlib.cornell.edu/ns/vitro/role#public> ;
+  vitro:prohibitedFromUpdateBelowRoleLevelAnnot <http://vitro.mannlib.cornell.edu/ns/vitro/role#public> ;
+  rdfs:label "Universität"@de .
+
+<http://kerndatensatz-forschung.de/owl/Basis#Verlag>
+  a owl:Class ;
+  owl:equivalentClass <http://vivoweb.org/ontology/core#Publisher> ;
+  Meta:inhaltlicheDefinition "Pu67" ;
+  Meta:pgbid "dcterms.publisher" ;
+  vitro:hiddenFromDisplayBelowRoleLevelAnnot <http://vitro.mannlib.cornell.edu/ns/vitro/role#public> ;
+  vitro:hiddenFromPublishBelowRoleLevelAnnot <http://vitro.mannlib.cornell.edu/ns/vitro/role#public> ;
+  vitro:inClassGroup <http://vivoweb.org/ontology#vitroClassGrouporganizations> ;
+  vitro:prohibitedFromUpdateBelowRoleLevelAnnot <http://vitro.mannlib.cornell.edu/ns/vitro/role#public> ;
+  rdfs:label "Verlag"@de .
+
+<http://kerndatensatz-forschung.de/owl/Basis#Verwaltungspersonal>
+  a owl:Class ;
+  rdfs:subClassOf <http://kerndatensatz-forschung.de/owl/Basis#Beschaeftigter> ;
+  Meta:inhaltlicheDefinition "Be28" ;
+  vitro:inClassGroup <http://vivoweb.org/ontology#vitroClassGrouppeople> ;
+  vitro:hiddenFromDisplayBelowRoleLevelAnnot <http://vitro.mannlib.cornell.edu/ns/vitro/role#public> ;
+  vitro:hiddenFromPublishBelowRoleLevelAnnot <http://vitro.mannlib.cornell.edu/ns/vitro/role#public> ;
+  vitro:prohibitedFromUpdateBelowRoleLevelAnnot <http://vitro.mannlib.cornell.edu/ns/vitro/role#public> ;
+  rdfs:label "Verwaltungspersonal"@de .
+
+<http://kerndatensatz-forschung.de/owl/Basis#WissenschaftlicheOderKuenstlerischeHilfskraefte>
+  a owl:Class ;
+  rdfs:subClassOf <http://kerndatensatz-forschung.de/owl/Basis#WissenschaftlichesUndKuenstlerischesPersonal> ;
+  Meta:inhaltlicheDefinition "Be18" ;
+  vitro:inClassGroup <http://vivoweb.org/ontology#vitroClassGrouppeople> ;
+  vitro:hiddenFromDisplayBelowRoleLevelAnnot <http://vitro.mannlib.cornell.edu/ns/vitro/role#public> ;
+  vitro:hiddenFromPublishBelowRoleLevelAnnot <http://vitro.mannlib.cornell.edu/ns/vitro/role#public> ;
+  vitro:prohibitedFromUpdateBelowRoleLevelAnnot <http://vitro.mannlib.cornell.edu/ns/vitro/role#public> ;
+  rdfs:label "Wissenschaftliche oder künstlerische Hilfskräfte"@de .
+
+<http://kerndatensatz-forschung.de/owl/Basis#WissenschaftlicheUndKuenstlerischeMitarbeiter>
+  a owl:Class ;
+  rdfs:subClassOf <http://kerndatensatz-forschung.de/owl/Basis#WissenschaftlichesUndKuenstlerischesPersonal> ;
+  Meta:inhaltlicheDefinition "Be22" ;
+  vitro:inClassGroup <http://vivoweb.org/ontology#vitroClassGrouppeople> ;
+  vitro:hiddenFromDisplayBelowRoleLevelAnnot <http://vitro.mannlib.cornell.edu/ns/vitro/role#public> ;
+  vitro:hiddenFromPublishBelowRoleLevelAnnot <http://vitro.mannlib.cornell.edu/ns/vitro/role#public> ;
+  vitro:prohibitedFromUpdateBelowRoleLevelAnnot <http://vitro.mannlib.cornell.edu/ns/vitro/role#public> ;
+  rdfs:label "Wissenschaftliche und künstlerische Mitarbeiter"@de .
+
+<http://kerndatensatz-forschung.de/owl/Basis#WissenschaftlicheVortragsfolien>
+  a owl:Class ;
+  owl:equivalentClass bibo:Slideshow ;
+  rdfs:subClassOf <http://kerndatensatz-forschung.de/owl/Basis#Publikation> ;
+  Meta:inhaltlicheDefinition "Pu44" ;
+  vitro:hiddenFromDisplayBelowRoleLevelAnnot <http://vitro.mannlib.cornell.edu/ns/vitro/role#public> ;
+  vitro:hiddenFromPublishBelowRoleLevelAnnot <http://vitro.mannlib.cornell.edu/ns/vitro/role#public> ;
+  vitro:inClassGroup <http://vivoweb.org/ontology#vitroClassGrouppublications> ;
+  vitro:prohibitedFromUpdateBelowRoleLevelAnnot <http://vitro.mannlib.cornell.edu/ns/vitro/role#public> ;
+  rdfs:label "Wissenschaftliche Vortragsfolien"@de .
+
+<http://kerndatensatz-forschung.de/owl/Basis#WissenschaftlicherArtikel>
+  a owl:Class ;
+  owl:equivalentClass bibo:AcademicArticle ;
+  rdfs:subClassOf <http://kerndatensatz-forschung.de/owl/Basis#Journalartikel> ;
+  Meta:inhaltlicheDefinition "Pu112" ;
+  vitro:hiddenFromDisplayBelowRoleLevelAnnot <http://vitro.mannlib.cornell.edu/ns/vitro/role#public> ;
+  vitro:hiddenFromPublishBelowRoleLevelAnnot <http://vitro.mannlib.cornell.edu/ns/vitro/role#public> ;
+  vitro:inClassGroup <http://vivoweb.org/ontology#vitroClassGrouppublications> ;
+  vitro:prohibitedFromUpdateBelowRoleLevelAnnot <http://vitro.mannlib.cornell.edu/ns/vitro/role#public> ;
+  rdfs:label "Wissenschaftlicher Artikel"@de .
+
+<http://kerndatensatz-forschung.de/owl/Basis#WissenschaftlichesUndKuenstlerischesPersonal>
+  a owl:Class ;
+  rdfs:subClassOf <http://kerndatensatz-forschung.de/owl/Basis#Beschaeftigter> ;
+  Meta:inhaltlicheDefinition "Be68" ;
+  vitro:hiddenFromDisplayBelowRoleLevelAnnot <http://vitro.mannlib.cornell.edu/ns/vitro/role#public> ;
+  vitro:hiddenFromPublishBelowRoleLevelAnnot <http://vitro.mannlib.cornell.edu/ns/vitro/role#public> ;
+  vitro:prohibitedFromUpdateBelowRoleLevelAnnot <http://vitro.mannlib.cornell.edu/ns/vitro/role#public> ;
+  vitro:inClassGroup <http://vivoweb.org/ontology#vitroClassGrouppeople> ;
+  rdfs:label "Wissenschaftliches und künstlerisches Personal"@de .
+
+<http://kerndatensatz-forschung.de/owl/Basis#WissenschaftsunterstuetzendesPersonal>
+  a owl:Class ;
+  rdfs:subClassOf <http://kerndatensatz-forschung.de/owl/Basis#Beschaeftigter> ;
+  Meta:inhaltlicheDefinition "Be63", "Fi26" ;
+  vitro:hiddenFromDisplayBelowRoleLevelAnnot <http://vitro.mannlib.cornell.edu/ns/vitro/role#public> ;
+  vitro:hiddenFromPublishBelowRoleLevelAnnot <http://vitro.mannlib.cornell.edu/ns/vitro/role#public> ;
+  vitro:prohibitedFromUpdateBelowRoleLevelAnnot <http://vitro.mannlib.cornell.edu/ns/vitro/role#public> ;
+  vitro:inClassGroup <http://vivoweb.org/ontology#vitroClassGrouppeople> ;
+  rdfs:label "Wissenschaftsunterstützendes Personal"@de .
+
+<http://kerndatensatz-forschung.de/owl/Basis#Wissensressourcen>
+  a owl:Class ;
+  rdfs:label "Wissensressourcen" ;
+  rdfs:subClassOf <http://kerndatensatz-forschung.de/owl/Basis#Forschungsinfrastruktur> ;
+  Meta:inhaltlicheDefinition "Fi16" ;
+  vitro:inClassGroup <http://vivoweb.org/ontology#vitroClassGroupequipment> ;
+  vitro:hiddenFromDisplayBelowRoleLevelAnnot <http://vitro.mannlib.cornell.edu/ns/vitro/role#public> ;
+  vitro:hiddenFromPublishBelowRoleLevelAnnot <http://vitro.mannlib.cornell.edu/ns/vitro/role#public> ;
+  vitro:prohibitedFromUpdateBelowRoleLevelAnnot <http://vitro.mannlib.cornell.edu/ns/vitro/role#public> .
+
+<http://kerndatensatz-forschung.de/owl/Basis#ePaper>
+  a owl:Class ;
+  rdfs:subClassOf <http://kerndatensatz-forschung.de/owl/Basis#Artikel> ;
+  Meta:inhaltlicheDefinition "Pu29" ;
+  vitro:hiddenFromDisplayBelowRoleLevelAnnot <http://vitro.mannlib.cornell.edu/ns/vitro/role#public> ;
+  vitro:hiddenFromPublishBelowRoleLevelAnnot <http://vitro.mannlib.cornell.edu/ns/vitro/role#public> ;
+  vitro:inClassGroup <http://vivoweb.org/ontology#vitroClassGrouppublications> ;
+  vitro:prohibitedFromUpdateBelowRoleLevelAnnot <http://vitro.mannlib.cornell.edu/ns/vitro/role#public> ;
+  rdfs:label "ePaper"@de .
+
+<http://kerndatensatz-forschung.de/owl/Basis#Zugangsart>
+  a owl:Class ;
+  rdfs:label "Art des Zugangs"@de ;
+  Meta:inhaltlicheDefinition "Fi6" ;
+  vitro:hiddenFromDisplayBelowRoleLevelAnnot <http://vitro.mannlib.cornell.edu/ns/vitro/role#public> ;
+  vitro:hiddenFromPublishBelowRoleLevelAnnot <http://vitro.mannlib.cornell.edu/ns/vitro/role#public> ;
+  vitro:prohibitedFromUpdateBelowRoleLevelAnnot <http://vitro.mannlib.cornell.edu/ns/vitro/role#public> .

@@ -119,28 +119,7 @@ router.get('/', function(req, res) {
   files.sort(SortFiles);
   files = uniquefileNames(files);
 
-  /////////////////////////////////////////////////////////////////
-  console.log(SKOSData);
-  //var SKOSInParentChildren =   getSKOSInParentChildren(SKOSData);
-  //console.log(SKOSData);
-//   var skosConcept = {};
-//   var concept = []
-//   skosConcept.concept = concept;
-//   console.log(sitePersonel);
-//
-//
-//   function onGeneratedRow(SKOSData)
-// {
-//     var jsonData = {};
-//     SKOSData.forEach(function(column)
-//     {
-//         var columnName = column.metadata.colName;
-//         jsonData[columnName] = column.value;
-//     });
-//     viewData.employees.push(jsonData);
-//  }
-
-//////////////////////////////////////////////////////
+//  console.log(SKOSData);
 
   var concepts = [];
   var concepts = filterExternalConcept(externalClassesData);
