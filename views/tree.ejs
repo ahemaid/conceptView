@@ -131,8 +131,8 @@
       var mixConceptsURI = <%- JSON.stringify(externalAndInternalConcepts) %>;
       var mixConcepts = [];
       var isfileNameSelected = false;
-      ///////////////////////////////////////////////////////////////////////
-      // show SKOS concepts
+
+      // show SKOS concepts on treeview
       function showSKOSData() {
         var viewData = SKOSData;
         currentTreeData = SKOSData; // set as current data tree to check for types or files show checkbox clicks
@@ -164,16 +164,24 @@
       });
       var existInMixConcepts = [];
 
-
-
       /////////////////////////////////////////////////////////////////////////
       ////////////////////////////////////////////////////////////////////////
       //mixConcepts.push("Agent");
       //mixConcepts.push("Place");
-
-
+      //get skosURI for SKOSChild or SKOSParent
+      // function getSKOSURI(str) {
+      //   for (var i = 0; i < SKOSData.length; i++) {
+      //     if (SKOSData[i].parent === str & SKOSData[i].RDFType === "skos:broader")
+      //       return KOSData[i].URI;
+      //     if (SKOSData[i].child === str & SKOSData[i].RDFType === "skok:narrower")
+      //       return KOSData[i].URI;
+      //   }
+      // }
+      //
+      //
       ////////////////////////////////////////////////////////////////////////
       ////////////////////////////////////////////////////////////////////////
+
       // get existing concepts to find external concepts
       function getExistInMixConcepts() {
         mixConceptsURI.forEach(function(item) {
@@ -249,7 +257,6 @@
         externalURITable += '<tr>    <td> For more details click the link  below <br/>' + link + '</td>  </tr>';
         externalURITable += '</table>';
         $('#viewList').show();
-        //$('#documentation').
         $('a[href="#documentation"]').click();
         $('#sourceCodeTab').hide();
         $('#graphTab').hide();
@@ -264,11 +271,10 @@
         $("#conceptHead").show();
         $("#conceptHead").html('<p > Concept Details for :<code>' + trimHash(trimSlash(ExteralURI)) + '</code></p>');
         $('#detailTable').html(externalURITable);
-        //$('#externalInfo').html('<p> This is external concept for more details click the following link..  '+ ExteralURI +'</p>');
         var endpoint = "http://localhost:3030/ds/sparql?query=";
         var querystring = 'SELECT  ?s WHERE { ?s  a <' + encodeURIComponent(ExteralURI) + '> }';
         var method = "POST";
-        // You REALLY want async = true.
+        //  async = true.
         var async = true;
         var request = new XMLHttpRequest();
         request.onload = function() {
@@ -281,7 +287,6 @@
               '<tr>' +
               '<th>Instances</th>' +
               '</tr>';
-            //  console.log(instances);
             for (var i = 0; i < instances.length; i++) {
               var instanceURI = instances[i]["s"].value;
               var key1 = trimSlash(instances[i]["s"].value);
@@ -300,9 +305,9 @@
         }
         request.open(method, endpoint + querystring, true);
         request.setRequestHeader("Content-Type", 'application/x-www-form-urlencoded');
-        // Actually sends the request to the server.
+        // send the request to the server.
         request.send();
-        //debugger;
+
       }
 
       //Comparer Function
@@ -341,11 +346,9 @@
             viewData[i].text = viewData[i].concept + '<div   class="ui teal tag label">' + viewData[i].RDFType + '</div>';
           }
         }
-
         var allParents = getUniqueParents(viewData);
         var data = [];
         var j = 0;
-
         for (var i = 0; i < allParents.length; i++) {
           if (allParents[i])
             data[j++] = getParentWithChildren(viewData, allParents[i]);
@@ -359,18 +362,23 @@
           data[j++] = viewData[i];
         }
         // sorting the tree before viewing
-        data.sort(GetSortOrder("text"));
+        data.sort(function(a, b) {
+          return ((a.text.toLowerCase() == b.text.toLowerCase()) ? 0 : ((a.text.toLowerCase() > b.text.toLowerCase()) ? 1 : -1));
+        });
         // make array unique
         data = uniqueArray(data, "parent");
         // rebuild tree with the new data
         rebuildTree(data);
       }
+
       // regenerate the tree according to the new data
       function rebuildTree(data) {
         $('#tree').treeview({
           data: data, // data is not optional
           levels: 5,
           enableLinks: true,
+          icon: "glyphicon glyphicon-chevron-right",
+          selectedIcon: "glyphicon glyphicon-chevron-right",
           onNodeSelected: function(event, node) {
             if (node.hasOwnProperty('child')) {
               var str;
@@ -381,12 +389,8 @@
               } else {
                 str = node.text;
               }
-              //alert(str);
-              //showTurtleSource(node.URI, "SKOS");
+              // show source code
               $('#sourceCode').show();
-              //alert(node.URI);
-              //debugger;
-
             } else {
               if (node.concept) {
                 $('#graph').empty();
@@ -418,15 +422,7 @@
           }
         });
       }
-      //get skosURI for SKOSChild or SKOSParent
-      // function getSKOSURI(str) {
-      //   for (var i = 0; i < SKOSData.length; i++) {
-      //     if (SKOSData[i].parent === str & SKOSData[i].RDFType === "skos:broader")
-      //       return KOSData[i].URI;
-      //     if (SKOSData[i].child === str & SKOSData[i].RDFType === "skok:narrower")
-      //       return KOSData[i].URI;
-      //   }
-      // }
+
       // check if showType or showfile checkboxes were clicked
       $('input:checkbox')
         .on('change', function(event) {
@@ -449,7 +445,7 @@
       }
 
       //show concept was not found as a message
-      function conceptNotFoundMessage(event) {
+      function conceptNotFoundMessage() {
         //event.preventDefault();
         //hide('ALL');
         $('#infoDetails').hide();
@@ -474,8 +470,6 @@
       var timeout = null;
       // Instant search on fly on concept
       var search = function(e) {
-        //alert('chk-ignore-case'+$('#chk-ignore-case').is(':checked'));
-        //alert('chk-exact-match'+$('#chk-exact-match').is(':checked'));
         clearTimeout(timeout);
         // Make a new timeout set to go off in 800ms
         var pattern = $('#input-search').val();
@@ -495,7 +489,7 @@
           location.reload();
       }
 
-      //     conceptNotFoundMessage();
+      // conceptNotFoundMessage();
       $('#input-search').on('keyup', search);
       // remove redundant parents from tree
       function getUniqueParents(data) {
@@ -521,7 +515,6 @@
           text: parentNode,
           nodes: children
         };
-        //debugger;
         return node;
       }
 
@@ -538,15 +531,11 @@
         isfileNameSelected = false; // to remove external from the show
         if (selectedFileName)
           selectedFileName = selectedFileName.trim();
-        // viewDataRendered
+        // search in RDFSDATA
         var viewData = viewDataRendered; //TODO: get this data with AJAX request.
         for (var i = 0; i < viewData.length; i++) {
           if (viewData[i].concept)
-            viewData[i].text = viewData[i].concept; //+ '<div class="pull-right"><a id=' + viewData[i].concept + ' onmousedown="showTypeFunc(this)" href="#" class="btn btn-default btn-xs" role="button">Show Type</a><a id=' + viewData[i]
-          //else
-          //viewData[i].text = viewData[i].child;// for SKOS
-          //   .concept + '  href="#" onmousedown="showFileFunc(this)" class="btn btn-danger btn-xs" role="button" >Show File(s)</a></div>';
-        }
+            viewData[i].text = viewData[i].concept;
         var allParents = getUniqueParents(viewData);
         var data = [];
         var j = 0;
@@ -582,12 +571,12 @@
         }
         return data;
       }
+    }
 
       // Get the word after slash char of a string
       function trimSlash(str) {
         if (str.includes("/")) {
           var n = str.split("/").pop(-1);;
-          //var p = n[n.length - 1];
           return n;
         } else {
           return str;
@@ -597,9 +586,9 @@
       // Get the word after hash char of a string
       function trimHash(str) {
         if (str.includes("#")) {
-          var n = str.split("#").pop(-1);
-          //var p = n[n.length - 1];
-          return n;
+          var n = str.split('#');;
+          var p = n[n.length - 1];
+          return p;
         } else {
           return str;
         }
@@ -646,9 +635,6 @@
         return;
       }
 
-
-
-
       // get selected fileNames for dropDownMenu and rebuild treeview
       function getSelectedFileName(e) {
         var selectedFileName = $('.ui.dropdown').dropdown('get text');
@@ -672,14 +658,13 @@
         var endpoint = "http://localhost:3030/ds/sparql?query=";
         var querystring = 'SELECT  ?p ?o WHERE {  <' + encodeURIComponent(instanceURI) + '> ?p ?o }';
         var method = "POST";
-        // You REALLY want async = true.
+        // async = true.
         var async = true;
         var request = new XMLHttpRequest();
         request.onload = function() {
           var status = request.status; // HTTP response status, e.g., 200 for "200 OK"
           var data = JSON.parse(request.responseText); // Returned data, e.g., an HTML document.
           var instances = data.results.bindings;
-          //console.log(instances);
           if (instances[0] != null) {
             var instancesDetailsTable = '<table class="table table-striped" >' +
               '<colgroup> <col class="col-md-2"><col class="col-md-4"> </colgroup>' +
@@ -688,9 +673,9 @@
               '<th>Object</th>' +
               '</tr>';
             for (var i = 0; i < instances.length; i++) {
-              var key1 = replaceWithRDFType(trimSlash(instances[i]['p'].value));
-              var key2 = replaceWithRDFType(trimSlash(instances[i]['o'].value));
-              externalConcepts
+              var key1 = replaceWithRDFType(trimHash(trimSlash(instances[i]['p'].value)));
+              var key2 = replaceWithRDFType(trimHash(trimSlash(instances[i]['o'].value)));
+              // some modifications to display the data on domumentation in nice way
               if (isConceptAvailable(key1)) {
                 key1 = '<a href="#" onmousedown="exec(&quot;' + key1 + '&quot;); return false; ">' + key1 + '</a>';
               }
@@ -714,19 +699,14 @@
         }
         request.open(method, endpoint + querystring, true);
         request.setRequestHeader("Content-Type", 'application/x-www-form-urlencoded');
-        // Actually sends the request to the server.
+        //send the request to the server.
         request.send();
-        //return false;
       }
 
       // To display instances of  the selected node
       function showInstances(item) {
         var conceptURI;
         var isURIExist = false;
-        // if(item && uri){
-        //   isURIExist=true;
-        //   conceptURI = uri;
-        // }
         if (item) {
           for (var i = 0; i < viewDataRendered.length; i++) {
             if (item.toLowerCase() === viewDataRendered[i].concept.toLowerCase()) {
@@ -810,10 +790,7 @@
           var endpoint = "http://localhost:3030/ds/sparql?query="
           var querystring = 'CONSTRUCT{<' + encodeURIComponent(conceptURI) + '> ?p ?o .}WHERE {<' + encodeURIComponent(conceptURI) + '> ?p ?o .}'
           var method = "POST";
-
-          //debugger;
-
-          // You REALLY want async = true.
+          // async = true.
           // Otherwise, it'll block ALL execution waiting for server response.
           var async = true;
           var request = new XMLHttpRequest();
@@ -823,13 +800,10 @@
             $('#viewList').show();
             $('#sourceCodeTab').show();
             $('#code').html(data);
-            //debugger;
           }
           request.open(method, endpoint + querystring, true);
           request.setRequestHeader("Content-Type", 'application/x-www-form-urlencoded;charset=UTF-8');
-          // Or... request.setRequestHeader("Content-Type", "text/plain;charset=UTF-8");
-          // Or... whatever
-          // Actually sends the request to the server.
+          //  send the request to the server.
           request.send();
         } else
           $("#code").html('<p>No node was selected !!!</p>');
@@ -844,33 +818,27 @@
         //highlight highlight node it was not the selected node
         var selectedNode = $('#tree').treeview('getSelected');
         if (selectedNode[0].concept != item) {
-          //alert("This is the clicked JSON" + selectedNode[0]['concept'] + ' item ' + item);
-
+          //scrollTop if class clicked from instanceDetailsTable
+          $("#infoDetails").animate({
+            scrollTop: 0
+          }, "fast");
+          $("#instanceDetailsTable").hide();
+          $("#instancesTable").hide();
+          // scroll to the clicked node from documentation and select the node
           const callback = element => element.innerHTML == item;
-
           const elements = Array.from(document.getElementsByTagName('a'));
-          // [a, a, a, ...]
-
           const result = elements.filter(callback);
+          var $s = $('#tree');
           //  get nodeid of string node.text
+          var liTop = $s.find('[data-nodeid=' + parseInt(result[0].parentNode.dataset.nodeid) + ']').offset().top;
+          var ulTop = $s.offset().top;
+          // scroll to the selected node
+          $s.scrollTop($s.scrollTop() + (liTop - ulTop));
+          // select the node of the treeview
           $('#tree').treeview('selectNode', [parseInt(result[0].parentNode.dataset.nodeid), {
             silent: true
           }]);
-          alert(result[0].parentNode.dataset.nodeid);
-          //$(#tree).scrollTop($('#' + item + ''));
-
-          // $('#tree').animate({
-          //   // scrollTop: $('.list-group-item node-tree node-selected').offset().top
-          //   scrollTop: $('a:contains('+result[0].parentNode.dataset.nodeid+')').offset().top
-          // });
-          // document.getElementById('id').scrollTop;
-          //debugger;
-          //$(window).scrollTop($('#FishTopping'));
-          //window.location.hash = '#FishTopping';
-
-          //debugger;
         }
-        //debugger;
         for (var i = 0; i < viewDataRendered.length; i++) {
           if (item.toLowerCase() === viewDataRendered[i].concept.toLowerCase()) {
             conceptURI = viewDataRendered[i].URI;
@@ -923,13 +891,18 @@
           '<th>Used on these types</th>' +
           '</tr>';
         for (var i = 0; i < dataSPARQL.length; i++) {
-          var key1 = replaceWithRDFType(trimSlash(dataSPARQL[i]['p'].value));
-          var key2 = replaceWithRDFType(trimSlash(dataSPARQL[i]['o'].value));
+          var key1 = replaceWithRDFType(trimHash(trimSlash(dataSPARQL[i]['p'].value)));
+          var key2 = dataSPARQL[i]['o'].value;
+          //check if object is uri
+          if (key2.includes("http://") && key1.includes("seeAlso")) {
+            if (key2.lastIndexOf('/'))
+              key2 = key2.slice(0, -1);
+            key2 = '<a href=' + key2 + '>' + key2 + '</a>';
+          } else
+            key2 = replaceWithRDFType(trimHash(trimSlash(key2)));
           var key3 = dataSPARQL[i]['o']['xml:lang'];
           var key4 = dataSPARQL[i]['o']['type'];
 
-
-          conceptLabel = key2;
           if (key1.includes("domain")) {
             conceptHasDomain = key1;
             if (isConceptAvailable(key2) && key4 === "uri")
@@ -947,16 +920,15 @@
             if (isConceptAvailable(key2) && !key1.includes("label") && key4 === "uri") {
               key2 = '<a href="#" onmousedown="exec(&quot;' + key2 + '&quot;); return false; ">' + key2 + '</a>';
             }
-            if (key1.includes("label")){
-                if(key3)
-                key2= key2+'@'+key3;
+            if (key1.includes("label")) {
+              if (key3)
+                key2 = key2 + '@' + key3;
             }
 
             table += '<tr><td>' + key1 + '</td>    <td>' + key2 + '</td>  </tr>';
           }
-          //debugger;
         }
-
+        //end of tables
         table += '</table> ';
         domainTable += '</table> ';
         rangeTable += '</table> ';
@@ -972,7 +944,6 @@
           $("#domainTable").show();
         else
           $("#domainTable").hide();
-
         // rangeTable has some values to show
         if (!conceptHasRange == "")
           $("#rangeTable").show();
