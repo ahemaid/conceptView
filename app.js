@@ -5,7 +5,6 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var routes = require('./routes/index');
-//var vocab = require('./routes/vocab');
 var contactus = require('./routes/contactus');
 var users = require('./routes/users');
 var tree = require('./routes/tree');
@@ -43,7 +42,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 //app.use('jQuery', express.static(__dirname + '/node_modules/jquery/dist/'));
 
-var data = require('./results.json');
+var data = require('./RDFresults');
 
 // TO:DO check if the file's expetions
 function SortByName(x, y) {

@@ -67,8 +67,10 @@ public class App {
 		JSONObject mergedJsonObjectClasses = new JSONObject();
 		JSONArray mergingArraySKOS = new JSONArray();
 		JSONObject mergedJsonObjectSKOS = new JSONObject();
-		JSONArray mergingArrayobjExternalClasses = new JSONArray();
-		JSONObject mergedJsonObjectExternalClasses = new JSONObject();
+		JSONArray mergingAllRDFObjecs = new JSONArray();
+		JSONObject mergedJsonObjectallRDFObjecs = new JSONObject();
+		JSONArray mergingAllSKOSObjecs = new JSONArray();
+		JSONObject mergedJsonObjectallSKOSObjecs = new JSONObject();
 
 		try {
 
@@ -79,11 +81,11 @@ public class App {
 			for (int i = 0; i < files.length; i++) {
 				if (files[i].contains("ttl")) {
 
-					System.out.println(files[i]);
-					JSONObject objClasses = generateClassesJSON("./ttlFiles/" + files[i], "../../results.JSON");
-					JSONObject objSKOS = generateSKOSJSON("./ttlFiles/" + files[i], "../../SKOSresults.JSON");
-					JSONObject objExternalClasses = generateExternalRDFSJSON("./ttlFiles/" + files[i],
-							"../../objExternalClassesresults.JSON");
+					JSONObject objClasses = generateClassesJSON("./ttlFiles/" + files[i]);
+					JSONObject objSKOS = generateSKOSJSON("./ttlFiles/" + files[i]);
+					JSONObject objExternalClassesRDF = allRDFObjectsJSON("./ttlFiles/" + files[i]);
+					JSONObject objExternalClassesSKOS = allSKOSObjectsJSON("./ttlFiles/" + files[i]);
+
 					// check for empty JSONobjects
 					if (objClasses.length() != 0) {
 						// System.out.println(obj);
@@ -93,21 +95,26 @@ public class App {
 						// System.out.println(obj);
 						mergingArraySKOS.put(objSKOS);
 					}
-					if (objExternalClasses.length() != 0) {
+					if (objExternalClassesRDF.length() != 0) {
 						// System.out.println(obj);
-						mergingArrayobjExternalClasses.put(objExternalClasses);
+						mergingAllRDFObjecs.put(objExternalClassesRDF);
+					}
+					if (objExternalClassesSKOS.length() != 0) {
+						// System.out.println(obj);
+						mergingAllSKOSObjecs.put(objExternalClassesSKOS);
 					}
 				}
 			}
 			mergedJsonObjectClasses.put("files", mergingArrayClasses);
 			mergedJsonObjectSKOS.put("files", mergingArraySKOS);
-			mergedJsonObjectExternalClasses.put("files", mergingArrayobjExternalClasses);
-			System.out.println("ExternalClasses: " + mergedJsonObjectExternalClasses);
+			mergedJsonObjectallRDFObjecs.put("files", mergingAllRDFObjecs);
+			mergedJsonObjectallSKOSObjecs.put("files", mergingAllSKOSObjecs);
+
 			// call to organize
 			SKOSFileDecode(mergedJsonObjectSKOS);
-
 			RDFSFileDecode(mergedJsonObjectClasses);
-			externalClassesFileDecode(mergedJsonObjectExternalClasses);
+			objectsFileDecode(mergedJsonObjectallRDFObjecs, "RDF");
+			objectsFileDecode(mergedJsonObjectallSKOSObjecs, "SKOS");
 
 		} catch (ArrayIndexOutOfBoundsException e) {
 			System.out.println("ArrayIndexOutOfBoundsException caught");
@@ -118,7 +125,7 @@ public class App {
 	}
 
 	// @SuppressWarnings({ "null", "resource" })
-	public static JSONObject generateClassesJSON(String _sourceFile, String _destination) throws IOException {
+	public static JSONObject generateClassesJSON(String _sourceFile) throws IOException {
 
 		org.apache.log4j.BasicConfigurator.configure(new NullAppender());
 
@@ -131,14 +138,12 @@ public class App {
 				+ "PREFIX rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#>"
 				+ "PREFIX owl:  <http://www.w3.org/2002/07/owl#>" + "PREFIX foaf: <http://xmlns.com/foaf/0.1/>"
 				+ "PREFIX xsd:  <http://www.w3.org/2001/XMLSchema#>"
-				+ "PREFIX skos: <http://www.w3.org/2004/02/skos/core#> " + "SELECT  ?concept ?rdfType ?label  WHERE {" +
-				// "?root rdfs:label ?root_name1 ."+
-				"?concept a ?rdfType ." + "?concept rdfs:label ?label ." + "OPTIONAL {?concept rdfs:label ?label .}" +
-				// .}"+
-				"} ORDER BY ?concept";
+				+ "PREFIX skos: <http://www.w3.org/2004/02/skos/core#> " + "SELECT  ?concept ?rdfType ?label  WHERE {"
+				+ "?concept a ?rdfType ." + "OPTIONAL {?concept rdfs:label ?label .}"
+				+ "FILTER regex(str(?concept), \"^((?!skos).)*$\" ) }" + "ORDER BY ?concept";
 		QueryExecution qexec2 = QueryExecutionFactory.create(mainQuery, ontModel);
 		ResultSet result2 = qexec2.execSelect();
-
+		// display output on console
 		// ResultSetFormatter.out(System.out, result2);
 
 		JSONObject jsonObject = new JSONObject();
@@ -146,23 +151,30 @@ public class App {
 
 		while (result2.hasNext()) {
 			QuerySolution binding = result2.nextSolution();
-			if (binding.get("concept").toString() != null) {
+			if (binding.get("concept").toString() != null  && isNotInstances(binding.get("rdfType").toString())) {
+				JSONObject obj = new JSONObject();
+
 				Resource concept = (Resource) binding.get("concept");
 				// System.out.println("\concept: " + concept.getURI());
 				Resource rdfType = (Resource) binding.get("rdfType");
-				String label = binding.get("label").toString();
-				if (!isNotInstances(rdfType.getURI()))
-					// System.out.println("rdfType: " + rdfType.getURI());
-					continue;
-				JSONObject obj = new JSONObject();
 
+				if (binding.get("label") != null) {
+					obj.put("label", binding.get("label").toString());
+				} else
+					obj.put("label", "");
 				// trimming of the concept from URI
-				obj.put("concept", trim(concept.getURI().toString()));
+				String conceptToTrim =concept.getURI().toString() ;
+				if (conceptToTrim.substring(conceptToTrim.length() - 1) == "/")
+					obj.put("concept", "mobivoc");
+				else
+					obj.put("concept", replaceWithRDFType(concept.getURI().toString()));
+				
 
 				obj.put("URI", concept.getURI());
 
 				// trimming of the concept from URI
-				obj.put("rdfType", trim(rdfType.getURI().toString()));
+				if(rdfType.getURI().toString() != null )
+				obj.put("rdfType", replaceWithRDFType(rdfType.getURI().toString()));
 				// if (rdfType.getURI().toString().contains("Class")) {
 				// obj.put("parent", "");
 				Query = "PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>"
@@ -184,39 +196,23 @@ public class App {
 						if (classParent.getURI() != null) {
 							obj.put("parent", classParent.getURI().toString());
 							// System.out.println("parent: " + classParent.getURI().toString());
-
 						}
-
-						/*
-						 * } else obj.put("parent", "");
-						 */
-
 					}
 				}
 				File file = new File(_sourceFile);
 				obj.put("fileName", file.getName());
-				if (label != null)
-					obj.put("label", label);
-
-				// obj.put("platform", i);
 
 				// if you are using JSON.simple do this
 				array.put(obj);
 
-				// and if you use json-jena
 				// array.put(obj);
 				jsonObject.put("concepts", array);
-
-			} else
-				continue;
-
+			}
 		}
-
 		return jsonObject;
-
 	}
 
-	public static JSONObject generateSKOSJSON(String _sourceFile, String _destination) throws IOException {
+	public static JSONObject generateSKOSJSON(String _sourceFile) throws IOException {
 
 		org.apache.log4j.BasicConfigurator.configure(new NullAppender());
 
@@ -244,22 +240,20 @@ public class App {
 				Resource oNarrower = (Resource) binding.get("oNarrower");
 
 				JSONObject obj = new JSONObject();
-				
-				// URI for child 
+
+				// URI for child
 				obj.put("URI", sNarrower.getURI());
 
 				obj.put("child", trim(sNarrower.getURI().toString()));
 
 				obj.put("parent", trim(oNarrower.getURI().toString()));
-				
-				obj.put("RDFType", "skos:narrower");
 
+				obj.put("RDFType", "skos:narrower");
 
 				File file = new File(_sourceFile);
 				obj.put("fileName", file.getName());
 				array.put(obj);
-			} else
-				continue;
+			}
 
 		}
 
@@ -277,22 +271,20 @@ public class App {
 				Resource oBroader = (Resource) binding.get("oBroader");
 				JSONObject obj = new JSONObject();
 
-				//  URI for parent
+				// URI for parent
 				obj.put("URI", sBroader.getURI());
 
 				obj.put("parent", trim(sBroader.getURI().toString()));
 
 				obj.put("child", trim(oBroader.getURI().toString()));
-				
-				obj.put("RDFType", "skos:broader");
 
+				obj.put("RDFType", "skos:broader");
 
 				File file = new File(_sourceFile);
 				obj.put("fileName", file.getName());
 				array.put(obj);
 
-			} else
-				continue;
+			}
 		}
 
 		// check location
@@ -302,7 +294,7 @@ public class App {
 
 	}
 
-	public static JSONObject generateExternalRDFSJSON(String _sourceFile, String _destination) throws IOException {
+	public static JSONObject allRDFObjectsJSON(String _sourceFile) throws IOException {
 
 		org.apache.log4j.BasicConfigurator.configure(new NullAppender());
 
@@ -315,8 +307,9 @@ public class App {
 				+ "PREFIX rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#>"
 				+ "PREFIX owl:  <http://www.w3.org/2002/07/owl#>" + "PREFIX foaf: <http://xmlns.com/foaf/0.1/>"
 				+ "PREFIX xsd:  <http://www.w3.org/2001/XMLSchema#>"
-				+ "PREFIX skos: <http://www.w3.org/2004/02/skos/core#> " + "SELECT  ?class  WHERE {" + "?s a ?class."
-				+ " }";
+				+ "PREFIX skos: <http://www.w3.org/2004/02/skos/core#> "
+				+ "SELECT Distinct ?o  WHERE { ?s ?p ?o. FILTER (!isLiteral(?o))   FILTER(!isBlank(?o))" + "MINUS "
+				+ "  { ?s ?p ?o. FILTER (!isLiteral(?o))   FILTER(!isBlank(?o)) FILTER(regex(str(?p), \"skos/core#\" )) }}";
 		QueryExecution qexec = QueryExecutionFactory.create(mainQuery, ontModel);
 		ResultSet result = qexec.execSelect();
 		// ResultSetFormatter.outputAsJSON(System.out, result);
@@ -328,18 +321,64 @@ public class App {
 
 		while (result.hasNext()) {
 			QuerySolution binding = result.nextSolution();
-			if (binding.get("class").toString() != null) {
-				Resource externalClass = (Resource) binding.get("class");
+			if (binding.get("o").toString() != null) {
+				Resource externalClass = (Resource) binding.get("o");
 
 				JSONObject obj = new JSONObject();
+				obj.put("object", replaceWithRDFType(externalClass.getURI().toString()));
 
-				obj.put("externalClass", externalClass.getURI());
+				obj.put("URI", externalClass.getURI());
 
-				File file = new File(_sourceFile);
-				obj.put("fileName", file.getName());
+				// File file = new File(_sourceFile);
+				// obj.put("fileName", file.getName());
 				array.put(obj);
-			} else
-				continue;
+			}
+		}
+		// check location
+		jsonObject.put("externalClasses", array);
+
+		return jsonObject;
+
+	}
+
+	public static JSONObject allSKOSObjectsJSON(String _sourceFile) throws IOException {
+
+		org.apache.log4j.BasicConfigurator.configure(new NullAppender());
+
+		FileManager.get().addLocatorClassLoader(Main.class.getClassLoader());
+
+		OntModel ontModel = ModelFactory.createOntologyModel(OntModelSpec.OWL_DL_MEM);
+		FileManager.get().readModel(ontModel, _sourceFile);
+
+		mainQuery = "PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>"
+				+ "PREFIX rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#>"
+				+ "PREFIX owl:  <http://www.w3.org/2002/07/owl#>" + "PREFIX foaf: <http://xmlns.com/foaf/0.1/>"
+				+ "PREFIX xsd:  <http://www.w3.org/2001/XMLSchema#>"
+				+ "PREFIX skos: <http://www.w3.org/2004/02/skos/core#> "
+				+ "SELECT Distinct ?o  WHERE { ?s ?p ?o. FILTER (!isLiteral(?o))   FILTER(!isBlank(?o)) FILTER(regex(str(?p), \"skos/core#\" )) }";
+		QueryExecution qexec = QueryExecutionFactory.create(mainQuery, ontModel);
+		ResultSet result = qexec.execSelect();
+		// ResultSetFormatter.outputAsJSON(System.out, result);
+
+		// ResultSetFormatter.out(System.out, result2);
+
+		JSONObject jsonObject = new JSONObject();
+		JSONArray array = new JSONArray();
+
+		while (result.hasNext()) {
+			QuerySolution binding = result.nextSolution();
+			if (binding.get("o").toString() != null) {
+				Resource externalClass = (Resource) binding.get("o");
+
+				JSONObject obj = new JSONObject();
+				obj.put("object", replaceWithRDFType(externalClass.getURI().toString()));
+
+				obj.put("URI", externalClass.getURI());
+
+				// File file = new File(_sourceFile);
+				// obj.put("fileName", file.getName());
+				array.put(obj);
+			}
 		}
 		// check location
 		jsonObject.put("externalClasses", array);
@@ -349,12 +388,40 @@ public class App {
 	}
 
 	public static Boolean isNotInstances(String RDFType) {
-		if (trim(RDFType).contains("Class"))
+		if (RDFType.contains("owl#NamedIndividual"))
+			return false;
+		else if (RDFType.contains("owl#"))
 			return true;
-		if (trim(RDFType).contains("Property"))
+		else if (trim(RDFType).contains("Class"))
 			return true;
+		else if (trim(RDFType).contains("Property"))
+			return true;
+		else
+			return false;
 
-		return false;
+	}
+
+	public static String replaceWithRDFType(String RDFType) {
+		String conceptArray[];
+		String RDFTypeTrimmed = "";
+		if (RDFType.contains("/")) {
+			conceptArray = RDFType.split("/");
+			if (conceptArray != null && conceptArray.length > 0) {
+				RDFTypeTrimmed = conceptArray[conceptArray.length - 1];
+			}
+		}
+		if (RDFTypeTrimmed.indexOf("Class") >= 0 && RDFTypeTrimmed.indexOf("owl") >= 0)
+			return "owl:Class";
+		else if (RDFTypeTrimmed.indexOf("Class") >= 0 && RDFTypeTrimmed.indexOf("rdf-schema") >= 0)
+			return "rdfs:Class";
+		else if (RDFTypeTrimmed.indexOf("owl") >= 0)
+			return "owl:" + RDFTypeTrimmed.substring(RDFTypeTrimmed.lastIndexOf('#') + 1);
+		else if (RDFTypeTrimmed.indexOf("rdf-schema") >= 0)
+			return "rdfs:" + RDFTypeTrimmed.substring(RDFTypeTrimmed.lastIndexOf('#') + 1);
+		else if (RDFTypeTrimmed.indexOf("22-rdf-syntax-ns") >= 0)
+			return "rdf:" + RDFTypeTrimmed.substring(RDFTypeTrimmed.lastIndexOf('#') + 1);
+		else
+			return trim(RDFType);
 
 	}
 
@@ -425,9 +492,21 @@ public class App {
 		return conceptTrimmed;
 	}
 
-	public static void externalClassesFileDecode(JSONObject obj) {
+	public static void objectsFileDecode(JSONObject obj, String type) {
 
 		try {
+			String filePath;
+			String outFileMessage;
+			if (type == "SKOS") {
+				filePath = "../../allSKOSObjects.JSON";
+				outFileMessage = "Successfully Copied allSKOSObjectJSON Object to File...";
+			}
+
+			else {
+				filePath = "../../allRDFObjects.JSON";
+				outFileMessage = "Successfully Copied allRDFObjectJSON Object to File...";
+
+			}
 			JSONObject rootJSON = obj;
 			JSONArray orginzedArray = new JSONArray();
 			JSONArray dataList = (JSONArray) rootJSON.get("files");
@@ -435,17 +514,17 @@ public class App {
 				JSONObject project = (JSONObject) projectObj;
 				JSONArray issueList = (JSONArray) project.get("externalClasses");
 				if (issueList.length() > 0) {
-					//System.out.println("\nParent ::" + issueList);
+					// System.out.println("\nParent ::" + issueList);
 					for (Object issueObj : issueList) {
 						JSONObject issue = (JSONObject) issueObj;
 						orginzedArray.put(issue);
 					}
 				}
 			}
-			try (FileWriter file = new FileWriter("../../externalClassesResults.JSON")) {
+			try (FileWriter file = new FileWriter(filePath)) {
 				file.write(orginzedArray.toString());
 
-				System.out.println("Successfully Copied externalClassesJSON Object to File...");
+				System.out.println(outFileMessage);
 				// System.out.println("\nJSON Object: " + mergedJsonObject);
 				// trim();
 			} catch (Exception e) {
@@ -464,14 +543,15 @@ public class App {
 			JSONObject rootJSON = obj;
 			JSONArray orginzedArray = new JSONArray();
 			JSONArray dataList = (JSONArray) rootJSON.get("files");
-			for (Object projectObj : dataList) {
-				JSONObject project = (JSONObject) projectObj;
-				JSONArray issueList = (JSONArray) project.get("SKOSconcepts");
-				if (issueList.length() > 0) {
-					System.out.println("\nParent ::" + issueList);
-					for (Object issueObj : issueList) {
-						JSONObject issue = (JSONObject) issueObj;
-						orginzedArray.put(issue);
+			if (dataList.length() > 0) {
+				for (Object projectObj : dataList) {
+					JSONObject project = (JSONObject) projectObj;
+					JSONArray issueList = (JSONArray) project.get("SKOSconcepts");
+					if (issueList.length() > 0) {
+						for (Object issueObj : issueList) {
+							JSONObject issue = (JSONObject) issueObj;
+							orginzedArray.put(issue);
+						}
 					}
 				}
 			}
@@ -479,7 +559,6 @@ public class App {
 				file.write(orginzedArray.toString());
 
 				System.out.println("Successfully Copied SKOSJSON Object to File...");
-				// System.out.println("\nJSON Object: " + mergedJsonObject);
 				// trim();
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -498,40 +577,44 @@ public class App {
 			JSONArray orginzedArray = new JSONArray();
 			// String conceptTrimmed = "";
 			JSONArray dataList = (JSONArray) rootJSON.get("files");
-			for (Object projectObj : dataList) {
-				JSONObject project = (JSONObject) projectObj;
-				JSONArray issueList = (JSONArray) project.get("concepts");
-				for (Object issueObj : issueList) {
-					JSONObject issue = (JSONObject) issueObj;
-					JSONObject orginzedOject = new JSONObject();
-					orginzedOject.put("concept", issue.getString("concept"));
-					orginzedOject.put("fileName", issue.getString("fileName"));
-					orginzedOject.put("label", issue.getString("label"));
-					orginzedOject.put("URI", issue.getString("URI"));
-					orginzedOject.put("RDFType", issue.getString("rdfType"));
-					// System.out.println("\nRDFType: " + issue.getString("rdfType"));
+			if (dataList.length() > 0) {
+				for (Object projectObj : dataList) {
+					JSONObject project = (JSONObject) projectObj;
+					JSONArray issueList = (JSONArray) project.get("concepts");
+					if (issueList.length() > 0) {
+						for (Object issueObj : issueList) {
+							JSONObject issue = (JSONObject) issueObj;
+							JSONObject orginzedOject = new JSONObject();
+							orginzedOject.put("concept", issue.getString("concept"));
+							orginzedOject.put("fileName", issue.getString("fileName"));
+							orginzedOject.put("label", issue.getString("label"));
+							orginzedOject.put("URI", issue.getString("URI"));
+							orginzedOject.put("RDFType", issue.getString("rdfType"));
+							// System.out.println("\nRDFType: " + issue.getString("rdfType"));
 
-					// if (issue.has("parent")) {
-					if (issue.has("parent") && !issue.isNull("parent")) {
-						String parentTrimmed = trim(issue.getString("parent"), true);
-						orginzedOject.put("parent", parentTrimmed);
-						// System.out.println("\nParent ::" + parentTrimmed);
+							// if (issue.has("parent")) {
+							if (issue.has("parent") && !issue.isNull("parent")) {
+								String parentTrimmed = trim(issue.getString("parent"), true);
+								orginzedOject.put("parent", parentTrimmed);
+								// System.out.println("\nParent ::" + parentTrimmed);
 
-					} else {
+							} else {
 
-						orginzedOject.put("parent", "");
+								orginzedOject.put("parent", "");
 
+							}
+
+							orginzedArray.put(orginzedOject);
+						}
 					}
 
-					orginzedArray.put(orginzedOject);
 				}
-
 			}
-			try (FileWriter file = new FileWriter("../../results.JSON")) {
+			try (FileWriter file = new FileWriter("../../RDFresults.JSON")) {
 				file.write(orginzedArray.toString());
 				// file.flush();
 				// file.close();
-				System.out.println("Successfully Copied JSON Object to File...");
+				System.out.println("Successfully Copied RDFJSON Object to File...");
 				// System.out.println("\nJSON Object: " + mergedJsonObject);
 				// trim();
 			} catch (Exception e) {

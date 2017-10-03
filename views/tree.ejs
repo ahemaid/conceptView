@@ -122,15 +122,23 @@
       var viewDataRendered = <%- JSON.stringify(data) %>;
       var SKOSData = <%- JSON.stringify(SKOSData) %>;
       var currentTreeData = viewDataRendered;
-      var mixConceptsURI = <%- JSON.stringify(externalAndInternalConcepts) %>;
-      var mixConcepts = [];
+      var mixConcepts = <%- JSON.stringify(allRDFObjects) %>;
       var isfileNameSelected = false;
       var currentFiles = <%- JSON.stringify(fileNames) %>;
-
+      var RDFObjPlusURI = <%- JSON.stringify(RDFObjectsPlusURI) %>;
       // show SKOS concepts on treeview
+      console.log(mixConcepts);
+
       function showSKOSTree() {
         var viewData = SKOSData;
         currentTreeData = SKOSData; // set as current data tree to check for types or files show checkbox clicks
+        // control checkboxes FilesCheckBox and TypesCheckBox
+        var viewData = currentTreeData; //TODO: get this data with AJAX request.
+        if (isCheckedshowFilesCheckBox)
+          $('#showTypesCheckBox').prop('checked', false);
+        if (isCheckedshowTypesCheckBox)
+          $('#showFilesCheckBox').prop('checked', false);
+
         var allParents = getUniqueParents(viewData);
         var data = [];
         var j = 0;
@@ -172,15 +180,15 @@
         });
         // make array unique
         data = uniqueArray(data);
+
         // rebuild tree with the new SKOS data
         rebuildTree(data);
       }
 
-      // get concpt from URI for some concepts
-      mixConceptsURI.forEach(function(item) {
-        mixConcepts.push(trimHash(trimSlash(item)));
-      });
-      var existInMixConcepts = [];
+      // // get concpt from URI for some concepts
+      // mixConcepts.forEach(function(item) {
+      //   mixConcepts.push(item);
+      // });
 
       /////////////////////////////////////////////////////////////////////////
       ////////////////////////////////////////////////////////////////////////
@@ -199,21 +207,24 @@
       //
       ////////////////////////////////////////////////////////////////////////
       ////////////////////////////////////////////////////////////////////////
-
       // get existing concepts to find external concepts
       function getExistInMixConcepts() {
-        mixConceptsURI.forEach(function(item) {
+        var array = [];
+        mixConcepts.forEach(function(item) {
           for (var i = 0; i < viewDataRendered.length; i++) {
-            if (trimHash(trimSlash(item)) === viewDataRendered[i].concept) {
-              existInMixConcepts.push(trimHash(trimSlash(item)));
+            if (item === viewDataRendered[i].concept) {
+              array.push(item);
             }
           }
         });
+        return array;
       }
 
-      getExistInMixConcepts();
+      var internalConcepts = getExistInMixConcepts();
       // some external concepts was not in the first results.json file
-      var externalConcepts = $(mixConcepts).not(existInMixConcepts).get();
+      var externalConcepts = $(mixConcepts).not(internalConcepts).get();
+      console.log("externalConcepts" + externalConcepts);
+      debugger;
 
       // store the selected concept
       var conceptSelected = "";
@@ -259,13 +270,7 @@
 
       // show info. for external Concepts and thier instaces
       function showExternalInfo(str) {
-        var ExteralURI = "";
-        for (var i = 0; i < mixConceptsURI.length; i++) {
-          var item = mixConceptsURI[i];
-          if (trimHash(trimSlash(item)) == str) {
-            ExteralURI = item;
-          }
-        }
+        var ExteralURI = getExternalURI(str);
         if (ExteralURI) {
           var externalURITable = '<table class="table table-striped" >' +
             '<colgroup> <col class="col-md-4"> </colgroup>' +
@@ -333,14 +338,8 @@
           $('#infoDetails').hide();
           $("#externalInfo").show();
           $("#externalInfo").html('<p > Concept is External still has no URI</p>');
-
-
-
         }
-
-
       }
-
       var isCheckedshowTypesCheckBox;
       var isCheckedshowFilesCheckBox;
       //show treeview with types or files
@@ -372,20 +371,23 @@
           if (allParents[i])
             data[j++] = getParentWithChildren(viewData, allParents[i]);
         }
+        console.log(externalConcepts);
+
         if (!isfileNameSelected) {
-          for (var i = 0; i < mixConcepts.length; i++) {
-            data[j++] = getExternals(mixConcepts[i]);
+          for (var i = 0; i < externalConcepts.length; i++) {
+            data[j++] = getExternals(externalConcepts[i]);
           }
         }
         for (var i = 0; i < viewData.length; i++) {
           data[j++] = viewData[i];
         }
+        // make array unique
+        data = uniqueArray(data);
         // sorting the tree before viewing
         data.sort(function(a, b) {
           return ((a.text.toLowerCase() == b.text.toLowerCase()) ? 0 : ((a.text.toLowerCase() > b.text.toLowerCase()) ? 1 : -1));
         });
-        // make array unique
-        data = uniqueArray(data, "parent");
+
         // rebuild tree with the new data
         rebuildTree(data);
       }
@@ -414,7 +416,6 @@
               exec(node.URI, "SKOS");
               // show source code
               showTurtleSource(node.URI, "SKOS");
-              debugger;
 
             } else {
               if (node.concept) {
@@ -433,12 +434,11 @@
                   if (parentNode.includes("External")) {
                     parentNode = parentNode.split('<');
                     parentNode = parentNode[0];
-                    alert("External" + parentNode)
+                    $('#externalInfo').hide();
                     showExternalInfo(parentNode);
                   } else {
                     var str;
-                    alert("Inside SKOS parent"+parentNode)
-
+                    // catch SKOS parent nodes of the tree
                     if (node.text.includes("<")) {
                       var parentNode = node.text;
                       parentNode = parentNode.split('<');
@@ -662,14 +662,13 @@
       // Customization of the RDF type to show as in standards
       function replaceWithRDFType(str) {
         if (str.includes("22-rdf-syntax-ns")) {
-          str = "rdf:" + trimHash(str);
+          return "rdf:" + trimHash(str);
         } else if (str.includes('rdf-schema'))
-          str = "rdfs:" + trimHash(str);
+          return "rdfs:" + trimHash(str);
         else if (str.includes('owl'))
-          str = "owl:" + trimHash(str);
+          return "owl:" + trimHash(str);
         else
-          str = str;
-        return str;
+          return str;
       }
 
       //check if concept is in our ontology or external
@@ -683,8 +682,8 @@
 
       // check if the concept is external
       function isConceptExternal(str) {
-        for (var i = 0; i < mixConcepts.length; i++) {
-          if (str === mixConcepts[i]) {
+        for (var i = 0; i < externalConcepts.length; i++) {
+          if (str === externalConcepts[i]) {
             return true;
           }
         }
@@ -692,10 +691,10 @@
       }
 
       // get externalURI
-      function getExternalConceptURI(str) {
-        for (var i = 0; i < externalConcepts.length; i++) {
-          if (str === externalConcepts[i].concept)
-            return externalConcepts[i].URI;
+      function getExternalURI(str) {
+        for (var i = 0; i < RDFObjPlusURI.length; i++) {
+          if (str === RDFObjPlusURI[i].object)
+            return RDFObjPlusURI[i].URI;
         }
         return;
       }
@@ -766,8 +765,8 @@
               '<th>Object</th>' +
               '</tr>';
             for (var i = 0; i < instances.length; i++) {
-              var key1 = replaceWithRDFType(trimHash(trimSlash(instances[i]['p'].value)));
-              var key2 = replaceWithRDFType(trimHash(trimSlash(instances[i]['o'].value)));
+              var key1 = trimHash(replaceWithRDFType(trimSlash(instances[i]['p'].value)));
+              var key2 = trimHash(replaceWithRDFType(trimSlash(instances[i]['o'].value)));
               // some modifications to display the data on domumentation in nice way
               if (isConceptAvailable(key1)) {
                 key1 = '<a href="#" onmousedown="exec(&quot;' + key1 + '&quot;); return false; ">' + key1 + '</a>';
@@ -992,7 +991,7 @@
           '<th>Used on these types</th>' +
           '</tr>';
         for (var i = 0; i < dataSPARQL.length; i++) {
-          var key1 = replaceWithRDFType(trimHash(trimSlash(dataSPARQL[i]['p'].value)));
+          var key1 = trimHash(replaceWithRDFType(trimSlash(dataSPARQL[i]['p'].value)));
           var key2 = dataSPARQL[i]['o'].value;
           //check if object is uri
           if (key2.includes("http://") && key1.includes("seeAlso")) {
@@ -1000,7 +999,7 @@
               key2 = key2.slice(0, -1);
             key2 = '<a href=' + key2 + '>' + key2 + '</a>';
           } else
-            key2 = replaceWithRDFType(trimHash(trimSlash(key2)));
+            key2 = trimHash(replaceWithRDFType(trimSlash(key2)));
           var key3 = dataSPARQL[i]['o']['xml:lang'];
           var key4 = dataSPARQL[i]['o']['type'];
 

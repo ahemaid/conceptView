@@ -1,14 +1,14 @@
 var express = require('express');
 var app = express();
 var router = express.Router();
-var appdata = require('../results.json');
+var appdata = require('../RDFresults.json');
 var SKOSData = require('../SKOSResults.json');
-var externalClassesData = require('../externalClassesResults.json');
-
-var http = require('http');
-const url = require('url');
-var parseString = require('xml2js').parseString;
-var sparqlResponse = [];
+var RDFObjectsPlusURI = require('../allRDFObjects.json');
+var SKOSObjectsPlusURI = require('../allSKOSObjects.json');
+// var http = require('http');
+// const url = require('url');
+// var parseString = require('xml2js').parseString;
+// var sparqlResponse = [];
 
 
 router.get('/', function(req, res) {
@@ -64,15 +64,15 @@ router.get('/', function(req, res) {
     return out;
   }
   // filter external classes
-  function filterExternalConcept(externalClassesData) {
+  function filterExternalConcept(RDFObjects) {
     var out = [];
     var data = [];
-    for (var i = 0, j = 0, l = externalClassesData.length; i < l; i++) {
-      if (typeof(externalClassesData[i].externalClass) != "undefined")
-        if (!(externalClassesData[i].externalClass.includes("www.w3.org"))){
-          data[j] = externalClassesData[i].externalClass;
-          j++;
-        }
+    for (var i = 0, j = 0, l = RDFObjects.length; i < l; i++) {
+      if (typeof(RDFObjects[i].object) != "undefined") {
+        data[j] = RDFObjects[i].object;
+        j++;
+      }
+
     }
     for (var i = 0, l = data.length; i < l; i++) {
       var unique = true;
@@ -86,14 +86,21 @@ router.get('/', function(req, res) {
     }
     return out;
   }
-  // arrange SKOS in parent and child relationship
-  // function getSKOSInParentChildren(data){
-  //   var skosElemet = {};
-  //   var concepts = [];
-  //
-  //
-  //
-  // }
+  // remove SKOS when same parent and child relationship found
+  function removeDuplicateSKOSData(data) {
+    var out = [];
+    var array = data;
+
+    for (var i = 0; i < data.length; i++) {
+      for (var j = 0; j < array.length; j++) {
+        if (array[j].parent === data[i].parent && array[j].RDFType === "skos:narrower" && data[i].RDFType === "skos:broader") {
+          array.splice(j--, 1);
+          console.log("parent   " + array[j].parent + "child     " + data[i].parent)
+        }
+      }
+    }
+    return array;
+  }
 
   // translation of concept to URI
   function findURI(array, item) {
@@ -119,18 +126,21 @@ router.get('/', function(req, res) {
   files.sort(SortFiles);
   files = uniquefileNames(files);
 
-//  console.log(SKOSData);
+  //  remove duplicate data from SKOSData
+  var SKOSResults = removeDuplicateSKOSData(SKOSData);
+
 
   var concepts = [];
-  var concepts = filterExternalConcept(externalClassesData);
-  //console.log(concepts);
+  var allRDFObjects = filterExternalConcept(RDFObjectsPlusURI);
+  console.log(allRDFObjects);
 
   res.render('tree.ejs', {
     title: 'tree',
     data: treeData,
     fileNames: files,
-    externalAndInternalConcepts: concepts,
-    SKOSData:SKOSData
+    allRDFObjects: allRDFObjects,
+    SKOSData: SKOSResults,
+    RDFObjectsPlusURI:RDFObjectsPlusURI
   });
 
 });
