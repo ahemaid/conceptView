@@ -1,6 +1,9 @@
 .form-group input[type="checkbox"] {
     display: none;
 }
+.badge{
+  background-color: transparent;
+}
 
 .form-group input[type="checkbox"] + .btn-group > label span {
     width: 20px;
@@ -24,9 +27,7 @@ body {
     padding: 50px;
     font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
 }
-a {
-    color: #00B7FF;
-}
+
 .mygrid-wrapper-div {
     overflow: auto;
     height: 100%;
