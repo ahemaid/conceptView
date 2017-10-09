@@ -198,6 +198,7 @@
         // rebuild tree with the new SKOS data
         buildTree(data);
       }
+
       // get getExternalsConcepts for either SKOS or RFS(S)
       function getExternalsConcepts() {
         var externalConcepts = [];
@@ -209,6 +210,7 @@
                 internals.push(item);
               }
             }
+            internalsConcepts = internals;
           });
           externalConcepts = $(mixSKOSConcepts).not(internals).get();
         }
@@ -270,7 +272,7 @@
       function showExternalInfo(str) {
         var ExteralURI = getExternalURI(str);
         // check if hideExternalConceptsCheckBox is checked
-        if ($('#hideExternalConceptsCheckBox').is(':checked')){
+        if ($('#hideExternalConceptsCheckBox').is(':checked')) {
           $('#hideExternalConceptsCheckBox').prop('checked', false);
           if ($('#SKOSViewCheckBox').is(':checked')) {
             showSKOSTree();
@@ -377,7 +379,6 @@
           $("#externalInfo").show();
           $("#externalInfo").html('<p > Concept is External still has no URI</p>');
         }
-        debugger;
       }
 
       //show treeview with types or files
@@ -705,6 +706,8 @@
           return "rdfs:" + trimHash(str);
         else if (str.includes('owl'))
           return "owl:" + trimHash(str);
+        else if (str.includes('core#Concept') || str.includes('narrower') || str.includes('broader'))
+          return "skos:" + trimHash(str);
         else
           return str;
       }
@@ -976,6 +979,19 @@
         var isURIExist = false;
         var conceptURI;
         conceptSelected = item;
+
+        if (view === "SKOS") {
+          conceptURI = item;
+          isURIExist = true;
+        } else {
+          for (var i = 0; i < viewDataRendered.length; i++) {
+            if (item.toLowerCase() === viewDataRendered[i].concept.toLowerCase()) {
+              conceptURI = viewDataRendered[i].URI;
+              isURIExist = true;
+              break;
+            }
+          }
+        }
         //highlight highlight node it was not the selected node
         var selectedNode = $('#tree').treeview('getSelected');
         if (selectedNode[0].concept != item && view !== "SKOS") {
@@ -1002,18 +1018,29 @@
           }]);
         }
         if (view === "SKOS") {
-          conceptURI = item;
-          isURIExist = true;
-        } else {
-          for (var i = 0; i < viewDataRendered.length; i++) {
-            if (item.toLowerCase() === viewDataRendered[i].concept.toLowerCase()) {
-              conceptURI = viewDataRendered[i].URI;
-              isURIExist = true;
-              break;
-            }
-          }
-
+          //scrollTop if class clicked from instanceDetailsTable
+          $("#infoTabs").animate({
+            scrollTop: 0
+          }, "fast");
+          $("#instanceHead").hide();
+          $("#instanceDetailsTable").hide();
+          $("#instancesTable").hide();
+          // scroll to the clicked node from documentation and select the node
+          const callback = element => element.innerHTML == trimHash(replaceWithRDFType(trimSlash(item)));
+          const elements = Array.from(document.getElementsByTagName('a'));
+          const result = elements.filter(callback);
+          var $s = $('#treeContainer');
+          //  get nodeid of string node.text
+          var liTop = $s.find('[data-nodeid=' + parseInt(result["0"].firstChild.parentNode.offsetParent.dataset.nodeid) + ']').offset().top;
+          var ulTop = $s.offset().top;
+          // scroll to the selected node
+          $s.scrollTop($s.scrollTop() + (liTop - ulTop));
+          // select the node of the treeview
+          $('#tree').treeview('selectNode', [parseInt(result["0"].firstChild.parentNode.offsetParent.dataset.nodeid), {
+            silent: true
+          }]);
         }
+        debugger;
         if (isURIExist) {
           var endpoint = "http://localhost:3030/ds/sparql"
           var sparql = 'prefix schema: <http://schema.org/> \n' +
@@ -1061,6 +1088,8 @@
         for (var i = 0; i < dataSPARQL.length; i++) {
           var key1 = trimHash(replaceWithRDFType(trimSlash(dataSPARQL[i]['p'].value)));
           var key2 = dataSPARQL[i]['o'].value;
+          var key2URI = key2;
+
           //check if object is uri
           if (key2.includes("http://") && key1.includes("seeAlso")) {
             if (key2[key2.length - 1] === ('/'))
@@ -1068,9 +1097,9 @@
             key2 = '<a href=' + key2 + '>' + key2 + '</a>';
           } else
             key2 = trimHash(replaceWithRDFType(trimSlash(key2)));
+
           var key3 = dataSPARQL[i]['o']['xml:lang'];
           var key4 = dataSPARQL[i]['o']['type'];
-
           if (key1.includes("domain")) {
             conceptHasDomain = key1;
             if (isConceptAvailable(key2) && key4 === "uri")
@@ -1086,6 +1115,12 @@
               key2 = '<a href="#" onmousedown="showExternalInfo(&quot;' + key2 + '&quot;); return false; ">' + key2 + '</a>';
             rangeTable += '<tr>    <td>' + key2 + '</td>  </tr>';
           } else {
+            if (key1.includes("broader") || key1.includes("narrower")) {
+              key2 = '<a href="#" onmousedown="exec(&quot;' + key2URI + '&quot;,&quot;SKOS&quot;); return false; ">' + key2 + '</a>';
+            }
+            // if (isConceptAvailable(key2) && (key1.includes("broader") ||key1.includes("narrower") )) {
+            //   key2 = '<a href="#" onmousedown="exec(&quot;' + key2 + '&quot;); return false; ">' + key2 + '</a>';
+            // }
             if (isConceptExternal(key2) && !key1.includes("label") && key4 === "uri") {
               key2 = '<a href="#" onmousedown="showExternalInfo(&quot;' + key2 + '&quot;); return false; ">' + key2 + '</a>';
             }
