@@ -87,20 +87,20 @@ router.get('/', function(req, res) {
     return out;
   }
   // remove SKOS when same parent and child relationship found
-  function removeDuplicateSKOSData(data) {
-    var out = [];
-    var array = data;
-
-    for (var i = 0; i < data.length; i++) {
-      for (var j = 0; j < array.length; j++) {
-        if (array[j].parent === data[i].parent && array[j].RDFType === "skos:narrower" && data[i].RDFType === "skos:broader") {
-          array.splice(j--, 1);
-          console.log("parent   " + array[j].parent + "child     " + data[i].parent)
-        }
-      }
-    }
-    return array;
-  }
+  // function removeDuplicateSKOSData(data) {
+  //   var out = [];
+  //   var array = data;
+  //
+  //   for (var i = 0; i < data.length; i++) {
+  //     for (var j = 0; j < array.length; j++) {
+  //       if (array[j].parent === data[i].parent && array[j].RDFType === "skos:narrower" && data[i].RDFType === "skos:broader") {
+  //         array.splice(j--, 1);
+  //         console.log("parent   " + array[j].parent + "child     " + data[i].parent)
+  //       }
+  //     }
+  //   }
+  //   return array;
+  // }
 
   // translation of concept to URI
   function findURI(array, item) {
@@ -127,20 +127,22 @@ router.get('/', function(req, res) {
   files = uniquefileNames(files);
 
   //  remove duplicate data from SKOSData
-  var SKOSResults = removeDuplicateSKOSData(SKOSData);
+  // var SKOSResults = removeDuplicateSKOSData(SKOSData);
 
 
   var concepts = [];
   var allRDFObjects = filterExternalConcept(RDFObjectsPlusURI);
-  console.log(allRDFObjects);
+  var allSKOSObjects = filterExternalConcept(SKOSObjectsPlusURI);
 
   res.render('tree.ejs', {
     title: 'tree',
     data: treeData,
     fileNames: files,
-    allRDFObjects: allRDFObjects,
-    SKOSData: SKOSResults,
-    RDFObjectsPlusURI:RDFObjectsPlusURI
+    allRDFObjects:allRDFObjects,
+    allSKOSObjects:allSKOSObjects,
+    SKOSData: SKOSData,
+    RDFObjectsPlusURI:RDFObjectsPlusURI,
+    SKOSObjectsPlusURI:SKOSObjectsPlusURI
   });
 
 });

@@ -231,7 +231,6 @@ public class App {
 
 		JSONObject jsonObject = new JSONObject();
 		JSONArray array = new JSONArray();
-
 		while (result1.hasNext()) {
 			QuerySolution binding = result1.nextSolution();
 			if (binding.get("sNarrower").toString() != null) {
@@ -242,10 +241,11 @@ public class App {
 				JSONObject obj = new JSONObject();
 
 				// URI for child
-				obj.put("URI", sNarrower.getURI());
-
+				obj.put("childURI", sNarrower.getURI());
+				obj.put("parentURI", oNarrower.getURI());
+				
 				obj.put("child", trim(sNarrower.getURI().toString()));
-
+				
 				obj.put("parent", trim(oNarrower.getURI().toString()));
 
 				obj.put("RDFType", "skos:narrower");
@@ -264,25 +264,52 @@ public class App {
 		ResultSet result2 = qexec2.execSelect();
 		// ResultSetFormatter.outputAsJSON(System.out, result2);
 		while (result2.hasNext()) {
+			boolean isDuplicateData = false;
 			QuerySolution binding = result2.nextSolution();
 			if (binding.get("sBroader").toString() != null) {
 				Resource sBroader = (Resource) binding.get("sBroader");
 				// System.out.println("\concept: " + concept.getURI());
 				Resource oBroader = (Resource) binding.get("oBroader");
-				JSONObject obj = new JSONObject();
 
-				// URI for parent
-				obj.put("URI", sBroader.getURI());
+				
+				////////////////////////////////////////////////
+				if (array.length() > 0) {
+					for (Object issueObj : array) {
+						JSONObject issue = (JSONObject) issueObj;
+						String str1= issue.getString("parent");
+						String str2= trim(sBroader.getURI().toString());
+						String str3= issue.getString("child");
+						String str4= trim(oBroader.getURI().toString()) ;
 
-				obj.put("parent", trim(sBroader.getURI().toString()));
+						if(str1.equalsIgnoreCase(str2) || str3.equalsIgnoreCase(str4) )
+						{
+							isDuplicateData = true;
+							break;
+							
+						}
+						
+					}
+					}
+				if(!isDuplicateData) {
+					JSONObject obj = new JSONObject();
 
-				obj.put("child", trim(oBroader.getURI().toString()));
+					// URI for parent
+					obj.put("parentURI", sBroader.getURI());
+					obj.put("childURI", oBroader.getURI());
 
-				obj.put("RDFType", "skos:broader");
+					obj.put("parent", trim(sBroader.getURI().toString()));
 
-				File file = new File(_sourceFile);
-				obj.put("fileName", file.getName());
-				array.put(obj);
+					obj.put("child", trim(oBroader.getURI().toString()));
+
+					obj.put("RDFType", "skos:broader");
+
+					File file = new File(_sourceFile);
+					obj.put("fileName", file.getName());
+					array.put(obj);
+					
+				}
+				//////////////////////////////////////////
+
 
 			}
 		}

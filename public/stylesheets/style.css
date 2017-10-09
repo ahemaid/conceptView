@@ -1,3 +1,10 @@
+
+li.list-group-item.node-tree a{
+  max-width: 355px;
+  display: inline-block;
+  word-wrap: break-word;
+}
+
 .form-group input[type="checkbox"] {
     display: none;
 }
@@ -28,10 +35,6 @@ body {
     font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
 }
 
-.mygrid-wrapper-div {
-    overflow: auto;
-    height: 100%;
-}
 .tree {
     min-height: 20px;
     padding: 19px;
