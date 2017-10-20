@@ -1,0 +1,295 @@
+<% include header %>
+  <div class="ui container" style="overflow:hidden">
+    <div class="page-header">
+      <h1>Configuration Page</h1>
+    </div>
+    <div class="ui two column stackable grid">
+      <div class="column">
+        <form action="/config" onsubmit="return validateFormOnSubmit(this)" method="post">
+          <div class="form-group">
+            <div class="ui styled accordion">
+              <div class="active title">
+                <i class="dropdown icon"></i> General Info
+              </div>
+              <div class="active content">
+                <div class="field" style="margin-bottom:5px">
+                  <div class="ui corner  labeled input">
+                    <a class="ui left label" style="width: 150px;">
+          Vocabulary Name
+        </a>
+                    <input type="text" id="vocabularyName" class="form-control" name="vocabularyName" placeholder="Enter vocabulary name" value="Mobivoc" style="width:300px" />
+                    <div class="ui corner label">
+                      <i class="asterisk icon"></i>
+                    </div>
+                  </div>
+                </div>
+                <div class="field" style="margin-bottom:5px">
+                  <div class="ui labeled input">
+                    <a class="ui left label" style="width: 150px;">
+          Domain name
+        </a>
+                    <input type="text" id="server" name="server" class="form-control" placeholder="Enter domain name" value="http://vocol.vagrantshare.com" style="width:300px" />
+                    <div class="ui corner label">
+                      <i class="asterisk icon"></i>
+                    </div>
+                  </div>
+                </div>
+                <div class="field" style="margin-bottom:5px">
+                  <div class="ui checkbox">
+                    <input type="checkbox" name="webHook" class="form-control" value="webHookChecked">
+                    <label>Web Hook</label>
+                  </div>
+                </div>
+              </div>
+              <div class="title">
+                <i class="dropdown icon"></i> Repository info
+              </div>
+              <div class="content">
+                <div class="field" style="margin-bottom:5px">
+                  <div class="ui labeled input">
+                    <a class="ui label" style="width: 150px;">
+          Repository
+        </a>
+                    <input type="text" id="repository" name="repository" placeholder="Enter repository address" value="https://github.com/lavhal/testProj.git" style="width:300px" />
+                    <div class="ui corner label">
+                      <i class="asterisk icon"></i>
+                    </div>
+                  </div>
+                </div>
+                <div class="field" style="margin-bottom:5px">
+                  <div class="ui labeled input">
+                    <a class="ui label" style="width: 150px;">
+          Branch Name
+        </a>
+                    <input type="text" id="branchName" name="branchName" placeholder="Enter branch name" value="master" style="width:300px" />
+                    <div class="ui corner label">
+                      <i class="asterisk icon"></i>
+                    </div>
+                  </div>
+                </div>
+                <div class="field" style="margin-bottom:5px">
+                  <div class="ui labeled input">
+                    <a class="ui label" style="width: 150px;">
+          User
+        </a>
+                    <input type="text" id="user" name="user" placeholder="Enter repository user" value="lavhal" style="width:300px" />
+                    <div class="ui corner label">
+                      <i class="asterisk icon"></i>
+                    </div>
+                  </div>
+                </div>
+                <div class="field" style="margin-bottom:5px">
+                  <div class="ui labeled input">
+                    <a class="ui label" style="width: 150px;">
+          Password
+        </a>
+                    <input type="password" id="password" name="password" placeholder="Enter repository password" style="width:300px" />
+                    <div class="ui corner label">
+                      <i class="asterisk icon"></i>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="title">
+                <i class="dropdown icon"></i> Syntax Validation
+              </div>
+              <div class="content">
+                <div class="field">
+                  <div class="ui radio checkbox">
+                    <input type="radio" name="syntaxValidation" value="rapperChecked" checked>
+                    <label>Rapper</label>
+                  </div>
+                </div>
+                <div class="field">
+                  <div class="ui radio checkbox">
+                    <input type="radio" name="syntaxValidation" value="jenaRiotChecked">
+                    <label>Jena Riot</label>
+                  </div>
+                </div>
+              </div>
+              <div class="title">
+                <i class="dropdown icon"></i> Documentation Generation
+              </div>
+              <div class="content">
+                <div class="field">
+                  <div class="ui radio checkbox">
+                    <input type="radio" name="documentationGeneration" value="schemaOrgChecked" checked>
+                    <label>SchemaOrg</label>
+                  </div>
+                </div>
+                <div class="field">
+                  <div class="ui radio checkbox">
+                    <input type="radio" name="documentationGeneration" value="widocoChecked">
+                    <label>Widoco</label>
+                  </div>
+                </div>
+              </div>
+              <div class="title">
+                <i class="dropdown icon"></i> Additional Services
+              </div>
+              <div class="content">
+                <div class="field" style="margin-bottom:5px">
+                  <div class="ui checkbox">
+                    <input type="checkbox" name="visualization" value="visualizationChecked" checked>
+                    <label>Visualization</label>
+                  </div>
+                </div>
+                <div class="field" style="margin-bottom:5px">
+                  <div class="ui checkbox">
+                    <input type="checkbox" name="sparqlEndPoint" value="sparqlEndPointChecked" checked>
+                    <label>Sparql EndPoint</label>
+                  </div>
+                </div>
+                <div class="field" style="margin-bottom:5px">
+                  <div class="ui checkbox">
+                    <input type="checkbox" name="syntaxValidationReport" value="syntaxValidationReportChecked" checked>
+                    <label>Syntax Validation Report</label>
+                  </div>
+                </div>
+                <div class="field" style="margin-bottom:5px">
+                  <div class="ui checkbox">
+                    <input type="checkbox" name="evolutionReport" value="evolutionReportChecked" checked>
+                    <label>Schema Evolution Report</label>
+                  </div>
+                </div>
+                <div class="field" style="margin-bottom:5px">
+                  <div class="ui checkbox">
+                    <input type="checkbox" name="otherBranches" value="otherBranchesChecked" checked>
+                    <label>Other Branches</label>
+                  </div>
+                </div>
+                <div class="field" style="margin-bottom:5px">
+                  <div class="ui checkbox">
+                    <input type="checkbox" name="clientHooks" value="clientHooksChecked" checked>
+                    <label>Client Side Hooks</label>
+                  </div>
+                </div>
+                <div class="field" style="margin-bottom:5px">
+                  <div class="ui checkbox">
+                    <input type="checkbox" name="turtleEditor" value="turtleEditorChecked" checked>
+                    <label>Turtle Editor</label>
+                  </div>
+                </div>
+                <div class="field" style="margin-bottom:5px">
+                  <div class="ui checkbox">
+                    <input type="checkbox" name="predefinedQueries" value="predefinedQueriesChecked" checked>
+                    <label>Use Predefined Queries</label>
+                  </div>
+                </div>
+              </div>
+              <div class="title">
+                <i class="dropdown icon"></i> Serializations Format
+              </div>
+              <div class="content">
+                <div class="field">
+                  <div class="ui  checkbox">
+                    <input type="checkbox" name="rdfxml" value="rdfxmlChecked">
+                    <label>RdfXML</label>
+                  </div>
+                </div>
+                <div class="field">
+                  <div class="ui  checkbox">
+                    <input type="checkbox" name="ntriples" value="ntriplesChecked">
+                    <label>NTriples</label>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="field" style="padding-top:10px">
+            <div class="ui massive right floated buttons">
+              <button class="ui button">Cancel</button>
+              <div class="or"></div>
+              <button type="submit" class="ui teal button" value="Save Configuration">Save Configuration</button>
+            </div>
+          </div>
+        </form>
+      </div>
+      <div class="column">
+        <ul class="nav nav-tabs" role="tablist" id="sourceCodeTabs">
+          <li role="presentation" class="active"><a href="#homepage" aria-controls="homepage" role="tab" data-toggle="tab">Homepage Description</a></li>
+        </ul>
+        <!-- Tab panes -->
+        <div class="tab-content">
+          <div role="tabpanel" class="tab-pane active" id="homepage">
+            <!-- <textarea id="editor" name="homepageContent" style="width:300;height:800"> -->
+            <div id="textEditor" class="ui ignored message" style="overflow:auto;width:534;">
+
+            </div>
+            <!-- </textarea> -->
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  </div>
+
+  <script type="text/javascript">
+    $('.ui.checkbox').checkbox();
+    $('.ui.accordion').accordion();
+
+    function validateFormOnSubmit(theForm) {
+      var reason = "";
+
+      reason += validateEmpty(theForm.vocabularyName);
+      reason += validateEmpty(theForm.server);
+      reason += validateEmpty(theForm.repository);
+      reason += validateEmpty(theForm.branchName);
+      reason += validateEmpty(theForm.user);
+      reason += validateEmpty(theForm.password);
+
+      if (reason != "") {
+        alert("Some fields need correction:\n" + reason);
+        return false;
+      }
+      return true;
+    }
+
+    function validateEmpty(fld) {
+      var error = "";
+
+      if (fld.value.length == 0) {
+        fld.style.background = 'Pink';
+        error = "The required field has not been filled in " + fld.id + "\n";
+      } else {
+        fld.style.background = 'White';
+      }
+      return error;
+    }
+
+    $('#sourceCodeTabs a').click(function(e) {
+      e.preventDefault()
+      $(this).tab('show')
+    })
+
+    var text = '<h3>Supporting human mobility by data mobility</h3>' +
+      '<p>New mobility concepts and better data networking are both crucial factors for global economic development. To invent innovative and sustainable mobility concepts, new data-based value-added services are required.</p>' +
+      '<p>For example:</p>' +
+      '<ul>' +
+      '<li>' +
+      '<h4>Route Planning</h4>' +
+      '<p>Route planning taking into account places of interest, energy saving aspects (e.g. for electric vehicles) or complex travel arrangements</p>' +
+      '</li>' +
+      '<li>' +
+      '<h4>Multimodal Mobility</h4>' +
+      '<p>Linking various multimodal mobility services with regard to complex environment conditions and current or forecast events like weather or traffic volume</p>' +
+      '</li>' +
+      '<li>' +
+      '<h4>Alternative Scenarios</h4>' +
+      '<p>Dynamic and interactive planning of alternative mobility services in the event of unforeseen circumstances (e.g. breakdown in public transport, congestions)</p>' +
+      '</li>' +
+      '</ul>' +
+      '<p>To implement such innovative data-based services for mobility support it is necessary to link and integrate data coming from a vast number of different sources. Some examples are map data, vehicle data, weather data, mobility' +
+      'service descriptions or events information. These data sets come from various stakeholders and organisations and they often have proprietary data structures.</p>' +
+      '<p>Our goal is to significantly improve the data mobility between all stakeholders by providing a standardized vocabulary using Semantic Web technologies and ontologies. For the open vocabulary covering various mobility aspects we' +
+      'use RDF (Resource Description Framework) - a recommended specification of the World Wide Web Consortium (W3C) and the so-called lingua franca for the integration of data and web. We invite everyone who is interested to join our' +
+      'MobiVoc initiative and to participate in the development of the Open Mobility Vocabulary.</p>' +
+      '<p><img alt="Logo: ITA" src="http://www.ita-int.org/wp-content/uploads/2015/07/ita_logo_left_small-110x59.png" style="height:22px; width:40px" /></p>' +
+      '<p>MobiVoc is a project of <a href="http://www.ita-int.org">ITA</a> in cooperation with our <a href="partners.html">partners</a>.</p>' +
+      '<p>Click <a target="_blank" href="https://github.com/lavhal/testProj">here</a> for more about GitHub repository.</p>'
+
+    $('#textEditor').html(text);
+    $('#textEditor').height(370);
+
+  </script>
+  <% include footer %>

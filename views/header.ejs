@@ -7,13 +7,14 @@
   <title>
     <%- title %>
   </title>
-  <link rel="stylesheet" type="text/css" href="/semantic/dist/semantic.min.css">
   <link rel="stylesheet" href="/javascripts/bower_components/bootstrap/dist/css/bootstrap.css">
   <link rel="stylesheet" href="/javascripts/bower_components/bootstrap/dist/css/bootstrap.min.css">
   <link rel="stylesheet" href="/javascripts/bower_components/bootstrap/dist/css/bootstrap-theme.min.css">
+  <link rel="stylesheet" href="/stylesheets/bootstrap-treeview.min.css">
+  <link rel="stylesheet" type="text/css" href="/semantic/dist/semantic.min.css">
+  <link rel="stylesheet" href="/stylesheets/yasqe.min.css">
   <link rel="stylesheet" href="/stylesheets/style.css">
-
-  <link rel="stylesheet" href="/stylesheets/codemirror.css">
+  <!-- <link rel="stylesheet" href="/stylesheets/codemirror.css"> -->
   <!-- <link rel="stylesheet" href="/stylesheets/docs.css">  -->
   <link href="/stylesheets/mTab-style.css" type="text/css" rel="stylesheet" />
   <script src="/javascripts/bower_components/jquery/dist/jquery.min.js"></script>
@@ -21,9 +22,11 @@
   <script src="/semantic/dist/semantic.min.js"></script>
   <script src="/javascripts/d3sparql.js"></script>
   <script src="/javascripts/jquery-mTab-min.js"></script>
-  <script src="/javascripts/codemirror.js"></script>
-  <script src="/javascripts/sparql.js"></script>
-
+  <!-- <script src="/javascripts/codemirror.js"></script>
+  <script src="/javascripts/sparql.js"></script> -->
+  <script src="/javascripts/yasqe.bundled.js"></script>
+  <script src="/javascripts/bootstrap-treeview.min.js"></script>
+  <script src="/javascripts/d3.min.js"></script>
   <!--
   gloval replaceAll fuction to remove string from text of turtle code
 -->
@@ -33,50 +36,45 @@
       return target.replace(new RegExp(search, 'g'), replacement);
     };
   </script>
-  <!--
-    <script src="/javascripts/bower_components/bootstrap/dist/js/bootstrap.js"></script>
-
-
-
-    <script src="https://cdn.datatables.net/1.10.13/js/jquery.dataTables.min.js"></script>
-    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.13/css/jquery.dataTables.min.css" />
--->
-  <link rel="stylesheet" href="/stylesheets/bootstrap-treeview.min.css">
-  <script src="/javascripts/bootstrap-treeview.min.js"></script>
-  <script type="text/javascript" src="/javascripts/xmlToJSON.js"></script>
-  <!--
-<script src="http://d3js.org/d3.v3.min.js"></script>-->
-  <script src="/javascripts/d3.min.js"></script>
 
 </head>
-
 <body>
-
-
   <nav class="navbar navbar-inverse navbar-fixed-top">
-    <div class="container-fluid">
-      <div class="navbar-header">
-        <a class="navbar-brand" href="#">Documentation</a>
-      </div>
-      <ul class="nav navbar-nav" ->
-        <!--<ul class="dropdown-menu" id="2">-->
-        <li><a href="/">Home</a></li>
-        <li>
-          <a/ href="/users">Users</a>
-        </li>
-        <li>
-          <a/ href="/turtleEditor">Turtle Editor</a>
-        </li>
-        </li>
-        <li><a href="/visualization">Visualization</a></li>
-        <li class="current">
-          <a href="/tree">Tree</a>
-        </li>
-        <li>
-          <a/ href="/contactus">Contact Us</a>
-        </li>
-      </ul>
-    </div>
-  </nav>
-
-  <!--    <div class="container-fluid">-->
+        <div class="container">
+          <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar" aria-expanded="true" aria-controls="navbar">
+              <span class="sr-only">Toggle navigation</span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="#">    <img src="images/logo.png" width="200" height="30" alt="">
+</a>
+          </div>
+          <div id="navbar" class="navbar-collapse collapse in" aria-expanded="true" style="">
+            <ul class="nav navbar-nav">
+              <li ><a href="/">Home</a></li>
+              <li><a/ href="/users">Users</a></li>
+              <li><a/ href="/turtleEditor">Turtle Editor</a></li>
+              <li><a href="/visualization">Visualization</a></li>
+              <li class="current">
+                <a href="/tree">Tree</a>
+              </li>
+            </ul>
+             <ul class="nav navbar-nav navbar-right">
+               <li>
+                 <a href="https://github.com/ahemaid/conceptView"><i class="circular inverted github icon"></i></a>
+               </li>
+               <li>
+                 <a href="/contactus"><i class="circular inverted help icon"></i></a>
+               </li>
+               <li>
+                 <a href="/contactus"><i class="circular inverted mail icon"></i></a>
+               </li>
+              <li class="active"><a href="#">login</a></li>
+              <!-- <li><a href="../navbar-static-top/">Static top</a></li>
+              <li class="active"><a href="./">Fixed top <span class="sr-only">(current)</span></a></li> -->
+            </ul>
+          </div><!--/.nav-collapse -->
+        </div>
+      </nav>

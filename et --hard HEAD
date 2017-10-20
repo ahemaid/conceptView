@@ -1,0 +1,192 @@
+[33mcommit 588b9f37b2ced1cd0e8b319615055aa70d00dc12[m[33m ([m[1;36mHEAD -> [m[1;32mmaster[m[33m, [m[1;31morigin/master[m[33m, [m[1;31morigin/HEAD[m[33m)[m
+Author: Hemid <ahmedcertsoft@gmail.com>
+Date:   Mon Oct 9 13:34:05 2017 +0200
+
+    add link to SKOS:narrower and SKOS:broader
+
+[33mcommit 967a6604551c90e54658fefa991218a20ffbc231[m
+Author: Hemid <ahmedcertsoft@gmail.com>
+Date:   Mon Oct 9 06:53:50 2017 +0200
+
+    add hide external concepts if not parent
+
+[33mcommit 392582dc6d739552a9a03bc8395e88be3e2d311b[m
+Author: Hemid <ahemid@iais.fraunhofer.de>
+Date:   Thu Oct 5 12:32:49 2017 +0200
+
+    add new sto.ttl
+
+[33mcommit bcf73ec8a1ebde80316d13b5b15011a665408fab[m
+Author: unknown <ahemaid@eis-haltern.iais.fraunhofer.de>
+Date:   Tue Oct 3 19:31:07 2017 +0200
+
+    creating RDFObjects
+
+[33mcommit 3a4515f175f50ea66ab6cb33c2730bc38031b9b2[m
+Author: unknown <ahemaid@eis-haltern.iais.fraunhofer.de>
+Date:   Mon Oct 2 08:46:52 2017 +0200
+
+    fix SKOS parent clicks
+
+[33mcommit fd85524909a1014029db0d6a07e26ef668442e56[m
+Author: unknown <ahemaid@eis-haltern.iais.fraunhofer.de>
+Date:   Sun Oct 1 11:08:32 2017 +0200
+
+    use notFoundMessage
+
+[33mcommit 612935e00f0dc22b022b80e12cfc6da7c4bfea4a[m
+Author: unknown <ahemaid@eis-haltern.iais.fraunhofer.de>
+Date:   Sun Oct 1 10:49:57 2017 +0200
+
+    solve the problem of hidden URI
+
+[33mcommit e704dc9ec3c278b979dec5d1feec53e5bdb19aa0[m
+Author: unknown <ahemaid@eis-haltern.iais.fraunhofer.de>
+Date:   Sun Oct 1 05:53:04 2017 +0200
+
+    add xml.lang property to labels
+
+[33mcommit d207e4cdceceb1d63ff2ef67ba469a4306084c08[m
+Author: unknown <ahemaid@eis-haltern.iais.fraunhofer.de>
+Date:   Fri Sep 29 08:26:25 2017 +0200
+
+    add SKOS with solving some issues
+
+[33mcommit b83c5e806e55c81b64b665946b6d60440d8cf943[m
+Author: unknown <ahemaid@eis-haltern.iais.fraunhofer.de>
+Date:   Fri Sep 29 04:45:53 2017 +0200
+
+    add SKOS files and type properties
+
+[33mcommit 05dcfed660b19807a2650ccacb838c8834e3bb06[m
+Author: unknown <ahemaid@eis-haltern.iais.fraunhofer.de>
+Date:   Thu Sep 28 22:09:06 2017 +0200
+
+    add SKOS to view
+
+[33mcommit 4dc5395cd6c544642d984f6f758688b7cfd0397c[m
+Author: unknown <ahemaid@eis-haltern.iais.fraunhofer.de>
+Date:   Wed Sep 27 23:35:39 2017 +0200
+
+    add external to tree
+
+[33mcommit 5e23a5d412e164bb7d27ebfa665be62727d74a31[m
+Author: unknown <ahemaid@eis-haltern.iais.fraunhofer.de>
+Date:   Wed Sep 27 14:01:56 2017 +0200
+
+    add d3.min.js locally
+
+[33mcommit 4e34ba614863ba202244da0b4bb30e919d19f61a[m
+Author: unknown <ahemaid@eis-haltern.iais.fraunhofer.de>
+Date:   Wed Sep 27 13:40:19 2017 +0200
+
+    fix not found concept
+
+[33mcommit f6820fecd658c4fd90072905a149986ff6b35974[m
+Author: unknown <ahemaid@eis-haltern.iais.fraunhofer.de>
+Date:   Tue Sep 26 13:34:00 2017 +0200
+
+    add semanticUI elements
+
+[33mcommit 8449b3b22c37980c2f5ebd4fd0cac4bbb630b820[m
+Author: unknown <ahemaid@eis-haltern.iais.fraunhofer.de>
+Date:   Mon Sep 25 04:30:16 2017 +0200
+
+    get Graph on view
+
+[33mcommit 72a34f401f7c87c73510365a3cec26c906918ad2[m
+Author: unknown <ahemaid@eis-haltern.iais.fraunhofer.de>
+Date:   Sun Sep 24 14:36:41 2017 +0200
+
+    fix parent inside onotolgy
+
+[33mcommit 6083602130fcae46bf07a22c046a73d7d1db63ae[m
+Author: unknown <ahemaid@eis-haltern.iais.fraunhofer.de>
+Date:   Sun Sep 24 13:04:16 2017 +0200
+
+    fix instant searching
+
+[33mcommit 31485ec99ceeae73854a9a1cb63f3cc0ff38b6b1[m
+Author: unknown <ahemaid@eis-haltern.iais.fraunhofer.de>
+Date:   Sun Sep 24 11:39:04 2017 +0200
+
+    get instances of concepts
+
+[33mcommit 62dc44c8d208f29e5b97596e365052feab8c2cf4[m
+Author: unknown <ahemaid@eis-haltern.iais.fraunhofer.de>
+Date:   Mon Sep 18 13:28:51 2017 +0200
+
+    new tabView of VoCol
+
+[33mcommit bfde10ca44039ff198c71161da33af0bf1333e84[m
+Author: unknown <ahemaid@eis-haltern.iais.fraunhofer.de>
+Date:   Mon Sep 18 10:24:19 2017 +0200
+
+    solve not found URI
+
+[33mcommit 235537024fddd6b0089bcb5a44a4cde2b8a9b07e[m
+Author: unknown <ahemaid@eis-haltern.iais.fraunhofer.de>
+Date:   Mon Sep 18 06:02:38 2017 +0200
+
+    nice buttons
+
+[33mcommit 859be9a5d3c705950feadb70925ddadba18b1b1a[m
+Author: unknown <ahemaid@eis-haltern.iais.fraunhofer.de>
+Date:   Sun Sep 17 14:01:16 2017 +0200
+
+    add data in tables
+
+[33mcommit bea4b72296b40f70c399d8d6ff34d9a46d804df4[m
+Author: unknown <ahemaid@eis-haltern.iais.fraunhofer.de>
+Date:   Sat Sep 16 14:40:14 2017 +0200
+
+    change visualisation
+
+[33mcommit 4004eaeb757ca398a601a89e52517a7c27dc13b3[m
+Merge: 43a0e0c bf976bb
+Author: unknown <ahemaid@eis-haltern.iais.fraunhofer.de>
+Date:   Fri Sep 15 10:09:54 2017 +0200
+
+    Merge branch 'master' of https://github.com/ahemaid/conceptView
+
+[33mcommit bf976bb84faeb6cabc666d5ef3e52616a9864624[m
+Author: Hemid <ahmedcertsoft@gmail.com>
+Date:   Fri Sep 15 10:04:28 2017 +0200
+
+    Update README.md
+
+[33mcommit 43a0e0c611061d61e82248cc985f364214e230f4[m
+Author: unknown <ahemaid@eis-haltern.iais.fraunhofer.de>
+Date:   Fri Sep 15 09:59:47 2017 +0200
+
+    update for click files and show types
+
+[33mcommit 86997902ab02d2275b0d1887653f19c0d66f3a27[m
+Author: Hemid <ahemid@iais.fraunhofer.de>
+Date:   Wed Sep 13 17:41:52 2017 +0200
+
+    update sparql query
+
+[33mcommit 7443e823483cb8ebdb7524302cc8951ea07a2809[m
+Author: Hemid <ahemid@iais.fraunhofer.de>
+Date:   Wed Sep 13 00:01:30 2017 +0200
+
+    update the version
+
+[33mcommit da062b814bb2341c574bde0c6591875f14203be0[m
+Author: Hemid <ahemid@iais.fraunhofer.de>
+Date:   Tue Sep 12 15:47:41 2017 +0200
+
+    first commit
+
+[33mcommit 82812210ac9f987b6897be3edb363c5ac5938aaa[m
+Author: Hemid <ahemid@iais.fraunhofer.de>
+Date:   Tue Sep 12 14:58:23 2017 +0200
+
+    update the project 2
+
+[33mcommit 95bb2b8b61e8675e68a295f4acb278704b10dfe9[m
+Author: Ahmad Hemid <s6ahhemi@uni-bonn.de>
+Date:   Mon Sep 11 06:37:22 2017 +0200
+
+    update project
