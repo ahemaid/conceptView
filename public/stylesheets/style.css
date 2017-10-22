@@ -6,8 +6,12 @@
 .ui.tiny.label {
   margin: -10px .14285714em;
 }
+
 .ui.checkbox {
-      display: block;
+  display: inline-block;
+  margin-bottom: 0px;
+  margin-top: 0px;
+  margin-bottom:5px
 }
 
 .yasqe .CodeMirror-scroll {
@@ -16,7 +20,7 @@
 }
 
 li.list-group-item.node-tree a {
-  max-width: 355px.ui.checkbox ;
+  max-width: 355px.ui.checkbox;
   display: inline-block;
   word-wrap: brea.ui.checkbox k-word;
 }

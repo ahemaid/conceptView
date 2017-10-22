@@ -525,12 +525,12 @@ public class App {
 			String filePath;
 			String outFileMessage;
 			if (type == "SKOS") {
-				filePath = "../../allSKOSObjects.JSON";
+				filePath = "../../jsonDataFiles/SKOSObjects.json";
 				outFileMessage = "Successfully Copied allSKOSObjectJSON Object to File...";
 			}
 
 			else {
-				filePath = "../../allRDFObjects.JSON";
+				filePath = "../../jsonDataFiles/RDFSObjects.json";
 				outFileMessage = "Successfully Copied allRDFObjectJSON Object to File...";
 
 			}
@@ -582,7 +582,7 @@ public class App {
 					}
 				}
 			}
-			try (FileWriter file = new FileWriter("../../SKOSResults.JSON")) {
+			try (FileWriter file = new FileWriter("../../jsonDataFiles/SKOSConcepts.json")) {
 				file.write(orginzedArray.toString());
 
 				System.out.println("Successfully Copied SKOSJSON Object to File...");
@@ -637,7 +637,7 @@ public class App {
 
 				}
 			}
-			try (FileWriter file = new FileWriter("../../RDFresults.JSON")) {
+			try (FileWriter file = new FileWriter("../../jsonDataFiles/RDFSConcepts.json")) {
 				file.write(orginzedArray.toString());
 				// file.flush();
 				// file.close();

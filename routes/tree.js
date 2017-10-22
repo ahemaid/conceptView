@@ -1,10 +1,10 @@
 var express = require('express');
 var app = express();
 var router = express.Router();
-var appdata = require('../RDFresults.json');
-var SKOSData = require('../SKOSResults.json');
-var RDFObjectsPlusURI = require('../allRDFObjects.json');
-var SKOSObjectsPlusURI = require('../allSKOSObjects.json');
+var appdata = require('../jsonDataFiles/RDFSConcepts.json');
+var SKOSData = require('../jsonDataFiles/SKOSConcepts.json');
+var RDFObjectsPlusURI = require('../jsonDataFiles/RDFSObjects.json');
+var SKOSObjectsPlusURI = require('../jsonDataFiles/SKOSObjects.json');
 // var http = require('http');
 // const url = require('url');
 // var parseString = require('xml2js').parseString;

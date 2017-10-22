@@ -1,28 +1,40 @@
 <% include header %>
   <div class="ui container" style="overflow:hidden">
-    <div class="page-header">
-      <h1>Configuration Page</h1>
-    </div>
+    <h1 style="padding-top:10px">Configuration Page</h1>
     <div class="ui two column stackable grid">
       <div class="column">
         <form action="/config" onsubmit="return validateFormOnSubmit(this)" method="post">
           <div class="form-group">
             <div class="ui styled accordion">
-              <div class="active title">
+              <div id="generalInfoTitle" class="active title">
                 <i class="dropdown icon"></i> General Info
               </div>
-              <div class="active content">
+              <div id="generalInfoContent" class="active content">
                 <div class="field" style="margin-bottom:5px">
                   <div class="ui corner  labeled input">
                     <a class="ui left label" style="width: 150px;">
           Vocabulary Name
         </a>
-                    <input type="text" id="vocabularyName" class="form-control" name="vocabularyName" placeholder="Enter vocabulary name" value="Mobivoc" style="width:300px" />
+                    <input type="text" id="vocabularyName"  name="vocabularyName" placeholder="Enter vocabulary name" value="Mobivoc" style="width:300px" />
                     <div class="ui corner label">
                       <i class="asterisk icon"></i>
                     </div>
                   </div>
                 </div>
+
+                <div class="field" style="margin-bottom:5px">
+                  <div class="ui labeled input">
+                    <a class="ui label" style="width: 150px;">
+          Vocabulary Name
+        </a>
+        <input type="text" id="vocabularyName" class="form-control" name="vocabularyName" placeholder="Enter vocabulary name" value="Mobivoc" style="width:300px" />
+                    <div class="ui corner label">
+                      <i class="asterisk icon"></i>
+                    </div>
+                  </div>
+                </div>
+
+
                 <div class="field" style="margin-bottom:5px">
                   <div class="ui labeled input">
                     <a class="ui left label" style="width: 150px;">
@@ -35,16 +47,27 @@
                   </div>
                 </div>
                 <div class="field" style="margin-bottom:5px">
+                  <div class="ui labeled input">
+                    <a class="ui label" style="width: 150px;">
+          Password
+        </a>
+                    <input type="password" id="password" name="password" placeholder="Enter repository password" style="width:300px" />
+                    <div class="ui corner label">
+                      <i class="asterisk icon"></i>
+                    </div>
+                  </div>
+                </div>
+                <div class="field">
                   <div class="ui checkbox">
                     <input type="checkbox" name="webHook" class="form-control" value="webHookChecked">
                     <label>Web Hook</label>
                   </div>
                 </div>
               </div>
-              <div class="title">
+              <div id="repositoryInfoTitle" class="title">
                 <i class="dropdown icon"></i> Repository info
               </div>
-              <div class="content">
+              <div id="repositoryInfoContent" class="content">
                 <div class="field" style="margin-bottom:5px">
                   <div class="ui labeled input">
                     <a class="ui label" style="width: 150px;">
@@ -90,10 +113,10 @@
                   </div>
                 </div>
               </div>
-              <div class="title">
+              <div class=" title">
                 <i class="dropdown icon"></i> Syntax Validation
               </div>
-              <div class="content">
+              <div class=" content">
                 <div class="field">
                   <div class="ui radio checkbox">
                     <input type="radio" name="syntaxValidation" value="rapperChecked" checked>
@@ -107,10 +130,10 @@
                   </div>
                 </div>
               </div>
-              <div class="title">
+              <div id="docGenerationTitle" class="title">
                 <i class="dropdown icon"></i> Documentation Generation
               </div>
-              <div class="content">
+              <div id="docGenerationContent" class="content">
                 <div class="field">
                   <div class="ui radio checkbox">
                     <input type="radio" name="documentationGeneration" value="schemaOrgChecked" checked>
@@ -124,63 +147,63 @@
                   </div>
                 </div>
               </div>
-              <div class="title">
+              <div id="additionalServicesTitle" class="title">
                 <i class="dropdown icon"></i> Additional Services
               </div>
-              <div class="content">
-                <div class="field" style="margin-bottom:5px">
+              <div id="additionalServicesContent" class="content">
+                <div class="field">
                   <div class="ui checkbox">
                     <input type="checkbox" name="visualization" value="visualizationChecked" checked>
                     <label>Visualization</label>
                   </div>
                 </div>
-                <div class="field" style="margin-bottom:5px">
+                <div class="field">
                   <div class="ui checkbox">
                     <input type="checkbox" name="sparqlEndPoint" value="sparqlEndPointChecked" checked>
                     <label>Sparql EndPoint</label>
                   </div>
                 </div>
-                <div class="field" style="margin-bottom:5px">
+                <div class="field">
                   <div class="ui checkbox">
                     <input type="checkbox" name="syntaxValidationReport" value="syntaxValidationReportChecked" checked>
                     <label>Syntax Validation Report</label>
                   </div>
                 </div>
-                <div class="field" style="margin-bottom:5px">
+                <div class="field">
                   <div class="ui checkbox">
                     <input type="checkbox" name="evolutionReport" value="evolutionReportChecked" checked>
                     <label>Schema Evolution Report</label>
                   </div>
                 </div>
-                <div class="field" style="margin-bottom:5px">
+                <div class="field">
                   <div class="ui checkbox">
                     <input type="checkbox" name="otherBranches" value="otherBranchesChecked" checked>
                     <label>Other Branches</label>
                   </div>
                 </div>
-                <div class="field" style="margin-bottom:5px">
+                <div class="field">
                   <div class="ui checkbox">
                     <input type="checkbox" name="clientHooks" value="clientHooksChecked" checked>
                     <label>Client Side Hooks</label>
                   </div>
                 </div>
-                <div class="field" style="margin-bottom:5px">
+                <div class="field">
                   <div class="ui checkbox">
                     <input type="checkbox" name="turtleEditor" value="turtleEditorChecked" checked>
                     <label>Turtle Editor</label>
                   </div>
                 </div>
-                <div class="field" style="margin-bottom:5px">
+                <div class="field">
                   <div class="ui checkbox">
                     <input type="checkbox" name="predefinedQueries" value="predefinedQueriesChecked" checked>
                     <label>Use Predefined Queries</label>
                   </div>
                 </div>
               </div>
-              <div class="title">
+              <div id="serializationFormatTitle" class="title">
                 <i class="dropdown icon"></i> Serializations Format
               </div>
-              <div class="content">
+              <div id="serializationFormatContent" class="content">
                 <div class="field">
                   <div class="ui  checkbox">
                     <input type="checkbox" name="rdfxml" value="rdfxmlChecked">
@@ -196,11 +219,13 @@
               </div>
             </div>
           </div>
-          <div class="field" style="padding-top:10px">
-            <div class="ui massive right floated buttons">
+          <div class="field">
+            <div class="ui large right floated buttons">
               <button class="ui button">Cancel</button>
               <div class="or"></div>
-              <button type="submit" class="ui teal button" value="Save Configuration">Save Configuration</button>
+              <button type="submit" class="btn btn-primary"  value="Save Configuration" disabled>Save Configuration</button>
+
+              <!-- <button type="submit" class="ui teal button" value="Save Configuration">Save Configuration</button> -->
             </div>
           </div>
         </form>
@@ -228,21 +253,62 @@
     $('.ui.checkbox').checkbox();
     $('.ui.accordion').accordion();
 
+    // $('form').submit(function() {
+    //   $(this).find(':submit').attr('disabled', 'disabled');
+    // });
+    // $("form").bind("invalid-form.validate", function () {
+    // $(this).find(':submit').prop('disabled', false);
+// });
     function validateFormOnSubmit(theForm) {
-      var reason = "";
+      var reason1 = [];
+      var reason2 = [];
 
-      reason += validateEmpty(theForm.vocabularyName);
-      reason += validateEmpty(theForm.server);
-      reason += validateEmpty(theForm.repository);
-      reason += validateEmpty(theForm.branchName);
-      reason += validateEmpty(theForm.user);
-      reason += validateEmpty(theForm.password);
+      //var array = ["password", "user", "branchName", "repository"]
 
-      if (reason != "") {
-        alert("Some fields need correction:\n" + reason);
+      if (validateEmpty(theForm.vocabularyName) != "")
+        reason2.push(validateEmpty(theForm.vocabularyName));
+      if (validateEmpty(theForm.server) != "")
+        reason2.push(validateEmpty(theForm.server));
+      if (validateEmpty(theForm.repository) != "")
+        reason1.push(validateEmpty(theForm.repository));
+      if (validateEmpty(theForm.branchName) != "")
+        reason1.push(validateEmpty(theForm.branchName));
+      if (validateEmpty(theForm.user) != "")
+        reason1.push(validateEmpty(theForm.user));
+      if (validateEmpty(theForm.password) != "")
+        reason1.push(validateEmpty(theForm.password));
+
+      console.log(reason1);
+      console.log(reason2);
+
+      if (reason1.length > 0 && reason2.length > 0) {
+        //$(div.active.title).addClass("title");
+        //$(div.active.content).addClass("content");
+
+        //alert(JSON.stringify($("div.active.title")));
+        $("#repositoryInfoTitle").addClass("active title");
+        $("#repositoryInfoContent").addClass("active content");
+        //$("#generalInfoTitle").addClass(" active title");
+        //$("#generalInfoContent").addClass("active content");
+        alert("reason1 && reason2");
         return false;
+      } else if (reason1.length > 0) {
+        $("#repositoryInfoTitle").addClass("active title");
+        $("#repositoryInfoContent").addClass("active content");
+        $("#generalInfoTitle").removeClass("active title").addClass("title");
+        $("#generalInfoContent").removeClass("active content").addClass("content");
+        alert("reason1");
+        return false;
+      } else if (reason2.length > 0) {
+        alert("reason2");
+        return false;
+      } else {
+        alert("true");
+        $('form').submit(function() {
+        $(this).find(':submit').attr('disabled', 'enabled');
+        });
+        return true;
       }
-      return true;
     }
 
     function validateEmpty(fld) {
@@ -250,11 +316,12 @@
 
       if (fld.value.length == 0) {
         fld.style.background = 'Pink';
-        error = "The required field has not been filled in " + fld.id + "\n";
+        error = fld.id;
       } else {
         fld.style.background = 'White';
       }
       return error;
+      debugger;
     }
 
     $('#sourceCodeTabs a').click(function(e) {
@@ -290,6 +357,5 @@
 
     $('#textEditor').html(text);
     $('#textEditor').height(370);
-
   </script>
   <% include footer %>
