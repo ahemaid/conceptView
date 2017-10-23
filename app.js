@@ -12,25 +12,11 @@ var visualization = require('./routes/visualization');
 var turtleEditor = require('./routes/turtleEditor');
 var config = require('./routes/config');
 var fs = require('fs');
-var  jsonfile  =  require('jsonfile')
-
-
-//var selectServices = require('./routes/selectServices');
-
-//var favicon = require('favicons');
-
-
+var  jsonfile  =  require('jsonfile');
 var app = express();
-//favicon
-//app.use(favicon(__dirname + '/public/img/favicon.ico'));
 
-
-/*var env = process.env.NODE_ENV || 'development';
-app.locals.ENV = env;
-app.locals.ENV_DEVELOPMENT = env == 'development';*/
 
 // view engine setup
-
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 
@@ -56,7 +42,7 @@ app.use('/config', config);
 // http post when  a user configurations is submitted
 app.post('/config', function(req, res) {
   var timeout = null;
-  var filepath = 'config.json';
+  var filepath = 'jsonDataFiles/userConfigurations.json';
   var emptyJSONFile = false;
   var userConfigurationsArray = [];
   // Read the userConfigurations file if exsit to append new data

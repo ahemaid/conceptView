@@ -3,205 +3,205 @@
     <h1 style="padding-top:10px">Configuration Page</h1>
     <div class="ui two column stackable grid">
       <div class="column">
-        <form action="/config" onsubmit="return validateFormOnSubmit(this)" method="post">
-          <div class="form-group">
-            <div class="ui styled accordion">
-              <div id="generalInfoTitle" class="active title">
-                <i class="dropdown icon"></i> General Info
-              </div>
-              <div id="generalInfoContent" class="active content">
-                <div class="field" style="margin-bottom:5px">
-                  <div class="ui corner  labeled input">
-                    <a class="ui left label" style="width: 150px;">
+        <form class="ui form" action="/config" method="post">
+          <!-- onsubmit="return validateFormOnSubmit(this)" -->
+          <div class="ui styled accordion">
+            <div id="generalInfoTitle" class="active title">
+              <i class="dropdown icon"></i> General Info
+            </div>
+            <div id="generalInfoContent" class="active content">
+              <div class="field" style="margin-bottom:5px">
+                <div class="ui corner  labeled input">
+                  <a class="ui left label" style="width: 150px;">
           Vocabulary Name
         </a>
-                    <input type="text" id="vocabularyName"  name="vocabularyName" placeholder="Enter vocabulary name" value="Mobivoc" style="width:300px" />
-                    <div class="ui corner label">
-                      <i class="asterisk icon"></i>
-                    </div>
+                  <input type="text" id="vocabularyName" name="vocabularyName" placeholder="Enter vocabulary name" value="Mobivoc" style="width:300px" />
+                  <div class="ui corner label">
+                    <i class="asterisk icon"></i>
                   </div>
                 </div>
-                <div class="field" style="margin-bottom:5px">
-                  <div class="ui labeled input">
-                    <a class="ui left label" style="width: 150px;">
+              </div>
+              <div class="field" style="margin-bottom:5px">
+                <div class="ui labeled input">
+                  <a class="ui left label" style="width: 150px;">
           Domain name
         </a>
-                    <input type="text" id="server" name="server"  placeholder="Enter domain name" value="http://vocol.vagrantshare.com" style="width:300px" />
-                    <div class="ui corner label">
-                      <i class="asterisk icon"></i>
-                    </div>
-                  </div>
-                </div>
-                <div class="field">
-                  <div class="ui checkbox">
-                    <input type="checkbox" name="webHook"  value="webHookChecked">
-                    <label>Web Hook</label>
+                  <input type="text" id="server" name="server" placeholder="Enter domain name" value="http://vocol.vagrantshare.com" style="width:300px" />
+                  <div class="ui corner label">
+                    <i class="asterisk icon"></i>
                   </div>
                 </div>
               </div>
-              <div id="repositoryInfoTitle" class="title">
-                <i class="dropdown icon"></i> Repository info
+              <div class="field">
+                <div class="ui checkbox">
+                  <input type="checkbox" name="webHook" value="webHookChecked">
+                  <label>Web Hook</label>
+                </div>
               </div>
-              <div id="repositoryInfoContent" class="content">
-                <div class="field" style="margin-bottom:5px">
-                  <div class="ui labeled input">
-                    <a class="ui label" style="width: 150px;">
+            </div>
+            <div id="repositoryInfoTitle" class="title">
+              <i class="dropdown icon"></i> Repository info
+            </div>
+            <div id="repositoryInfoContent" class="content">
+              <div class="field" style="margin-bottom:5px">
+                <div class="ui labeled input">
+                  <a class="ui label" style="width: 150px;">
           Repository
         </a>
-                    <input type="text" id="repository" name="repository" placeholder="Enter repository address" value="https://github.com/lavhal/testProj.git" style="width:300px" />
-                    <div class="ui corner label">
-                      <i class="asterisk icon"></i>
-                    </div>
+                  <input type="text" id="repository" name="repository" placeholder="Enter repository address" value="https://github.com/lavhal/testProj.git" style="width:300px" />
+                  <div class="ui corner label">
+                    <i class="asterisk icon"></i>
                   </div>
                 </div>
-                <div class="field" style="margin-bottom:5px">
-                  <div class="ui labeled input">
-                    <a class="ui label" style="width: 150px;">
+              </div>
+              <div class="field" style="margin-bottom:5px">
+                <div class="ui labeled input">
+                  <a class="ui label" style="width: 150px;">
           Branch Name
         </a>
-                    <input type="text" id="branchName" name="branchName" placeholder="Enter branch name" value="master" style="width:300px" />
-                    <div class="ui corner label">
-                      <i class="asterisk icon"></i>
-                    </div>
+                  <input type="text" id="branchName" name="branchName" placeholder="Enter branch name" value="master" style="width:300px" />
+                  <div class="ui corner label">
+                    <i class="asterisk icon"></i>
                   </div>
                 </div>
-                <div class="field" style="margin-bottom:5px">
-                  <div class="ui labeled input">
-                    <a class="ui label" style="width: 150px;">
+              </div>
+              <div class="field" style="margin-bottom:5px">
+                <div class="ui labeled input">
+                  <a class="ui label" style="width: 150px;">
           User
         </a>
-                    <input type="text" id="user" name="user" placeholder="Enter repository user" value="lavhal" style="width:300px" />
-                    <div class="ui corner label">
-                      <i class="asterisk icon"></i>
-                    </div>
+                  <input type="text" id="user" name="user" placeholder="Enter repository user" value="lavhal" style="width:300px" />
+                  <div class="ui corner label">
+                    <i class="asterisk icon"></i>
                   </div>
                 </div>
-                <div class="field" style="margin-bottom:5px">
-                  <div class="ui labeled input">
-                    <a class="ui label" style="width: 150px;">
+              </div>
+              <div class="field" style="margin-bottom:5px">
+                <div class="ui labeled input">
+                  <a class="ui label" style="width: 150px;">
           Password
         </a>
-                    <input type="password" id="password" name="password" placeholder="Enter repository password" style="width:300px" />
-                    <div class="ui corner label">
-                      <i class="asterisk icon"></i>
-                    </div>
+                  <input type="password" id="password" name="password" placeholder="Enter repository password" style="width:300px" />
+                  <div class="ui corner label">
+                    <i class="asterisk icon"></i>
                   </div>
                 </div>
               </div>
-              <div class=" title">
-                <i class="dropdown icon"></i> Syntax Validation
-              </div>
-              <div class=" content">
-                <div class="field">
-                  <div class="ui radio checkbox">
-                    <input type="radio" name="syntaxValidation" value="rapperChecked" checked>
-                    <label>Rapper</label>
-                  </div>
-                </div>
-                <div class="field">
-                  <div class="ui radio checkbox">
-                    <input type="radio" name="syntaxValidation" value="jenaRiotChecked">
-                    <label>Jena Riot</label>
-                  </div>
+            </div>
+            <div class=" title">
+              <i class="dropdown icon"></i> Syntax Validation
+            </div>
+            <div class=" content">
+              <div class="field">
+                <div class="ui radio checkbox">
+                  <input type="radio" name="syntaxValidation" value="rapperChecked" checked>
+                  <label>Rapper</label>
                 </div>
               </div>
-              <div id="docGenerationTitle" class="title">
-                <i class="dropdown icon"></i> Documentation Generation
-              </div>
-              <div id="docGenerationContent" class="content">
-                <div class="field">
-                  <div class="ui radio checkbox">
-                    <input type="radio" name="documentationGeneration" value="schemaOrgChecked" checked>
-                    <label>SchemaOrg</label>
-                  </div>
-                </div>
-                <div class="field">
-                  <div class="ui radio checkbox">
-                    <input type="radio" name="documentationGeneration" value="widocoChecked">
-                    <label>Widoco</label>
-                  </div>
+              <div class="field">
+                <div class="ui radio checkbox">
+                  <input type="radio" name="syntaxValidation" value="jenaRiotChecked">
+                  <label>Jena Riot</label>
                 </div>
               </div>
-              <div id="additionalServicesTitle" class="title">
-                <i class="dropdown icon"></i> Additional Services
-              </div>
-              <div id="additionalServicesContent" class="content">
-                <div class="field">
-                  <div class="ui checkbox">
-                    <input type="checkbox" name="visualization" value="visualizationChecked" checked>
-                    <label>Visualization</label>
-                  </div>
-                </div>
-                <div class="field">
-                  <div class="ui checkbox">
-                    <input type="checkbox" name="sparqlEndPoint" value="sparqlEndPointChecked" checked>
-                    <label>Sparql EndPoint</label>
-                  </div>
-                </div>
-                <div class="field">
-                  <div class="ui checkbox">
-                    <input type="checkbox" name="syntaxValidationReport" value="syntaxValidationReportChecked" checked>
-                    <label>Syntax Validation Report</label>
-                  </div>
-                </div>
-                <div class="field">
-                  <div class="ui checkbox">
-                    <input type="checkbox" name="evolutionReport" value="evolutionReportChecked" checked>
-                    <label>Schema Evolution Report</label>
-                  </div>
-                </div>
-                <div class="field">
-                  <div class="ui checkbox">
-                    <input type="checkbox" name="otherBranches" value="otherBranchesChecked" checked>
-                    <label>Other Branches</label>
-                  </div>
-                </div>
-                <div class="field">
-                  <div class="ui checkbox">
-                    <input type="checkbox" name="clientHooks" value="clientHooksChecked" checked>
-                    <label>Client Side Hooks</label>
-                  </div>
-                </div>
-                <div class="field">
-                  <div class="ui checkbox">
-                    <input type="checkbox" name="turtleEditor" value="turtleEditorChecked" checked>
-                    <label>Turtle Editor</label>
-                  </div>
-                </div>
-                <div class="field">
-                  <div class="ui checkbox">
-                    <input type="checkbox" name="predefinedQueries" value="predefinedQueriesChecked" checked>
-                    <label>Use Predefined Queries</label>
-                  </div>
+            </div>
+            <div id="docGenerationTitle" class="title">
+              <i class="dropdown icon"></i> Documentation Generation
+            </div>
+            <div id="docGenerationContent" class="content">
+              <div class="field">
+                <div class="ui radio checkbox">
+                  <input type="radio" name="documentationGeneration" value="schemaOrgChecked" checked>
+                  <label>SchemaOrg</label>
                 </div>
               </div>
-              <div id="serializationFormatTitle" class="title">
-                <i class="dropdown icon"></i> Serializations Format
-              </div>
-              <div id="serializationFormatContent" class="content">
-                <div class="field">
-                  <div class="ui  checkbox">
-                    <input type="checkbox" name="rdfxml" value="rdfxmlChecked">
-                    <label>RdfXML</label>
-                  </div>
+              <div class="field">
+                <div class="ui radio checkbox">
+                  <input type="radio" name="documentationGeneration" value="widocoChecked">
+                  <label>Widoco</label>
                 </div>
-                <div class="field">
-                  <div class="ui  checkbox">
-                    <input type="checkbox" name="ntriples" value="ntriplesChecked">
-                    <label>NTriples</label>
-                  </div>
+              </div>
+            </div>
+            <div id="additionalServicesTitle" class="title">
+              <i class="dropdown icon"></i> Additional Services
+            </div>
+            <div id="additionalServicesContent" class="content">
+              <div class="field">
+                <div class="ui checkbox">
+                  <input type="checkbox" name="visualization" value="visualizationChecked" checked>
+                  <label>Visualization</label>
+                </div>
+              </div>
+              <div class="field">
+                <div class="ui checkbox">
+                  <input type="checkbox" name="sparqlEndPoint" value="sparqlEndPointChecked" checked>
+                  <label>Sparql EndPoint</label>
+                </div>
+              </div>
+              <div class="field">
+                <div class="ui checkbox">
+                  <input type="checkbox" name="syntaxValidationReport" value="syntaxValidationReportChecked" checked>
+                  <label>Syntax Validation Report</label>
+                </div>
+              </div>
+              <div class="field">
+                <div class="ui checkbox">
+                  <input type="checkbox" name="evolutionReport" value="evolutionReportChecked" checked>
+                  <label>Schema Evolution Report</label>
+                </div>
+              </div>
+              <div class="field">
+                <div class="ui checkbox">
+                  <input type="checkbox" name="otherBranches" value="otherBranchesChecked" checked>
+                  <label>Other Branches</label>
+                </div>
+              </div>
+              <div class="field">
+                <div class="ui checkbox">
+                  <input type="checkbox" name="clientHooks" value="clientHooksChecked" checked>
+                  <label>Client Side Hooks</label>
+                </div>
+              </div>
+              <div class="field">
+                <div class="ui checkbox">
+                  <input type="checkbox" name="turtleEditor" value="turtleEditorChecked" checked>
+                  <label>Turtle Editor</label>
+                </div>
+              </div>
+              <div class="field">
+                <div class="ui checkbox">
+                  <input type="checkbox" name="predefinedQueries" value="predefinedQueriesChecked" checked>
+                  <label>Use Predefined Queries</label>
+                </div>
+              </div>
+            </div>
+            <div id="serializationFormatTitle" class="title">
+              <i class="dropdown icon"></i> Serializations Format
+            </div>
+            <div id="serializationFormatContent" class="content">
+              <div class="field">
+                <div class="ui  checkbox">
+                  <input type="checkbox" name="rdfxml" value="rdfxmlChecked">
+                  <label>RdfXML</label>
+                </div>
+              </div>
+              <div class="field">
+                <div class="ui  checkbox">
+                  <input type="checkbox" name="ntriples" value="ntriplesChecked">
+                  <label>NTriples</label>
                 </div>
               </div>
             </div>
           </div>
           <div class="field">
             <div class="ui large right floated buttons">
-              <button class="ui button">Cancel</button>
+              <button id="restBtn" class="ui reset button">Reset</button>
               <div class="or"></div>
-              <button type="submit" class="btn btn-success"  value="Save Configuration" >Save Configuration</button>
-
-              <!-- <button type="submit" class="ui teal button" value="Save Configuration">Save Configuration</button> -->
+              <button type="submit" class="ui blue submit button" value="Save Configuration">Save Configuration</button>
             </div>
+          </div>
+          <div class="field">
+            <div class="ui error message"></div>
           </div>
         </form>
       </div>
@@ -212,97 +212,77 @@
         <!-- Tab panes -->
         <div class="tab-content">
           <div role="tabpanel" class="tab-pane active" id="homepage">
-            <!-- <textarea id="editor" name="homepageContent" style="width:300;height:800"> -->
             <div id="textEditor" class="ui ignored message" style="overflow:auto;width:534;">
-
             </div>
-            <!-- </textarea> -->
           </div>
         </div>
       </div>
     </div>
-  </div>
   </div>
 
   <script type="text/javascript">
     $('.ui.checkbox').checkbox();
     $('.ui.accordion').accordion();
 
-    // $('form').submit(function() {
-    //   $(this).find(':submit').attr('disabled', 'disabled');
-    // });
-    // $("form").bind("invalid-form.validate", function () {
-    // $(this).find(':submit').prop('disabled', false);
-// });
-    function validateFormOnSubmit(theForm) {
-      var reason1 = [];
-      var reason2 = [];
+      $('.ui.form')
+        .form({
+          fields: {
+            vocabularyName: {
+              identifier: 'vocabularyName',
+              rules: [{
+                type: 'empty',
+                prompt: 'You must give the vocabulary name'
 
-      //var array = ["password", "user", "branchName", "repository"]
-
-      if (validateEmpty(theForm.vocabularyName) != "")
-        reason2.push(validateEmpty(theForm.vocabularyName));
-      if (validateEmpty(theForm.server) != "")
-        reason2.push(validateEmpty(theForm.server));
-      if (validateEmpty(theForm.repository) != "")
-        reason1.push(validateEmpty(theForm.repository));
-      if (validateEmpty(theForm.branchName) != "")
-        reason1.push(validateEmpty(theForm.branchName));
-      if (validateEmpty(theForm.user) != "")
-        reason1.push(validateEmpty(theForm.user));
-      if (validateEmpty(theForm.password) != "")
-        reason1.push(validateEmpty(theForm.password));
-
-      console.log(reason1);
-      console.log(reason2);
-
-      if (reason1.length > 0 && reason2.length > 0) {
-        //$(div.active.title).addClass("title");
-        //$(div.active.content).addClass("content");
-
-        //alert(JSON.stringify($("div.active.title")));
-        $("#repositoryInfoTitle").addClass("active title");
-        $("#repositoryInfoContent").addClass("active content");
-        //$("#generalInfoTitle").addClass(" active title");
-        //$("#generalInfoContent").addClass("active content");
-        alert("reason1 && reason2");
-        return false;
-      } else if (reason1.length > 0) {
-        $("#repositoryInfoTitle").addClass("active title");
-        $("#repositoryInfoContent").addClass("active content");
-        $("#generalInfoTitle").removeClass("active title").addClass("title");
-        $("#generalInfoContent").removeClass("active content").addClass("content");
-        alert("reason1");
-        return false;
-      } else if (reason2.length > 0) {
-        alert("reason2");
-        return false;
-      } else {
-        alert("true");
-        $('form').submit(function() {
-        $(this).find(':submit').attr('disabled', 'enabled');
+              }]
+            },
+            repository: {
+              identifier: 'repository',
+              rules: [{
+                type: 'empty',
+                prompt: 'You must fill the repository name'
+              }]
+            },
+            server: {
+              identifier: 'server',
+              rules: [{
+                type: 'empty',
+                prompt: 'The server URL is missing'
+              }]
+            },
+            branchName: {
+              identifier: 'branchName',
+              rules: [{
+                type: 'empty',
+                prompt: 'You must give the github branch name'
+              }]
+            },
+            username: {
+              identifier: 'username',
+              rules: [{
+                type: 'empty',
+                prompt: 'The user name is missing'
+              }]
+            },
+            password: {
+              identifier: 'password',
+              rules: [{
+                  type: 'empty',
+                  prompt: 'password cannot be empty'
+                },
+                {
+                  type: 'minLength[6]',
+                  prompt: 'Your password must be at least {ruleValue} characters'
+                }
+              ]
+            }
+          }
         });
-        return true;
-      }
-    }
 
-    function validateEmpty(fld) {
-      var error = "";
-
-      if (fld.value.length == 0) {
-        fld.style.background = 'Pink';
-        error = fld.id;
-      } else {
-        fld.style.background = 'White';
-      }
-      return error;
-      debugger;
-    }
-
-    $('#sourceCodeTabs a').click(function(e) {
-      e.preventDefault()
-      $(this).tab('show')
-    })
+        // reset button is clicked to reset the form
+        $('#restBtn').on('click', function(event){
+          event.preventDefault();
+          location.reload("/config");
+        });
 
     var text = '<h3>Supporting human mobility by data mobility</h3>' +
       '<p>New mobility concepts and better data networking are both crucial factors for global economic development. To invent innovative and sustainable mobility concepts, new data-based value-added services are required.</p>' +

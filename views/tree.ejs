@@ -431,7 +431,6 @@
         });
         // rebuild tree with the new data
         buildTree(data);
-        //debugger;
       }
 
       // regenerate the tree according to the new data
@@ -592,8 +591,8 @@
             resetViews();
           }
         }, 1);
-        // alert(pattern);
       }
+
       // chech search input on keyup
       $('#input-search').on('keyup', search);
 
@@ -737,7 +736,6 @@
           }
         }
         //TODO: filter childern of parents
-        //debugger;
         return filteredData;
       }
 
@@ -896,7 +894,6 @@
             showRDFSTree(currentTreeData, currentSelectedFile);
           }
         }
-        //debugger;
       }
 
       // show info. details of clicked instance
@@ -1249,7 +1246,6 @@
                 if (key3)
                   key2 = key2 + '@' + key3;
               }
-              debugger;
               table += '<tr><td>' + key1 + '</td>    <td>' + key2 + '</td>  </tr>';
             }
           }
