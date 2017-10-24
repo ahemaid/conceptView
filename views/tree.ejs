@@ -1,6 +1,6 @@
 <% include header %>
-  <div class="container">
-    <!-- <div class="col-sm-12  col-md-12" style="padding-top: 2cm"></div> -->
+<div class="ui grid">
+<div class="container">
     <div class="ui segment" style="padding-top: 1cm">
       <div class="ui form">
         <div class="three fields">
@@ -81,8 +81,8 @@
       <div id="externalInfo"></div>
       <ul id="viewList" class="nav nav-tabs" style="display: none">
         <li class="active"><a class="nav-link active" data-toggle="tab" id="showExternalInfo" href="#documentation">Documentation</a></li>
-        <li><a class="nav-link" data-toggle="tab" id="sourceCodeTab" href="#sourceCode">Turtle source</a></li>
-        <li><a class="nav-link" data-toggle="tab" id="graphTab" href="#showGraph">Concept graph</a></li>
+        <li><a class="nav-link" data-toggle="tab" id="sourceCodeTab" href="#sourceCode">Source</a></li>
+        <li><a class="nav-link" data-toggle="tab" id="graphTab" href="#showGraph">Graphical depiction</a></li>
       </ul>
       <div class="tab-content">
         <div class="tab-pane active" id="documentation" role="tabpanel">
@@ -97,16 +97,16 @@
           </div>
         </div>
         <div class="tab-pane" class="tabContent" id="sourceCode" role="tabpanel">
-          <h4 style="margin-top:9px">Source Code:</h4>
           <div id="yasqe" style="overflow: hidden"></div>
         </div>
         <div class="tab-pane" class="tabContent" id="showGraph" role="tabpanel">
-          <h4 style="margin-top:9px">Graph Representation:</h4>
           <div id='graph'></div>
         </div>
       </div>
     </div>
-  </div>
+  <!-- </div>
+</div> -->
+
   <% include footer %>
     <!-- End of expressJS coding-->
 
@@ -285,7 +285,7 @@
           // var externalURITable = '<table class="ui very basic table" >' +
           // '<colgroup> <col class="col-md-4"> </colgroup>' +
           var externalURITable = '<div class="ui attached error message">' +
-            '<div class="header"> This concept is outside this Ontology </div></div>';
+            '<div class="header"> This concept is external </div></div>';
           //'</tr></thread>';
           // check if it URL ends with "/"
           if (ExteralURI[ExteralURI.length - 1] === ('/')) {

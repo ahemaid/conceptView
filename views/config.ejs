@@ -212,8 +212,8 @@
         <!-- Tab panes -->
         <div class="tab-content">
           <div role="tabpanel" class="tab-pane active" id="homepage">
-            <div id="textEditor" class="ui ignored message" style="overflow:auto;width:534;">
-            </div>
+            <p><textarea  style="overflow:auto; width:540px;height:382px">
+            </textarea></p>
           </div>
         </div>
       </div>
@@ -224,65 +224,66 @@
     $('.ui.checkbox').checkbox();
     $('.ui.accordion').accordion();
 
-      $('.ui.form')
-        .form({
-          fields: {
-            vocabularyName: {
-              identifier: 'vocabularyName',
-              rules: [{
-                type: 'empty',
-                prompt: 'You must give the vocabulary name'
+    // form validation
+    $('.ui.form')
+      .form({
+        fields: {
+          vocabularyName: {
+            identifier: 'vocabularyName',
+            rules: [{
+              type: 'empty',
+              prompt: 'You must give the vocabulary name'
 
-              }]
-            },
-            repository: {
-              identifier: 'repository',
-              rules: [{
+            }]
+          },
+          repository: {
+            identifier: 'repository',
+            rules: [{
+              type: 'empty',
+              prompt: 'You must fill the repository name'
+            }]
+          },
+          server: {
+            identifier: 'server',
+            rules: [{
+              type: 'empty',
+              prompt: 'The server URL is missing'
+            }]
+          },
+          branchName: {
+            identifier: 'branchName',
+            rules: [{
+              type: 'empty',
+              prompt: 'You must give the github branch name'
+            }]
+          },
+          username: {
+            identifier: 'username',
+            rules: [{
+              type: 'empty',
+              prompt: 'The user name is missing'
+            }]
+          },
+          password: {
+            identifier: 'password',
+            rules: [{
                 type: 'empty',
-                prompt: 'You must fill the repository name'
-              }]
-            },
-            server: {
-              identifier: 'server',
-              rules: [{
-                type: 'empty',
-                prompt: 'The server URL is missing'
-              }]
-            },
-            branchName: {
-              identifier: 'branchName',
-              rules: [{
-                type: 'empty',
-                prompt: 'You must give the github branch name'
-              }]
-            },
-            username: {
-              identifier: 'username',
-              rules: [{
-                type: 'empty',
-                prompt: 'The user name is missing'
-              }]
-            },
-            password: {
-              identifier: 'password',
-              rules: [{
-                  type: 'empty',
-                  prompt: 'password cannot be empty'
-                },
-                {
-                  type: 'minLength[6]',
-                  prompt: 'Your password must be at least {ruleValue} characters'
-                }
-              ]
-            }
+                prompt: 'password cannot be empty'
+              },
+              {
+                type: 'minLength[6]',
+                prompt: 'Your password must be at least {ruleValue} characters'
+              }
+            ]
           }
-        });
+        }
+      });
 
-        // reset button is clicked to reset the form
-        $('#restBtn').on('click', function(event){
-          event.preventDefault();
-          location.reload("/config");
-        });
+    // reset button is clicked to reset the form
+    $('#restBtn').on('click', function(event) {
+      event.preventDefault();
+      location.reload("/config");
+    });
 
     var text = '<h3>Supporting human mobility by data mobility</h3>' +
       '<p>New mobility concepts and better data networking are both crucial factors for global economic development. To invent innovative and sustainable mobility concepts, new data-based value-added services are required.</p>' +
@@ -310,7 +311,13 @@
       '<p>MobiVoc is a project of <a href="http://www.ita-int.org">ITA</a> in cooperation with our <a href="partners.html">partners</a>.</p>' +
       '<p>Click <a target="_blank" href="https://github.com/lavhal/testProj">here</a> for more about GitHub repository.</p>'
 
-    $('#textEditor').html(text);
-    $('#textEditor').height(370);
+    $('textarea').html(text);
+    // Replace all textarea tags with SCEditor
+    $(function() {
+      $('textarea').sceditor({
+        plugins: 'xhtml',
+        style: 'minified/jquery.sceditor.default.min.css'
+      });
+    });
   </script>
   <% include footer %>
