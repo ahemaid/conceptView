@@ -9,9 +9,7 @@ router.get('/', function (req, res) {
   var path = "jsonDataFiles/userConfigurations.json";
   fs.exists(path, function(exists) {
     if(!exists){
-      console.log("dsfdfdsfdsf                 dfdfsdf d         dffdsf"+path + " exists? " + exists);
       res.redirect('/config');
-
     }
     else {
       {

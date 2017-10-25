@@ -9,7 +9,6 @@ router.get('/', function(req, res) {
   }));
 
 
-  var str = 'notYet';
   // GET home page.
   res.render('config', {
     title: 'Configuration Page'

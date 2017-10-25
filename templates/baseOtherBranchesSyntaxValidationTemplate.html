@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+  <title></title>
+  <meta name="description" />
+  <link rel="stylesheet" type="text/css" href="/docs/style.css">
+<link rel="stylesheet" href="/docs/scripts/css/bootstrap.min.css">
+<link rel="stylesheet" href="/docs/scripts/css/bootstrap-theme.min.css">
+<script src="/docs/scripts/js/jquery.min.js"></script>
+<script src="/docs/scripts/js/bootstrap.min.js"></script>
+
+   <script>
+    $(function(){
+
+      var path = window.location.pathname.split('docs')[0];
+      $('title').load(path+"docs/title.html");
+      $("#projectTitle").load(path+"docs/title.html");
+
+    });
+    </script>
+
+</head>
+
+<body>
+
+  <nav class="navbar navbar-inverse navbar-fixed-top">
+    <div class="container-fluid">
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+          <span class="sr-only">Toggle navigation</span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="/"><div id="projectTitle"></div></a>
+      </div>
+      <div id="navbar" class="collapse navbar-collapse">
+        <ul id="navMenu-links" class="nav navbar-nav">
+
+           <li><a href="/docs/otherBranches.html">Other Branches</a> </li>
+
+            <!--Schema <li><a href="/docs/otherBranches/BranchName.html">BranchName Documentation</a></li> Schema-->
+
+            <!--Widoco <li><a href="/docs/otherBranches/BranchName/index.html">BranchName Documentation</a></li> Widoco-->
+
+            <!--SyntaxValidation <li class="active"><a href="/docs/otherBranches/BranchName_syntax_validation.html">BranchName Syntax Validation</a> </li> SyntaxValidation-->
+
+          </ul>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <div class="container">
+    <h3>Syntax Validation Report</h3>
+    <div>
+      <ul>
+        errors_to_replace
+      </ul>
+    </div>
+  </div>
+
+
+    <script>
+    
+    
+    var pathname = window.location.pathname;
+    var dynamicPath = "";
+    
+    var elms = document.getElementById("navMenu-links").getElementsByTagName("li");
+
+    for (var i = 0; i < elms.length; i++) {
+    
+     if(path.contains('docs')){
+       if(path.split('docs').split('/')==3)
+         dynamicPath = '/'+window.location.pathname.split('/')[1];
+     }
+     
+     var link = elms[i].firstElementChild;
+     link.setAttribute('href',dynamicPath+ link.getAttribute('href'));
+    }
+    
+    </script>
+
+</body>
+
+</html>

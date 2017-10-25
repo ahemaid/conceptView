@@ -5,11 +5,6 @@ var appdata = require('../jsonDataFiles/RDFSConcepts.json');
 var SKOSData = require('../jsonDataFiles/SKOSConcepts.json');
 var RDFObjectsPlusURI = require('../jsonDataFiles/RDFSObjects.json');
 var SKOSObjectsPlusURI = require('../jsonDataFiles/SKOSObjects.json');
-// var http = require('http');
-// const url = require('url');
-// var parseString = require('xml2js').parseString;
-// var sparqlResponse = [];
-
 
 router.get('/', function(req, res) {
 
@@ -86,21 +81,6 @@ router.get('/', function(req, res) {
     }
     return out;
   }
-  // remove SKOS when same parent and child relationship found
-  // function removeDuplicateSKOSData(data) {
-  //   var out = [];
-  //   var array = data;
-  //
-  //   for (var i = 0; i < data.length; i++) {
-  //     for (var j = 0; j < array.length; j++) {
-  //       if (array[j].parent === data[i].parent && array[j].RDFType === "skos:narrower" && data[i].RDFType === "skos:broader") {
-  //         array.splice(j--, 1);
-  //         console.log("parent   " + array[j].parent + "child     " + data[i].parent)
-  //       }
-  //     }
-  //   }
-  //   return array;
-  // }
 
   // translation of concept to URI
   function findURI(array, item) {
@@ -126,16 +106,14 @@ router.get('/', function(req, res) {
   files.sort(SortFiles);
   files = uniquefileNames(files);
 
-  //  remove duplicate data from SKOSData
-  // var SKOSResults = removeDuplicateSKOSData(SKOSData);
 
 
   var concepts = [];
   var allRDFObjects = filterExternalConcept(RDFObjectsPlusURI);
   var allSKOSObjects = filterExternalConcept(SKOSObjectsPlusURI);
 
-  res.render('tree.ejs', {
-    title: 'tree',
+  res.render('documentation.ejs', {
+    title: 'documentation',
     data: treeData,
     fileNames: files,
     allRDFObjects:allRDFObjects,
