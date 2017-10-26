@@ -12,7 +12,6 @@
   <link rel="stylesheet" href="/javascripts/bower_components/bootstrap/dist/css/bootstrap-theme.min.css">
   <link rel="stylesheet" href="/stylesheets/bootstrap-treeview.min.css">
   <link rel="stylesheet" type="text/css" href="/semantic/dist/semantic.min.css">
-  <!-- <link rel="stylesheet" type="text/css" href="/minified/jquery.sceditor.default.min.css"> -->
   <link rel="stylesheet" href="/stylesheets/yasqe.min.css">
   <link rel="stylesheet" href="/stylesheets/style.css">
   <link href="/stylesheets/mTab-style.css" type="text/css" rel="stylesheet" />
@@ -25,9 +24,6 @@
   <script src="/javascripts/bootstrap-treeview.min.js"></script>
   <script src="/javascripts/d3.min.js"></script>
   <script src="/javascripts/lodash.js"></script>
-  <!-- <script src="/minified/jquery.sceditor.bbcode.min.js"></script> -->
-  <link rel="stylesheet" href="minified/themes/default.min.css" />
-  <script src="minified/jquery.sceditor.bbcode.min.js"></script>
   <!-- global replaceAll fuction to remove string from text of turtle code -->
   <script>
     String.prototype.replaceAll = function(search, replacement) {
@@ -36,44 +32,59 @@
     };
   </script>
 
+
 </head>
+
 <body>
   <nav class="navbar navbar-inverse navbar-fixed-top">
-        <div class="container">
-          <div class="navbar-header">
-            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar" aria-expanded="true" aria-controls="navbar">
+    <div class="container">
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar" aria-expanded="true" aria-controls="navbar">
               <span class="sr-only">Toggle navigation</span>
               <span class="icon-bar"></span>
               <span class="icon-bar"></span>
               <span class="icon-bar"></span>
             </button>
-            <a class="navbar-brand" href="#">    <img src="images/logo2.png" width="140" height="30" alt="">
-</a>
-          </div>
-          <div id="navbar" class="navbar-collapse collapse in" aria-expanded="true" style="">
-            <ul class="nav navbar-nav">
-              <li ><a href="/">Home</a></li>
-              <li><a/ href="/users">Users</a></li>
-              <li><a/ href="/turtleEditor">Turtle Editor</a></li>
-              <li><a href="/visualization">Visualization</a></li>
-              <li class="current">
-                <a href="/tree">Tree</a>
-              </li>
-            </ul>
-             <ul class="nav navbar-nav navbar-right">
-               <li>
-                 <a href="https://github.com/ahemaid/conceptView"><i class="circular inverted github icon"></i></a>
-               </li>
-               <li>
-                 <a href="/contactus"><i class="circular inverted help icon"></i></a>
-               </li>
-               <li>
-                 <a href="/contactus"><i class="circular inverted mail icon"></i></a>
-               </li>
-              <li class="active"><a href="#">login</a></li>
-              <!-- <li><a href="../navbar-static-top/">Static top</a></li>
+        <a class="navbar-brand" href="#">
+          <%= projectTitle %></a>
+      </div>
+      <div id="navbar" class="navbar-collapse collapse in" aria-expanded="true" style="">
+        <ul class="nav navbar-nav">
+          <li><a href="/">Home</a></li>
+          <% if (userConfigurations[0] ) {%>
+          <li><a href="/turtleEditor">Turtle Editor</a></li><% } %>
+          <% if ( userConfigurations[1] ) {%>
+          <li><a href="/documentation">Documentation</a></li> <% } %>
+          <% if (userConfigurations[2]){ %>
+<li><a href="/visualization">Visualization</a></li><% } %>
+<% if (userConfigurations[3]) {%>
+<li><a href="/">Sparql End Point</a></li><% } %>
+
+    <% if (userConfigurations[4]) {%>
+<li><a href="/">Evolution</a></li><% } %>
+
+      <% if (userConfigurations[5]) {%>
+<li><a href="/">predefined Queries</a></li><% } %>
+
+      <% if (userConfigurations[6]){ %>
+<li><a href="/">Validation</a></li><% } %>
+
+        </ul>
+        <ul class="nav navbar-nav navbar-right">
+          <li>
+            <a href="https://github.com/ahemaid/conceptView"><i class="circular inverted github icon"></i></a>
+          </li>
+          <li>
+            <a href="/contactus"><i class="circular inverted help icon"></i></a>
+          </li>
+          <li>
+            <a href="/contactus"><i class="circular inverted mail icon"></i></a>
+          </li>
+          <li >        <a class="navbar-brand" href="#">    <img src="images/logo2.png" width="140" height="30" alt=""></a>
+</li>
+          <!-- <li><a href="../navbar-static-top/">Static top</a></li>
               <li class="active"><a href="./">Fixed top <span class="sr-only">(current)</span></a></li> -->
-            </ul>
-          </div><!--/.nav-collapse -->
-        </div>
-      </nav>
+        </ul>
+      </div>
+    </div>
+  </nav>

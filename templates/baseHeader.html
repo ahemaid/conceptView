@@ -1,0 +1,68 @@
+<script>
+
+$(function(){
+
+    $('#nav navbar-nav li a').each(function(){
+        var $href = $(this).attr('href');
+        if ( ($href == '') ) {
+            $(this).addClass('active');
+        } else {
+            $(this).removeClass('active');
+        }
+    });
+});
+
+</script>
+
+
+       <ul id="navMenu-links" class="nav navbar-nav">
+
+            <li> <a href="/">Home</a> </li>
+
+	    <!--TurtleEditor <li><a href="/docs/TurtleEditor/turtle-editor.html">Editing</a></li> TurtleEditor-->
+
+            <!--Schema <li><a href="/docs/schemas.html">Documentation</a></li> Schema-->
+
+            <!--Widoco <li><a href="/docs/Widoco/widocoGen/index.html">Documentation</a></li> Widoco-->
+
+            <!--Visualization <li><a href="/docs/visualization.html">Visualization</a> </li> Visualization-->
+
+	    <!--Visualization <li><a href="/docs/d3sparql/index.html">Analytics</a> </li> Visualization-->
+
+            <!--Sparql <li><a href="/docs/sparql.html">Querying</a> </li> Sparql-->
+
+            <!--SyntaxValidation <li><a href="/docs/syntax_validation.html">Validation</a> </li> SyntaxValidation-->
+
+            <!--Evolution <li><a href="/docs/evolution.html">Evolution</a> </li> Evolution-->
+
+	    <!--OtherBranches <li><a href="/docs/otherBranches.html">Other Branches</a> </li> OtherBranches-->
+
+       </ul>
+
+
+    <script>
+
+
+    var pathName = window.location.pathname;
+    var dynamicPath = "";
+
+     if(pathName.indexOf("docs")!==-1){
+       if(pathName.split('docs')[0].split('/').length==3)
+         dynamicPath = '/'+pathName.split('/')[1];
+     }
+     else if(pathName.split('/').length==3)
+         dynamicPath = '/'+pathName.split('/')[1];
+
+    var elms = document.getElementById("navMenu-links").getElementsByTagName("li");
+
+    for (var i = 0; i < elms.length; i++) {
+
+     var link = elms[i].firstElementChild;
+     link.setAttribute('href',dynamicPath+ link.getAttribute('href'));
+    }    
+
+     link = document.getElementById("projectTitle").parentNode;
+     link.setAttribute('href',dynamicPath+ link.getAttribute('href'));
+
+
+    </script>

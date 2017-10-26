@@ -1,4 +1,24 @@
-<% include header %>
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width">
+  <title>
+    <%- title %>
+  </title>
+  <link rel="stylesheet" href="minified/themes/default.min.css" />
+  <link rel="stylesheet" href="/javascripts/bower_components/bootstrap/dist/css/bootstrap.css">
+  <link rel="stylesheet" href="/javascripts/bower_components/bootstrap/dist/css/bootstrap.min.css">
+  <link rel="stylesheet" href="/javascripts/bower_components/bootstrap/dist/css/bootstrap-theme.min.css">
+  <link rel="stylesheet" type="text/css" href="/semantic/dist/semantic.min.css">
+  <link rel="stylesheet" href="/stylesheets/style.css">
+  <script src="/javascripts/bower_components/jquery/dist/jquery.min.js"></script>
+  <script src="/javascripts/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+  <script src="/semantic/dist/semantic.min.js"></script>
+  <script src="minified/jquery.sceditor.bbcode.min.js"></script>
+</head>
+<body style=" padding: 10px; ">
   <div class="ui container" style="overflow:hidden">
     <h1 style="padding-top:10px">Configuration Page</h1>
     <div class="ui two column stackable grid">
@@ -34,7 +54,7 @@
               </div>
               <div class="field">
                 <div class="ui checkbox">
-                  <input type="checkbox" name="webHook" value="webHookChecked">
+                  <input type="checkbox" name="webHook" value="true">
                   <label>Web Hook</label>
                 </div>
               </div>
@@ -46,14 +66,31 @@
               <div class="field" style="margin-bottom:5px">
                 <div class="ui labeled input">
                   <a class="ui label" style="width: 150px;">
-          Repository
+          Repository URL
         </a>
-                  <input type="text" id="repository" name="repository" placeholder="Enter repository address" value="https://github.com/lavhal/testProj.git" style="width:300px" />
+                  <input type="text" id="repository" name="repository" placeholder="Enter repository address" value="https://github.com/repositoryOwner/repositoryName.git     " style="width:300px" />
                   <div class="ui corner label">
                     <i class="asterisk icon"></i>
                   </div>
                 </div>
               </div>
+              <div class="field" style="margin-bottom:5px">
+                <div class="ui labeled input">
+                  <a class="ui label" style="width: 150px;">
+          Repository owner
+        </a>
+                  <input type="text" id="repositoryOwner" name="repositoryOwner" placeholder="Enter repository owner" value="repositoryOwner" style="width:300px" />
+                </div>
+              </div>
+              <div class="field" style="margin-bottom:5px">
+                <div class="ui labeled input">
+                  <a class="ui label" style="width: 150px;">
+          Repository name
+        </a>
+                  <input type="text" id="repositoryName" name="repositoryName" placeholder="Enter repository name" value="repositoryName" style="width:300px" />
+                </div>
+              </div>
+
               <div class="field" style="margin-bottom:5px">
                 <div class="ui labeled input">
                   <a class="ui label" style="width: 150px;">
@@ -94,13 +131,13 @@
             <div class=" content">
               <div class="field">
                 <div class="ui radio checkbox">
-                  <input type="radio" name="syntaxValidation" value="rapperChecked" checked>
+                  <input type="radio" name="syntaxValidation" value="true" checked>
                   <label>Rapper</label>
                 </div>
               </div>
               <div class="field">
                 <div class="ui radio checkbox">
-                  <input type="radio" name="syntaxValidation" value="jenaRiotChecked">
+                  <input type="radio" name="syntaxValidation" value="true">
                   <label>Jena Riot</label>
                 </div>
               </div>
@@ -111,13 +148,13 @@
             <div id="docGenerationContent" class="content">
               <div class="field">
                 <div class="ui radio checkbox">
-                  <input type="radio" name="documentationGeneration" value="schemaOrgChecked" checked>
+                  <input type="radio" name="documentationGeneration" value="true" checked>
                   <label>SchemaOrg</label>
                 </div>
               </div>
               <div class="field">
                 <div class="ui radio checkbox">
-                  <input type="radio" name="documentationGeneration" value="widocoChecked">
+                  <input type="radio" name="documentationGeneration" value="true">
                   <label>Widoco</label>
                 </div>
               </div>
@@ -128,49 +165,49 @@
             <div id="additionalServicesContent" class="content">
               <div class="field">
                 <div class="ui checkbox">
-                  <input type="checkbox" name="visualization" value="visualizationChecked" checked>
+                  <input type="checkbox" name="visualization" value="true" checked>
                   <label>Visualization</label>
                 </div>
               </div>
               <div class="field">
                 <div class="ui checkbox">
-                  <input type="checkbox" name="sparqlEndPoint" value="sparqlEndPointChecked" checked>
+                  <input type="checkbox" name="sparqlEndPoint" value="true" checked>
                   <label>Sparql EndPoint</label>
                 </div>
               </div>
               <div class="field">
                 <div class="ui checkbox">
-                  <input type="checkbox" name="syntaxValidationReport" value="syntaxValidationReportChecked" checked>
+                  <input type="checkbox" name="syntaxValidationReport" value="true" checked>
                   <label>Syntax Validation Report</label>
                 </div>
               </div>
               <div class="field">
                 <div class="ui checkbox">
-                  <input type="checkbox" name="evolutionReport" value="evolutionReportChecked" checked>
+                  <input type="checkbox" name="evolutionReport" value="true" checked>
                   <label>Schema Evolution Report</label>
                 </div>
               </div>
               <div class="field">
                 <div class="ui checkbox">
-                  <input type="checkbox" name="otherBranches" value="otherBranchesChecked" checked>
+                  <input type="checkbox" name="otherBranches" value="true" checked>
                   <label>Other Branches</label>
                 </div>
               </div>
               <div class="field">
                 <div class="ui checkbox">
-                  <input type="checkbox" name="clientHooks" value="clientHooksChecked" checked>
+                  <input type="checkbox" name="clientHooks" value="true" checked>
                   <label>Client Side Hooks</label>
                 </div>
               </div>
               <div class="field">
                 <div class="ui checkbox">
-                  <input type="checkbox" name="turtleEditor" value="turtleEditorChecked" checked>
+                  <input type="checkbox" name="turtleEditor" value="true" checked>
                   <label>Turtle Editor</label>
                 </div>
               </div>
               <div class="field">
                 <div class="ui checkbox">
-                  <input type="checkbox" name="predefinedQueries" value="predefinedQueriesChecked" checked>
+                  <input type="checkbox" name="predefinedQueries" value="true" checked>
                   <label>Use Predefined Queries</label>
                 </div>
               </div>
@@ -181,13 +218,13 @@
             <div id="serializationFormatContent" class="content">
               <div class="field">
                 <div class="ui  checkbox">
-                  <input type="checkbox" name="rdfxml" value="rdfxmlChecked">
+                  <input type="checkbox" name="rdfxml" value="true">
                   <label>RdfXML</label>
                 </div>
               </div>
               <div class="field">
                 <div class="ui  checkbox">
-                  <input type="checkbox" name="ntriples" value="ntriplesChecked">
+                  <input type="checkbox" name="ntriples" value="true">
                   <label>NTriples</label>
                 </div>
               </div>
@@ -320,4 +357,5 @@
       });
     });
   </script>
-  <% include footer %>
+</body>
+</html>

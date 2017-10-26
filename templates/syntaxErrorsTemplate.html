@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+  <title></title>
+  <meta name="description" />
+  <link rel="stylesheet" type="text/css" href="style.css">
+
+<link rel="stylesheet" href="scripts/css/bootstrap.min.css">
+<link rel="stylesheet" href="scripts/css/bootstrap-theme.min.css">
+<script src="scripts/js/jquery.min.js"></script>
+<script src="scripts/js/bootstrap.min.js"></script>
+
+  <script>
+    $(function(){
+
+      var path = window.location.pathname.split('docs')[0];
+      $('title').load(path+"docs/title.html");
+      $("#projectTitle").load(path+"docs/title.html");
+      var urlParts = window.location.href.split('/');
+      if(urlParts[urlParts.length-1]==='syntax_validation.html'){
+         $("#menuHeader").load(path+"docs/header.html");
+      }
+      else{
+        $("#menuHeader").load(path+"docs/otherBranches/"+urlParts[urlParts.length-1].split('_syntax_validation.html')[0]+"_header.html");
+      }
+
+
+    });
+    </script>
+
+</head>
+
+<body>
+
+  <nav class="navbar navbar-inverse navbar-fixed-top">
+    <div class="container-fluid">
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+          <span class="sr-only">Toggle navigation</span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+
+       <a class="navbar-brand" href="/"><div id="projectTitle"></div></a>
+      </div>
+      <div id="navbar" class="collapse navbar-collapse">
+
+      <div id="menuHeader"></div>
+      </div>
+    </div>
+  </nav>
+
+  <div class="container">
+    <h3>Syntax Validation Report</h3>
+    <div>
+      <ul>
+        errors_to_replace
+      </ul>
+    </div>
+
+    <!--QueryValidation
+    <h3>Query Validation Report</h3>
+    <div>
+      <ul>
+        sparql_query_errors
+      </ul>
+    </div>
+   QueryValidation-->
+ </div>
+
+
+</body>
+
+</html>
