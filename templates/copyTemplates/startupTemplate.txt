@@ -1,0 +1,49 @@
+#!/bin/bash
+#
+
+export TERM=xterm
+export PATH="$PATH":/home/vagrant/othertools/owl2vcs/
+
+cd /home/vagrant
+source .nvm/nvm.sh
+
+
+if ! lsof -i:8080
+then
+  cd /home/vagrant/
+  google_appengine/dev_appserver.py schemaorg/app.yaml &
+fi
+
+if ! lsof -i:3000
+then
+  cd /home/vagrant/VoCol
+  node configurationApp.js & 
+fi
+
+if ! lsof -i:3001
+then
+  cd /home/vagrant/VoCol
+  node webHookListener.js &
+fi
+
+if ! lsof -i:3002
+then
+ cd /home/vagrant/VoCol
+ #ClientServices node clientServices.js "validationTool" "consistencyChecking" "constraintChecking" "formatting" &
+fi
+
+if ! lsof -i:3030
+then
+  cd /home/vagrant/fuseki/apache-jena-fuseki-2.3.0/
+
+  if [ -f /home/vagrant/repoFolder/SingleVoc.ttl ]; then
+	./fuseki-server --file=/home/vagrant/repoFolder/SingleVoc.ttl /myDataset &
+  else
+	./fuseki-server --mem /myDataset &
+  fi
+
+fi
+
+if [ ! -f /home/vagrant/schemaorg/docs/configuration_page.html ]; then
+    mv /home/vagrant/VoCol/configuration_page.html /home/vagrant/schemaorg/docs/configuration_page.html
+fi

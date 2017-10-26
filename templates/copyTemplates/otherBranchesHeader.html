@@ -1,0 +1,32 @@
+       <ul class="nav navbar-nav">
+
+          <li><a href="#">Branch: BranchName</a> </li>
+
+             <li><a href="/docs/otherBranches/BranchName.html">Documentation</a></li> 
+
+            <!--Widoco <li><a href="/docs/otherBranches/BranchName/index.html">Documentation</a></li> Widoco-->
+
+             <li><a href="/docs/otherBranches/BranchName_syntax_validation.html">Validation</a> </li> 
+
+       </ul>
+
+  <script>
+    
+    
+    var pathname = window.location.pathname;
+    var dynamicPath = "";
+    
+    var elms = document.getElementById("navMenu-links").getElementsByTagName("li");
+
+    for (var i = 0; i < elms.length; i++) {
+    
+     if(path.contains('docs')){
+       if(path.split('docs').split('/')==3)
+         dynamicPath = '/'+window.location.pathname.split('/')[1];
+     }
+     
+     var link = elms[i].firstElementChild;
+     link.setAttribute('href',dynamicPath+ link.getAttribute('href'));
+    }
+    
+    </script>
